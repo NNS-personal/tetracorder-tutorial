@@ -1,0 +1,25 @@
+http://speclab.cr.usgs.gov
+
+Roger N. Clark
+U. S. Geological Survey
+
+This directory contains the native spectral library and convolutions of the library.
+The current spectral library is:
+
+           splib06a
+
+These directories should be put in a location of choice with
+a symbolic link (on unix/linux) where /speclib points to these
+directories.
+
+Say you put the directories:
+       library06
+       library06.conv
+into /data/usgs, then make a symbolic link:
+
+       ln -s /data/usgs /speclib
+
+Next confirm:
+
+       ls -l /speclib
+lrwxrwxrwx 1 root root 15 May 15 12:10 /speclib -> /data/usgs/speclib/

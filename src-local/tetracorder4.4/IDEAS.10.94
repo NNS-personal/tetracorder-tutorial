@@ -1,0 +1,221 @@
+New ideas for tricorder to be implimented in tricorder 3.0:
+Roger Clark
+
+================================================================
+case stuff
+
+At the end of each commandlet, have an action command:
+
+action: none         \# do nothing
+action: case 1       \# do case 1
+action: case 1 4 5   \# do case 1 then 4 then 5
+
+cases are like groups, but are not done until a certain match
+is found first.  
+
+see examples in the group description below.
+================================================================
+Groups are all done.  Group 0 takes is applied to all groups.
+(Meaning group 1 comparisons are group 0 + 1)
+
+After the group or case designation, have additional optional qualifiers:
+
+group 3 URATIO [splib04] 496 RRATIO [splib04] 496
+
+where URATIO = unknown   spectrum / spectrum [splib04] 496
+      RRATIO = reference spectrum / spectrum [splib04] 496
+
+
+Typical uses:
+
+group 0: vegetation, water, ice/snow
+group 1: minerals/materials in 0.4 to ~1.2um
+         (mostly electronic bands)
+group 2: minerals/materials in 2-2.5 um region with support from 1-1.5um
+         (mostly vibrational bands)
+case 1: vegetation species (from veg, group 0)
+case 2: vegeatation stress (from veg, group 0)
+group 3: any level vegetation chlorophyll detection
+case 3:  red-edge shift from group 3
+
+A special flag "-0" can ba added after the group # to not include group
+0 in the analysis.  (Note all entries in the group should be treated the
+same, or bizzare results might be encountered.)  Example:
+
+group 4 -0 URATIO [splib04] 496 RRATIO [splib04] 496
+
+================================================================
+The udata specifier specifies on what data to analyze:
+          (udata is the unknown, e.g. spectra from the cube)
+
+udata: reflectance     # operate on reflectance data
+udata: emittance       # operate on emittance data
+udata: radiance        # operate on radiance data
+udata: raw             # operate on raw data
+
+The observed data set will leter be specified what type it is in.
+The udata specifier says what it should be converted to before this
+analysis is done.
+
+The idea here is that in the future, we only store one data type (e.g.
+the AVIRIS radiance data) and compute what we need on the fly.  The
+specification of how to convert is specified elsewhere (in the section
+where the cube is assigned).
+
+For example, if the input data were in radiance, and the analysis
+should be done in reflectance, then convert the data to reflectance
+first.  At Tricorder 3.0, this will be informational only.  A future
+version will have conversions added.  For example, the radiance to
+reflectance will do an ATRM correction followed by an offset and
+multiplier ground calibration.
+
+This feature allows us to do atmospheric analyses on radiance data and
+surface reflectance analysis at the same time!  For example, one group
+could be atmospheric analysis, the others surface reflectance.  In the
+future when we have thermal data in the same cube, coregistered, yet
+another group could be analyzing emittance.
+
+Currently, reflectance and emittance are the same.  (With the Mars
+Surveyor TES instrument, a calibration to emittance could be applied.)
+
+The raw specifier means don't do anything to the data.
+================================================================
+the convolve specifier tells whether or not to convolve the
+             input reference spectrum to the resolution and sampling
+             of the flight instrument
+
+With this feature, we can convolve the reference spectra on the fly and
+we don't have to generate separate spectral libraries for each data set.
+(Of course, when comparing spectra, we will need the convolved ones, so
+maybe this really won't help.)
+
+convolve: no     # don't convolve
+convolve: gaussian wav= [splib04] 12 res= [splib04] 14
+
+where the wav= specifies the specpr file and record for the
+               reference spectrum input wavelengths
+          res= specifies the specpr file and record for the
+               reference spectrum input resolution
+          gaussian specifies do a gaussian convolution
+
+The tricorder setup will now ask for the resolution as well as
+    the wavelengths of the data that are being analyzed.
+================================================================
+The algorithm specifier:
+After the convolve designation, the method of analysis is specified:
+
+algorithm: bandmp      # the band fitting routines
+algorithm: canopychem  # canopy chemistry
+algorithm: linunmix    # linear unmixing (e.g. John Adams)
+algorithm: bandratio   # band ratioing
+
+Generally, the bandmp would be used in all the groups, then the
+other algorithms used in cases.
+
+For example, when you find a lot of veg, do a case and determine
+canopy chemistry.
+
+This has the potential for very complex analysis.  For example, determine
+there is veg in the pixel, apply a software defoliant, then redo the
+analysis on the veg removed spectra.  (Need to be careful about infinite
+loops here.)
+
+At tricorder 3.0, only bandmp will be implimented; others will follow.
+================================================================
+predefine the paths for group1, group2, etc.
+
+all group 0 identifications (done in conjunction with each group 1,
+2, ...) are put in with the path with the group currently being
+identified.  For example, if material A is group 0, and group 2
+materials are being analyzed, if A is found, then the output is in
+the directory of group 2 materials.
+
+Implications: if group 0 material has further action, then must set
+a flag so it is not done twice?
+================================================================
+history:
+          add specpr file names for v, w, u, d, and y as comments in the
+          history file.
+================================================================
+Cube assignment:  allow from command line so doesn't have to be
+                  assigned in specpr
+================================================================
+Output file bits/pixel and scale
+
+bits   DN # = #
+ 8     DN 255   = 0.5   #  8 bit output
+16     DN 32000 = 1.0   # 16 bit output
+
+Also make thresholding options a separate line after outputm
+     with an option specifier.
+================================================================
+Add continuum thresholding in place of the ct with each feature:
+
+     rct low high  # right continuum threshold
+     cct low high  # center continuum threshold
+     lct low high  # left continuum threshold
+
+the cct stands for continuum threshold at center and used to be
+called ct.
+
+Add band depth thresholding on a per feature basis:
+
+     bd low high   # band depth
+================================================================
+
+EXAMPLES:
+
+\#######################################################################
+3            # define 3 groups (0, 1, 2)
+[DIRg0]      # group 0 path
+[DIRg1]      # group 1 path
+[DIRg2]      # group 2 path
+BEGIN SETUP
+group 0
+udata: reflectance
+convolve: no
+algorithm: bandmp
+[splib04]   496 d                \# file ID, rec no.
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=Fir_Tree IH91-2 Complete   =a AVIRIS
+[DELETPTS]
+vegetation1.conifer              \# output title
+vegetation1                      \# Output base file name
+    3    0                       \# Number of features, and not feats
+Dw 0.522   0.552   0.737   0.767  cct 0.05 \# continuum wavelengths
+Dw 0.870   0.900   1.033   1.063  cct 0.10 \# continuum wavelengths
+Dw 1.033   1.063   1.245   1.275  cct 0.08 \# continuum wavelengths
+8 DN 255 = 1.00000                 \# Full scale
+option: FITALL>0.5  DEPTHALL>0.6   \# thresholding
+action: case 1     \# do case 1
+\#######################################################################
+group 0
+udata: reflectance
+convolve: no
+algorithm: bandmp
+[splib04]   182 d                \# file ID, rec no.
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=H2O-Ice GDS136 77K         =a AVIRIS
+[DELETPTS]
+Snow.H2O                         \# output title
+snow.and.ice                     \# Output base file name
+    2    1                       \# Number of features, and not feats
+Dw 0.958   0.986   1.080   1.110  cct 0.08 \# continuum wavelengths
+Dw 1.150   1.178   1.315   1.345  cct 0.08 \# continuum wavelengths
+NOT [splib04] 496  1  0.50 0.5   \# NOT vegetation, feat 1, depth .50, fit .5
+8 DN 255 = 0.50000                 \# Full scale
+option: FITALL>0.6  DEPTHALL>0.05  \# and thresholding
+action: none
+\#######################################################################
+case 1
+udata: reflectance
+convolve: no
+algorithm: bandmp
+[splib04]   183 d
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=vegetation species 1
+[DELETPTS]
+Vegetation species 1
+veg.type.1
+etc.
+
+END SETUP
+
+last line instead of group/case is "END SETUP"

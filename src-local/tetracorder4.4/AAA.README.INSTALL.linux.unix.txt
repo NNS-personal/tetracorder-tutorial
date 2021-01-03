@@ -1,0 +1,43 @@
+First install specpr
+
+
+Tetracorder can log runs it makes.  If you would like
+this, then:
+
+	cp logtetracorder /usr/local/bin
+	cp /dev/null  /usr/log/tetracorder
+        chmod 666 /usr/log/tetracorder
+
+        Note, on some systems, it might be /var/log.
+        It would be easiest to make a symbolic link,
+        otherwise the scripts will need to be changed to
+        point to/var/log
+
+Tetracorder can limit who is able to run tetracorder.
+If you would like this, then:
+
+        Create a list of users (as given by the "who" command)
+        in:
+
+               /usr/local/etc/authtetracorder.list
+
+       then:
+
+               cp authtetracorder /usr/local/bin
+               chmod 777 /usr/local/bin/authtetracorder
+
+Tetracorder can tell the answer in a voice in single spectrum mode.
+If you want to enable this:
+
+		cp tricordersound /usr/local/bin
+
+        Then customize /usr/local/bin/tricordersound to work in your local
+        environment.
+
+Now make tetracorder:
+
+	make
+	make install
+	cp /usr/local/bin/tetracorder4.4 /usr/local/bin/tetracorder
+
+DONE!

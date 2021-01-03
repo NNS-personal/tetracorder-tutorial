@@ -1,0 +1,245 @@
+	subroutine nvres1mat(imat,xdat1sp)
+
+######	implicit integer*4 (i-n)
+	implicit none
+
+#ccc  name:         nvres1mat
+#ccc  version date: 12/12/1994
+#ccc  author(s): Roger N. Clark
+#ccc  language: ratfor
+#ccc
+#ccc  short description: does nvres and bandmp over 1 feature for 1 material
+#ccc                     including thresholding decisions.
+#ccc
+#ccc  algorithm description: See Clark et al, 1990, JPL AVIRIS Conf.
+#ccc  system requirements: Unix
+#ccc  subroutines called: many specpr routines, need specpr.a library
+#ccc  argument list description: see below
+#ccc  parameter description: see below
+#ccc  common description: see below
+#ccc  message files referenced: none
+#ccc  internal variables: see below
+#ccc  file description: see below
+#ccc  user command lines: see below
+#ccc  update information: see below
+#ccc  NOTES:
+#ccc
+#ccc         imat = material number (see multmap.h
+#ccc         xdat1sp = spectrum to analyze
+
+	include 	../specpr/src.specpr/common/label1
+	include 	../specpr/src.specpr/common/lbl3
+	include 	../specpr/src.specpr/common/lbl4
+	include 	../specpr/src.specpr/common/lbl7
+	include 	../specpr/src.specpr/common/lundefs
+	include 	../specpr/src.specpr/common/alphabet
+	include 	../specpr/src.specpr/common/cmd
+	include 	../specpr/src.specpr/common/lblg
+	include 	../specpr/src.specpr/common/lblwav
+	include 	../specpr/src.specpr/common/cmdarg
+	include 	../specpr/src.specpr/common/dscrch
+	include 	../specpr/src.specpr/common/ioftyp
+	include 	../specpr/src.specpr/common/blank
+	include		../specpr/src.specpr/common/lblvol
+
+	include tricube.h
+
+# basic tricorder parameters
+
+	include tri1.h
+
+# arrays for multiple materials
+
+	include multmap.h
+
+	real*4    sumf, sumd, sumfd, fit, yintcp
+	real*4    conref, xfeat, xx, xbdxdn, xdn
+	integer*4 imat, itmpfeat, intmp, ifeat
+	integer*4 ntmpnotmat, ntmpnotfeat, ii
+	real*4    xdat1sp(maxpix)
+	real*4    xdat1bsp(maxpix)
+	real*4    xdatrsp(maxpix)
+	real*4 a1, b1, xndvivegspec,xndviobs,xfactor,bdnorm
+
+
+	#write (ttyout,*) 'DEBUG: starting material ',imat
+
+	    sumf = 0.0
+	    sumd = 0.0
+	    sumfd= 0.0
+
+	    do ifeat = 1, nfeat(imat) {
+
+		
+		#write (ttyout,*) 'DEBUG: starting call nvres band analysis, feat',ifeat
+
+		# Calculate observed continuum removed, band depth, 
+		# k factor, slope, intercept and error fit
+		# dataa = wavelengths
+
+		# copy to temp arrays, because these arrays get modified by nvres
+
+		do ii = cchans(1,ifeat,imat), cchans(4,ifeat,imat) {
+			xdat1bsp(ii) = xdat1sp(ii)
+			xdatrsp(ii)  = rratio(ii,imat)
+		} 
+
+		call nvres (dataa,rlbc(1,ifeat,imat),
+				xdat1bsp,xdatrsp,
+				cchans(1,ifeat,imat),
+				cchans(2,ifeat,imat),
+				cchans(3,ifeat,imat),
+				cchans(4,ifeat,imat),
+				emtogl,nchmin(ifeat,imat),
+				nchmax(ifeat,imat),
+				nftype(ifeat,imat),
+				imgflg, xel,yel,obscrm,kfactr,
+				bdepth, fit,
+				slope,yintcp,datac,conref,a1,b1,
+				xndvivegspec,xndviobs,xfactor,bdnorm)
+
+		# nvres: want normalized band depth bdnorm
+
+################################
+#		write (ttyout,*) 'nvres1mat DEBUG: ',xndvivegspec,xndviobs,xfactor,bdnorm
+#		write (ttyout,*) 'nvres1mat DEBUG: ',a1,b1,fit,bdepth
+#		write (ttyout,*) 'nvres1mat DEBUG: ',conref,kfactr
+#		do ii = cchans(1,ifeat,imat), cchans(4,ifeat,imat) {
+#
+#			write (ttyout,101) ii,dataa(ii),rlbc(ii,ifeat,imat),
+#					xdat1sp(ii),rratio(ii,imat),
+#					xdat1bsp(ii),xdatrsp(ii)
+#101			format ('DEBUG:',i5,6(1x,f10.5))
+#		}   # end DEBUG
+################################
+
+		if (bdnorm == -1.23e34 || abs(bdnorm) < 0.0e-9) {
+			bdnorm = 0.0
+			fit    = 0.0
+		} else if (conref < zcontmn(ifeat,imat) ||
+			   conref > zcontmx(ifeat,imat)) { # continuum
+							# is beyond
+							# limits
+			bdnorm = 0.0
+			fit    = 0.0
+
+		}
+			xdn = dln(ifeat,imat)          # weighted area
+			xfeat=real(nftype(ifeat,imat)) # feature type
+
+			xx=1.0                         # fit factor
+			if (bdnorm/xfeat <= 0.1e-5) {  # fit factor=0
+				xx=0.0                 # feature is
+						       # negative of
+						       # expected.
+
+				# if feature is a diagnostic one,
+				# and in this section does not exist,
+				# then this material can not be present,
+				# so zero it all out, and go to next
+				# material.
+				if (featimprt(ifeat,imat) == 2) {
+
+					# set remaining features to zero
+					do itmpfeat = ifeat, nfeat(imat) {
+						zfit(itmpfeat,imat)   = 0.0
+						zdepth(itmpfeat,imat) = 0.0
+						zfd(itmpfeat,imat)    = 0.0
+						zcompf(itmpfeat,imat) = 0.0
+					}
+					ofit(imat,xel)   = 0.0
+					odepth(imat,xel) = 0.0
+					ofd(imat,xel)    = 0.0
+
+					return
+				}
+
+			}
+			sumf = sumf + fit *xx* xdn     # sum fits
+			xbdxdn = bdnorm * xdn * xfeat
+			sumd = sumd + xbdxdn           # sum depths
+			sumfd= sumfd+ xbdxdn * fit     # sum fit*depth
+		
+
+		zfit(ifeat,imat)   = fit
+		zdepth(ifeat,imat) = bdnorm
+		zfd(ifeat,imat)    = fit * bdnorm
+		zcompf(ifeat,imat) = xx
+
+		#write (ttyout,*) 'DEBUG: weighted sum analysis complete'
+
+	    } # end ifeat do loop
+
+	    # output fit, depth, f*d before decisions
+
+
+	    ofit(imat,xel)   = sumf
+	    odepth(imat,xel) = sumd
+	    ofd(imat,xel)    = sumfd
+
+	    # Check if values are below thresholds
+
+	    if (ofit(imat,xel) < thrshfitall(imat)) {
+			ofit(imat,xel) = 0.0
+			odepth(imat,xel) = 0.0
+			ofd(imat,xel) = 0.0
+			go to 4050
+	    }
+	    if (abs(odepth(imat,xel)) < thrshdepthall(imat)) { # (is abs needed?
+			ofit(imat,xel) = 0.0
+			odepth(imat,xel) = 0.0
+			ofd(imat,xel) = 0.0
+			go to 4050
+	    }
+	    if (ofd(imat,xel) < thrshfdall(imat)) {
+			ofit(imat,xel) = 0.0
+			odepth(imat,xel) = 0.0
+			ofd(imat,xel) = 0.0
+			go to 4050
+	    }
+
+	    if (ofit(imat,xel) < thrshfit(imat)) {
+			ofit(imat,xel) = 0.0
+	    }
+	    if (abs(odepth(imat,xel)) < thrshdepth(imat)) { # (is abs needed?
+			odepth(imat,xel) = 0.0
+	    }
+	    if (ofit(imat,xel) < thrshdepthfit(imat)) {
+			odepth(imat,xel) = 0.0
+	    }
+	    if (ofd(imat,xel) < thrshfd(imat)) {
+			ofd(imat,xel) = 0.0
+	    }
+	    if (ofit(imat,xel) < thrshfdfit(imat)) {
+			ofd(imat,xel) = 0.0
+	    }
+	    if (odepth(imat,xel) < thrshfddepth(imat)) {
+			ofd(imat,xel) = 0.0
+	    }
+
+	    # check for NOT features  (initial nvres does not allow NOTs 12/94-RNC)
+
+	    if (numnotfeat(imat) > 0 & ofit(imat,xel) > 0.0) { # have NOT features
+		do intmp = 1, numnotfeat(imat) {
+			ntmpnotmat = notmat(intmp,imat)
+			ntmpnotfeat= notfeat(intmp,imat)
+			# NOT feature is possible
+			if (zdepth(ntmpnotfeat,ntmpnotmat) > 
+					thrshdnot(intmp,imat) &
+					zfit(ntmpnotfeat,ntmpnotmat) > 
+					thrshfnot(intmp,imat)) {  # NOT is found
+
+				ofit(imat,xel) = 0.0
+				odepth(imat,xel) = 0.0
+				ofd(imat,xel) = 0.0
+				notflg(ntmpnotfeat,ntmpnotmat) = 1
+
+			} else {
+				notflg(ntmpnotfeat,ntmpnotmat) = 0
+			}
+		}
+	    }
+
+4050 	return
+	end
+

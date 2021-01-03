@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# tricordersound
+#
+# send a sound to the sound device.
+# customize to whatever environment you have
+#
+# Roger N. Clark  June 10, 1997
+
+sound_dir=/i2/tmp/tricorder-sounds
+
+if [ -z "$DISPLAY" ]
+then
+	exit
+fi
+
+D=""
+if [ "$DISPLAY" = "xtrmnl10.cr.usgs.gov:0.0" ]   # roger
+then
+        D=$DISPLAY
+
+elif [ "$DISPLAY" = "xtrmnl8.cr.usgs.gov:0.0" ]  # trude
+then
+	D=$DISPLAY
+
+elif [ "$DISPLAY" = "xtrmnl9.cr.usgs.gov:0.0" ]  # ray
+then
+	D=$DISPLAY
+
+elif [ "$DISPLAY" = "xtrmnl11.cr.usgs.gov:0.0" ] # gregg
+then
+	D=$DISPLAY
+
+else
+	exit
+fi
+
+file=${sound_dir}/$1
+
+if [ -f "$file" ]
+then
+
+	/opt/audio/bin/send_sound -server $D   $file
+
+else
+	/opt/audio/bin/send_sound -server $D    ${sound_dir}/sound-file-not-found.wav
+
+fi

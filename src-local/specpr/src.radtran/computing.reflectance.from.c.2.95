@@ -1,0 +1,71 @@
+To use radtran subroutines to construct other programs, written in
+fortran or c.  (this is theoretical for c)
+
+The subroutine mrefl3 does the complete computation of a
+multicomponent surface.  It passes all variables by the subroutine
+call, uses no common blocks, and no strings are passed, so the
+subroutine should be directly callable from c:
+
+The mrefl3 routine calls a few other fortran routines, but all
+variables are passed in the call, so it should work with c.
+
+	subroutine mrefl3 (nminer,w,xn,xk,d,weight,dens,mu0,mu,r,
+			wsmean,g,wband,currch,sd,inrmlc,flag)
+#
+#     mrefl3 computes the reflectance of a particulate surface
+#     given the wavelength, the material index of refraction,
+#     the absorption coefficient, and a grain size.
+#
+#     input :
+#                   nminer = number of mineral components.
+#                       w  = wavelength in microns
+#                       xn = index of refraction
+#                       xk = absorption coefficient in inverse cm.
+#                        d = grain size in cm.
+#                   weight = weight fraction of each component
+#                     dens = density of each component
+#                      mu0 = cosine of angle of incidence
+#                       mu = cosine of angle of emission
+#		      flag = flag set to do only one mineral computation
+#                        g = phase angle (real*4)
+#                   currch = current channel number (a special flag,
+#                             normally set this to 0 to compute whole spectrum
+#                       sd = grain internal scattering coeff * grain diameter
+#                            radtran defaults this to 0.3.  If you don't
+#                            know otherwise, use 0.3 (This is hapke's grain
+#                            internal scattering coefficient
+#                   inrmlc = nromalize (=1) the reflewctance computation
+#                            to a calculation with single scattering
+#                            albedo =1 (this is normally what you want tpo do.
+#                            (=0 don't normalize)
+#                     flag = flag set to do only one mineral computation
+#                            (no mixtures)
+#
+#     output:
+#               r = reflectance
+#               wsmean = single scattering albedo
+#               wband = computed single scattering albedo for each mineral
+#                       (this might be restricted only to critical wavelengths)
+#                       (and wband is not computed when currch = 0
+#                       which is the normal case for computing a complete
+#                       spectrum.  wband is special for doing
+#                       iterative solutions at critical wavelengths.
+#
+#**************************************************************************
+#
+#
+	include defs.h   # tells what sizes the arrays below are.
+
+	real*4 phi, phinum, phiden, absord, phase, bphase
+	real*4 rhosqd, sdenom, snumer 
+	real*4 d(nminer), weight(nminer)
+	integer*4 currch,aflag,flag
+	real*4 xn(nminer), xk(nminer)
+	real*4 dens(nminer)
+
+	real*4 ws1(NMINL), ws(NMINL), s(NMINL)
+	real*4 wband(MAXCHNS,NMINL), se2(NMINL)
+#
+
+      real*4 mu,mu0,mu4
+

@@ -1,0 +1,25 @@
+-rw-rw-r-- 1 elivo vims   3267 May 20 13:20 AAA.README.txt
+-rw-rw-r-- 1 elivo vims    741 Apr 25  2008 absorption.band.positions.v1.txt
+-rwxrwxr-x 1 elivo vims   5048 May 28 09:07 cmd.1    ===>  tetrun
+-rw-rw-r-- 1 elivo vims   7511 May 27 05:42 cmd1.bat
+-rw-rw-r-- 1 elivo vims   6602 May 24 16:31 cmd1-OLD.bat
+-rw-rw-r-- 1 elivo vims   7586 May 27 05:41 cmd1-post.bat
+-rw-rw-r-- 1 elivo vims   7678 May 27 05:42 cmd1-post-dual-images.bat
+-rw-rw-r-- 1 elivo vims   6651 May 24 16:33 cmd1-post-OLD.bat
+-rwxrwxr-x 1 elivo vims   9979 May 27 22:39 cmd-install    =====>  tetsetup
+-rw-rw-r-- 1 elivo vims    687 May 27 04:53 cmd-install-pc.bat
+-rw-rw-r-- 1 elivo vims 401090 May  2 21:14 cmd.lib.setup.t4.4a4_hy07as6
+-rw-rw-r-- 1 elivo vims 411616 May  2 21:16 cmd.lib.setup.t4.4a4_mm260as6
+-rw-rw-r-- 1 elivo vims 414892 May  2 21:17 cmd.lib.setup.t4.4a4_mm85cs6
+-rw-rw-r-- 1 elivo vims 413951 May  2 21:15 cmd.lib.setup.t4.4a5s6
+drwxrwxr-x 2 elivo vims   4096 May 16 21:43 cmds.all.support
+-rw-rw-r-- 1 elivo vims   3752 Apr 25 11:45 cmds.start.t4.4a
+-rw-rw-r-- 1 elivo vims   3546 May  2 21:06 cmds.start.t4.4a.single
+-rw-rw-r-- 1 elivo vims   1138 Jan  4  1995 Color.used.for.veg.species
+-rw-rw-r-- 1 elivo vims   3831 May 20 12:59 DELETED.channels
+drwxrwxr-x 2 elivo vims   4096 May  2 21:27 INFO.misc
+drwxrwxr-x 2 elivo vims   4096 May 28 10:53 restart_files
+-rw-rw-r-- 1 elivo vims     95 Jan 29  2012 specpr.bat
+-rw-rw-r-- 1 elivo vims      0 Jun 10  1997 spoolfile
+-rw-rw-r-- 1 elivo vims    105 Jan 29  2012 tetracorder.bat
+drwxrwxr-x 2 elivo vims   4096 Aug 29  2003 Utilities

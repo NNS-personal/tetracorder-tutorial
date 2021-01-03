@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -x
+diff ../tricorder3.5/creatoutfiles.r	     creatoutfiles.r
+diff ../tricorder3.5/cubecorder.r	     cubecorder.r
+diff ../tricorder3.5/cublineout.r	     cublineout.r
+diff ../tricorder3.5/delhist.r		     delhist.r
+diff ../tricorder3.5/flushseqfile.r	     flushseqfile.r
+diff ../tricorder3.5/gcsetup.r		     gcsetup.r
+diff ../tricorder3.5/makvicarlabel.r	     makvicarlabel.r
+diff ../tricorder3.5/multmap.h		     multmap.h
+#diff ../tricorder3.5/nblures.r		     nblures.r
+#diff ../tricorder3.5/nblures1mat.r	     nblures1mat.r
+diff ../tricorder3.5/nvres1mat.r	     nvres1mat.r
+diff ../tricorder3.5/obuffers.h		     obuffers.h
+diff ../tricorder3.5/opencube.r		     opencube.r
+diff ../tricorder3.5/readi2sheet.r	     readi2sheet.r
+diff ../tricorder3.5/reflsetup.r	     reflsetup.r
+diff ../tricorder3.5/rstbgn.r		     rstbgn.r
+diff ../tricorder3.5/setupreadsheet.r	     setupreadsheet.r
+diff ../tricorder3.5/specorder.r	     specorder.r
+diff ../tricorder3.5/strdate.r		     strdate.r
+diff ../tricorder3.5/tp1all.r		     tp1all.r
+diff ../tricorder3.5/tp1cse.r		     tp1cse.r
+diff ../tricorder3.5/tp1mat.r		     tp1mat.r
+diff ../tricorder3.5/tri1.h		     tri1.h
+diff ../tricorder3.5/tri1setup.r	     tri1setup.r
+diff ../tricorder3.5/tricorder.r	     tricorder.r
+diff ../tricorder3.5/tricube.h		     tricube.h
+diff ../tricorder3.5/tritf.h		     tritf.h
+diff ../tricorder3.5/wrtcrdrout.r	     wrtcrdrout.r
+diff ../tricorder3.5/wrtgcsetup.r	     wrtgcsetup.r
+diff ../tricorder3.5/wrtspcrdrout.r	     wrtspcrdrout.r

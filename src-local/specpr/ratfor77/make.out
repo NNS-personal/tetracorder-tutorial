@@ -1,0 +1,9 @@
+cc -O -m32 -c -DF77 -DS_CHAR=char  rat4.c
+cc -O -m32 -c -DF77 -DS_CHAR=char  lookup.c
+lookup.c: In function ‘install’:
+lookup.c:51: warning: conflicting types for built-in function ‘malloc’
+lookup.c: In function ‘strsave’:
+lookup.c:79: warning: incompatible implicit declaration of built-in function ‘strlen’
+lookup.c:80: warning: incompatible implicit declaration of built-in function ‘strcpy’
+cc -O -m32 -c -DF77 -DS_CHAR=char  getopt.c
+cc -O -m32 rat4.o lookup.o getopt.o  -o ratfor77

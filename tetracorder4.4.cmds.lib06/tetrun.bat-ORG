@@ -1,0 +1,276 @@
+@echo off
+
+REM invoke:  tetrun [cube] [band]
+
+REM set imaging spectrometer data-cube path and filename and band (gray-image)
+
+REM set cube to null, environmental variable may be set outside of here in the future
+REM invoke cube, band, and cmds_start from command line or hardset in this file
+
+
+REM internal variable assignment (quotes around cube name not required)
+REM example: "../cubes/cuprite.95.cal.rtgc.intel_sub1"
+REM NOTE: path must be in UNIX format for this Windows batchfile (feeds into Davinci)
+
+set cube=""
+set band=""
+set binpc=""
+set start=""
+REM ***********************************************************************
+REM ***** REPLACE the 10 Fs' below with the datacube UNIX-PATH and FILENAME *****
+if %cube% == "" set cube="FFFFFFFFFF"
+rem if %cube% == "" set cube="../cubes/cuprite.95.cal.rtgc.intel_sub1"
+
+REM if %band% == "" set band=##########
+if %band% == "" set band=20
+
+REM ***** REPLACE the 10 Ps' below with the Windows path to .\bin-pc *****
+if %binpc% == "" set binpc="PPPPPPPPPP"
+rem if %binpc% == "" set binpc="../bin-pc"
+
+REM ***** REPLACE the cmd-start (no dash in name) with Tetracorder's cmd.start batch file
+set start="CMDSSTART"
+rem set start="cmds.start.t4.4a"
+
+REM ***********************************************************************
+
+
+REM set cube to first list argument  (overrides internal variable assignment)
+if exist %1 set cube=%1
+
+REM tetrun.bat will execute all functions except for fuctions using invalid cubes
+echo cube defined as: %cube%
+echo .
+echo .
+echo .
+if exist %cube% (
+   echo data-cube is valid: %cube%
+) else (
+   echo data-cube is NOT valid: %cube%
+   echo .
+   echo check file: cmd.lib.setup.tx.xxxxx for proper cube setting
+   echo .
+   echo    Edit tetrun.bat and re-run if dual cube-mineral map images are to be produced
+)
+echo .
+echo .
+
+if NOT [%2]==[] set band=%2
+
+REM end of imaging spectrometer data-cube path and filename setting routine
+
+REM start Tetracorder
+call %binpc%\tetracorder.bat r1 < %start%
+
+rem ------- end of Tetracorder Processing; beginning Davinci post-processing -------
+
+
+REM set program environment variables for Davinci
+if "%DV_HOME%" == "" call :environ-vars
+echo DV_HOME defined as: %DV_HOME%
+
+rem if Davinci not present, terminate batch script
+if "%DV_HOME%" == "Davinci_Not_Installed" GOTO :eof
+
+
+REM Obsolete:
+REM set path variable for SPECPR and Tetracorder
+REM if "%TETRACORDER_BIN%" == "" call ..\bin-pc\tet_bin_path.bat
+REM echo TETRACORDER_BIN defined as: %TETRACORDER_BIN%
+
+
+REM add specific mineral maps into generic version
+REM uncompress fitxdepth images in group1 and group2 subdirectories
+echo "unzipping *.fd.gz in group 1 subdirectory"
+gzip -d .\group.1um\*.fd.gz
+echo "unzipping *.fd.gz in group 2 subdirectory"
+gzip -d .\group.2um\*.fd.gz
+
+REM add mineral maps (PC Ver. files are unzipped [*.fd])
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.iron.oxides-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.kaol+smect-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.alunite+kaolinite.muscovite-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.ALUNITE_COMP-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.ALUN+PYROPH-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.KAOL+MUSC-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.PYROPH+MUSC-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.TALCS-pc
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f ./cmds.all.support/davinci.add.generic_Fe2+-pc
+
+echo "zipping *.fd in group 1 subdirectory"
+gzip .\group.1um\*.fd
+echo "zipping *.fd in group 2 subdirectory"
+gzip .\group.2um\*.fd
+
+REM lists all subdirectories in CWD, then call subroutine to perform cluster analysis
+for /d %%i in (case.*,group.*) do (call :make_cluster %%i)
+
+rename tmp.cluster tmp.cluster-junk
+
+REM generate cluster file from original file output
+findstr /N "0/" tmp.cluster-junk > tmp.cluster.txt
+
+del tmp.cluster-junk
+
+
+REM lists all subdirectories in CWD, then call subroutine to make pgm & gif images
+for /d %%i in (case.*,group.*) do (call :make_pgm-n-gif %%i)
+
+REM lists all subdirectories in CWD, then call subroutine to make dual jpeg images
+if exist %cube% for /d %%i in (case.*,group.*) do (call :make_dual-jpeg %%i)
+
+REM terminate batch execution
+GOTO :batch-end
+
+
+
+REM subroutine ----------------------------------
+REM subroutine to call Davinci and perform cluster analysis
+:make_cluster
+
+REM test commands
+REM echo %~p1%1\
+REM dir %~p1%1\*.fd
+REM for /f %%a IN ('dir /b %~p1%1\*.fd') do echo %%a
+REM for /f %%a IN ('dir /b %1\*.fd.gz') do echo %1%%a >> tmp.cluster-minmap-list
+
+echo "unzipping *.fd.gz in %1 subdirectory"
+gzip -d %1\*.fd.gz
+
+for /f %%a IN ('dir /b %1\*.fd') do call ^
+ "%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f cmds.all.support/davinci.cluster %1/%%a  >> tmp.cluster
+
+echo "zipping *.fd in %1 subdirectory"
+gzip %1\*.fd
+
+GOTO :eof
+
+
+REM subroutine ----------------------------------
+REM subroutine to call Davinci and create gamma stretched pgm and gif images
+:make_pgm-n-gif
+
+echo "unzipping *.fd.gz in %1 subdirectory"
+gzip -d %1\*.fd.gz
+
+for /f %%a IN ('dir /b %1\*.fd') do call ^
+ "%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f %binpc%/davinci.image.to.pgm %1/%%a -25 %1/%%~na.fd.pgm -gamma
+
+for /f %%a IN ('dir /b %1\*.pgm') do call ^
+ ppmtogif %1/%%a > %1/%%~na.gif
+del %1\*.pgm
+
+echo "zipping *.fd in %1 subdirectory"
+gzip %1\*.fd
+GOTO :eof
+
+
+REM subroutine ----------------------------------
+REM subroutine to call Davinci and create gamma stretched dual jpeg images
+:make_dual-jpeg
+
+echo "unzipping *.fd.gz in %1 subdirectory"
+gzip -d %1\*.fd.gz
+
+mkdir results.%1
+
+for /f %%a IN ('dir /b %1\*.fd') do call ^
+"%DV_HOME%"davinci.exe -l "%HOME%/.dvlog" -f %binpc%/davinci.red.overlay.gray-image %1/%%a -25 %cube% %band% 0 results.%1/%%~na.fd -gamma -dual
+
+echo "zipping *.fd in %1 subdirectory"
+gzip %1\*.fd
+GOTO :eof
+
+
+REM subroutine ----------------------------------
+REM subroutine to set program environment variables
+:environ-vars
+
+REM Win7 set DV_HOME=C:\Program Files (x86)\Davinci\
+if exist "C:\Program Files (x86)\Davinci\davinci.exe" set "DV_HOME=C:\Program Files (x86)\Davinci\"
+
+REM WinXP set DV_HOME=C:\PROGRA~1\Davinci\
+if exist "C:\PROGRA~1\Davinci\davinci.exe" set "DV_HOME=C:\PROGRA~1\Davinci\"
+
+if "%DV_HOME%" == "" set DV_HOME=Davinci_Not_Installed
+if "%DV_HOME%" == "Davinci_Not_Installed" GOTO :eof
+
+set HOME=%USERPROFILE%
+REM The following REMed out (commented out) setting used when PWD is in Davinci's home directory
+REM set DV_HOME=%~dp0
+set DV_CWD=%~dp0
+set SYSPATH=%PATH%
+
+set PATH=%DV_HOME%;
+set PATH=%PATH%;%DV_HOME%bin;
+set PATH=%PATH%;%DV_HOME%Gnuplot\bin;
+set PATH=%PATH%;%DV_HOME%Ghostscript\bin;
+set PATH=%PATH%;%DV_HOME%Ghostscript\lib
+set PATH=%PATH%;%DV_HOME%ImageJ
+set PATH=%PATH%;%DV_HOME%imgv
+
+if "%TMPDIR%" == "" set TMPDIR=%TEMP%
+
+set DEFAULT_DV_VIEWER=imgv.exe
+set IMGV_HOME=%DV_HOME%\imgv
+
+set ALTERNATE_DV_VIEWER=ImageJ.exe
+
+if "%DV_MOD_PATH%" == "" set DV_MOD_PATH=%DV_HOME%modules
+if "%DV_LIB%" == "" set DV_LIB=%DV_HOME%library
+if "%DVHELP%" == "" set DVHELP=%DV_HOME%dv.gih
+if "%DV_EX%" == "" set DV_EX=%DV_HOME%examples
+if "%GPLOT_CMD%" == "" set GPLOT_CMD=pgnuplot.exe
+if "%EDITOR%" == "" set EDITOR=notepad
+
+if "%USER%" == "" set USER=%USERNAME%
+if "%HOST%" == "" set HOST=%COMPUTERNAME%
+if "%GNUPLOT_PS_DIR%" == "" set GNUPLOT_PS_DIR=%DV_HOME%Gnuplot\bin\share\PostScript
+
+rem Ghostscript
+set GS_LIB=%DV_HOME%\Ghostscript\fonts;%DV_HOME%\Ghostscript\lib
+
+
+rem FIX THE IMAGE VIEWER
+
+if "%DV_VIEWER%" == "" goto  setviewer
+goto endviewer
+:setviewer
+if exist C:\WINDOWS\system32\javaw.exe goto javafound
+echo "Java not found"
+goto defaultviewer
+
+:javafound
+if exist "%DV_HOME%ImageJ/%ALTERNATE_DV_VIEWER%" goto imagejfound
+goto defaultviewer
+
+:imagejfound
+set DV_VIEWER=%ALTERNATE_DV_VIEWER%
+goto endviewer
+
+:defaultviewer
+set DV_VIEWER=%DEFAULT_DV_VIEWER%
+:endviewer
+
+rem Restore Path (by appending at the end)
+set PATH=%PATH%;%SYSPATH%
+echo Environment:
+echo PATH=%PATH%
+echo DV_HOME=%DV_HOME%
+echo DV_CWD=%DV_CWD%
+echo TMPDIR=%TMPDIR%
+echo DV_VIEWER=%DV_VIEWER%
+echo DV_MOD_PATH=%DV_MOD_PATH%
+echo DV_LIB=%DV_LIB%
+echo DVHELP=%DVHELP%
+echo DV_EX=%DV_EX%
+echo GPLOT_CMD=%GPLOT_CMD%
+echo EDITOR=%EDITOR%
+echo.
+GOTO :eof
+
+:batch-end
+echo "Tetracorder Finished"
+rem exit
+
+:eof

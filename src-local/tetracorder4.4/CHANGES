@@ -1,0 +1,55 @@
+
+makefile
+	Changed ratfor to $(RF)
+	Changed sspp to $(SSPP)
+	Changed f77 to $(F77)
+	Had to remake /src/local/cubeio in order for link to work
+	Added $(LDFLAGS) (+U77 for IA64 HPUX) to fortran build of
+         tetracorder to resolve "system_" and "time_"
+
+tetracorder.r
+	IA64HPUX F90 program statement
+	IA64HPUX ON statements
+
+reflsetup.r
+	Changed conditional statements containing:
+		iopcon(i:i) == iht
+	    to: iopcon(i:i) == 't'
+
+        Changed conditional statements containing:
+                iopcon(i:i) == ihc
+            to: iopcon(i:i) == 'c'
+	  NOTE: Think that the above would have worked as originally
+	        code - did not change back to confirm
+	Declared function fnb as integer*4
+	Declared function lnb as integer*4
+
+specorder.r
+	Removed comment line immediantly follow 3122 format
+	Declared function fnb as integer*4
+	Declared function lnb as integer*4
+
+cublineout.r
+	Removed comment on "return" line
+
+        changed:
+                nzeroline = yel
+            to: nzeroline(imat) = yel
+
+i4pack4.c
+	Added the following - same as for #NONHPUX
+	/*IA64HPUX
+		long int i4pack4_ (ibuff,npix,numsiz)
+	IA64HPUX*/
+
+delhist.r
+	Declared function fnb as integer*4
+	Declared function lnb as integer*4
+
+makvicarlabel.r
+	Declared function lnb as integer*4
+
+tri1setup.r
+	Declared function iwidok as integer instead
+        as integer*4 just to be consistent with all other
+	references to iwidok by other code 

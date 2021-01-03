@@ -1,0 +1,411 @@
+#!/bin/sh
+#
+# script to make sub-directories and install all needed tetracorder command files
+# to perform a standard mapping run.
+#
+# Roger N. Clark   Dec. 12, 1994, 3.7 installation May 11, 2001
+#                  t4.1 fall 2001.
+#                  Major updates 2008 for t4.1 and multiple instruments
+
+# make a sub directory and install all commands needed to run tetracorder.
+
+####################################################################
+#### NOTE: THINGS TO CHANGE IF THIS SCRIPT IS MOVED:          ######
+                                                              ######
+source=/info/tetracorder/tetracorder4.4.cmds.lib06            ######
+                                                              ######
+####################################################################
+#### NOTE: THINGS TO CHANGE FOR NEW VERSIONS                  ######
+                                                              ######
+     lib=cmd.lib.setup.t4.4a5s6                               ######
+   start=cmds.start.t4.4a                                     ######
+  starts=cmds.start.t4.4a.single                              ######
+                                                              ######
+### the following instrument specific libraries get set to    ######
+### the command library $lib in the $start and $starts        #####$
+### libraries (see case statement where restart is defined.   ######
+### Future tetracorder will not need custom libraries.        ######
+                                                              ######
+libmma=cmd.lib.setup.t4.4a4_mm260as6    # MMM targeted a        ######
+libmm09c=cmd.lib.setup.t4.4a4_mm85cs6   # MMM targeted a        ######
+libhy07a=cmd.lib.setup.t4.4a4_hy07as6   # Hymap_2007a 124 channels ###
+                                                              ######
+                                                              ######
+####################################################################
+
+
+usage()
+{
+	echo "Usage: tetsetup   sub_directory   data_set   image_cube"
+	echo ""
+	echo "sub_directory is the directory where the commands go,"
+	echo "			and it must not already exist."
+	echo ""
+	echo "Valid data sets are:"
+	echo "             AVIRIS:"
+        echo "                          aviris_2010"
+	echo "				aviris_2006"
+	echo "				aviris_2005"
+	echo "				aviris_2001"
+	echo "				aviris_2000"
+	echo "				aviris_1999"
+	echo "				aviris_1998"
+	echo "				aviris_1997"
+	echo "				aviris_1996"
+	echo "				aviris_1995"
+	echo "				aviris_1994"
+	echo "				aviris_1994"
+	echo "				Sept_1993"
+	echo "				 May_1993"
+	echo "		 	       bodie_1992"
+	echo "		 	       1992_no_shift"
+
+	echo "             CRISM:"
+	echo "		 	        CRISM_438a"
+	echo "		 	        CRISM_72b"
+
+	echo "             Moon Mineralogy Mapper"
+        echo "                          MMM_09c   # 2009 global mode 2009 85 channels"
+
+	echo "             VIMS:"
+	echo "		 	        VIMS2007"
+
+	echo "             HYMAP:"
+	echo " 				HyMap_1998"
+        echo "  			HyMap_1999.1 (cuprite)"
+	echo " 				HyMap_1999.2 (australia)"
+	echo " 				HyMap_2000"
+	echo " 				HyMap_2001"
+	echo "                          HyMap_2002"
+	echo "                          HyMap_2007a"
+
+	echo "             Hyperion:"
+        echo "                       Hyperion_2006"
+	echo ""
+	echo "             ASDFS"
+        echo "                       ASDFS"
+	echo ""
+	echo "image_cube is the path to the Imaging spectroscopy data set."
+}
+
+if [ -z "$1" ]
+then
+
+	usage
+	exit 1
+fi
+
+if [ -f "$1" -o -d "$1" ]
+then
+	echo "ERROR: $1 already exists "
+	echo ""
+	usage
+	exit 1
+fi
+
+dir=$1
+
+if [ -z "$2" ]
+then
+	echo "ERROR: you must specify a data set "
+	echo ""
+	usage
+	exit 1
+fi
+
+############## restart file name length max = 77 characters
+
+case $2 in
+
+	aviris_2010 )   data=aviris_2010
+	                restart=r1-av10a;;
+
+	aviris_2006 )   data=aviris_2006
+	                restart=r1-av06a;;
+
+	aviris_2005 )   data=aviris_2005
+	                restart=r1-av05a;;
+
+	aviris_2001 )   data=aviris_2001
+	                restart=r1-av01a;;
+
+	aviris_2000 )   data=aviris_2000
+	                restart=r1-av00a;;
+
+	aviris_1999 )  	data=aviris_1999
+			restart=r1-av99a;;
+
+	aviris_1998 )	data=aviris_1998
+			restart=r1-av98a;;
+
+	aviris_1997 )	data=aviris_1997
+			restart=r1-av97a;;
+
+	aviris_1996 )	data=aviris_1996
+			restart=r1-av96a;;
+
+	aviris_1995 )	data=aviris_1995
+			restart=r1-av95a;;
+
+	aviris_1994 )	data=aviris_1994
+			restart=r1-av94a;;
+
+	Sept_1993 )	data=aviris_Sept_1993
+			restart=r1-av9.93;;
+
+	May_1993 )	data=aviris_May_1993
+			restart=r1-av5.93;;
+
+	bodie_1992 )	data=aviris_bodie_1992
+			restart=r1-avbodie.92;;
+
+	1992_no_shift )	data=aviris_1992_no_shift
+			restart=r1-av1992;;
+
+	MMM_09c )       data=MMM_09c
+			lib=$libmm09c
+			restart=r1-06mm09c;;
+
+	VIMS2007 )	data=VIMS2007
+			restart=r1-vims2007;;
+
+	FS358 )		data=FS358
+			restart=r1-fs358;;
+
+	HyMap_1998 )    data=Hymap_1998
+                        restart=r1-hymap98;;
+
+	HyMap_1999.1 )  data=Hymap_1999.1
+                        restart=r1-hymap99.1;;
+
+        HyMap_1999.2 )  data=Hymap_1999.2
+                        restart=r1-hymap99.2;;
+
+	HyMap_2000 )    data=Hymap_2000
+                        restart=r1-hymap00;;
+
+	HyMap_2001 )    data=Hymap_2001
+                        restart=r1-hymap01;;
+
+	HyMap_2002 )    data=Hymap_2002
+                        restart=r1-hymap02;;
+
+	HyMap_2007a )    data=Hymap_2007a
+			lib=$libhy07a
+                        restart=r1-s06hy07a;;
+
+     Hyperion_2006 )    data=Hyperion_2006
+                        restart=r1-hyperion06;;
+
+              ASDFS)    data=ASDFS
+			restart=r1-asdfs;;
+
+	*)		echo "ERROR: unrecognized data set"
+			echo ""
+			usage
+			exit 1;;
+		
+esac
+#echo "DEBUG: got this far1"
+
+if [ -z "$3" ]
+then
+	echo "ERROR: you must specify a an image cube or NA "
+	echo ""
+	usage
+	exit 1
+fi
+
+cube=$3
+
+# make slashes into backslash slash for use in sed commands
+cube2=`echo "$cube" | sed -e 's/\//\\\\\//g'`
+
+# check that critical files exist:
+
+if [ -f "$source/$lib" ]
+then
+	echo "VERIFIED: $lib found"
+else
+	echo "ERROR: $lib not found"
+	echo "exit 2"
+	exit 2
+fi
+
+if [ -f "$source/restart_files/$restart" ]
+then
+	echo "VERIFIED: restart_files/$restart  found"
+else
+	echo "ERROR: restart_files/$restart not found"
+	echo "exit 2"
+	exit 2
+fi
+
+
+
+# check that cmds.start file is OK:
+
+a1=`grep '^==.DELETPTS.DDDDDDDDDD' ${source}/${start}`
+a2=`grep '^cube: FFFFFFFFFF'       ${source}/${start}`
+a3=`grep '^<AAAAAACMDLIBRARY'      ${source}/${start}`
+
+if [ -z "$a1" ]
+then
+	echo "ERROR: ${source}/${start} file has no '==[DELETPTS]DDDDDDDDDD' line"
+	echo "exit 2"
+	exit 2
+else
+	echo "CHECK VERIFIED: cmds.start file ok with $a1 line"
+fi
+
+if [ -z "$a2" ]
+then
+	echo "ERROR: ${source}/${start} file has no 'cube: FFFFFFFFFF' line"
+	echo "exit 2"
+	exit 2
+else
+	echo "CHECK VERIFIED: cmds.start file ok with $a2 line"
+fi
+
+if [ -z "$a3" ]
+then
+	echo "ERROR: ${source}/${start} file has no '<AAAAAACMDLIBRARY' line"
+	echo "exit 2"
+	exit 2
+else
+	echo "CHECK VERIFIED: cmds.start file ok with $a3 line"
+fi
+
+p1=`pwd`
+
+cd $source
+p2=`pwd`
+cd $p1
+
+if [ "$p1" = "$p2" ]
+then
+	echo "INVALID directory: do not execute this command from"
+	echo "		$p1"
+	echo ""
+	exit 1
+fi
+
+#
+# now have everything to actually assemble command files.
+#
+
+mypwd=`pwd`
+echo "present path: $mypwd" 
+echo "Making directory: $dir"
+mkdir $dir
+
+if [ "$?" -gt 0 ]
+then
+	echo "ERROR creating directory, exiting."
+	exit 1
+fi
+
+#####################################################################
+# check that cube is found
+
+cd ${dir}
+if [ "$cube" != "NA" ]
+then
+	if [ ! -f "$cube" ]
+	then
+		echo "WARNING: $cube"
+		echo "        NOT FOUND.  EXIT 1."
+		exit 1
+	fi
+fi
+cd $mypwd
+
+
+#####################################################################
+echo "making sub-directories in ${dir} for groups and cases"
+
+for i in cmds.all.support  Band.images \
+	group.1um group.2um group.veg group.ree group.2um-broad \
+	group.2.5um group.1.4um group.3um group.1.5um-broad \
+	group.ree_neod group.ree_samar \
+	case.red-edge case.veg.type case.ep-cal-chl
+do
+	echo "mkdir ${dir}/${i}"
+	mkdir ${dir}/${i}
+done
+
+a=`grep ${data} ${source}/DELETED.channels`
+
+if [ -z "$a" ]
+then
+	echo "ERROR: can not find ${data} DELETED.channels file"
+	echo "exit 1"
+	exit 1
+fi
+#### OLDway: a=`grep AVIRIS\ ${data} ${source}/DELETED.channels`
+####echo "DEBUG: a=$a"
+####echo "DEBUG: data=$data"
+####echo "DEBUG: restart=$restart"
+
+#--------------------------------------------------------------------
+echo "copying command files to ${dir}"
+
+cp ${source}/$lib   ${dir}
+
+
+dpt=`echo $a | sed -e 's/#.*$//' | sed -e 's/ *$//'`
+
+echo "Installing cmds.start file:"
+echo "           Installing deleted points:"
+echo "           $dpt"
+echo "           Using command library $lib"
+echo "           Setting cube path/file name to:"
+echo "           $cube"
+sed -e "s/DDDDDDDDDD/${dpt}/" ${source}/$start | \
+			sed -e "s/FFFFFFFFFF/${cube2}/" | \
+			sed -e "s/AAAAAACMDLIBRARY/${lib}/" | \
+			sed -e '/following line must change/d' > \
+				${dir}/$start
+
+echo "Installing cmds.start single file:"
+echo "           Installing deleted points:"
+echo "           $dpt"
+echo "           Using command library $lib"
+sed -e "s/DDDDDDDDDD/${dpt}/" ${source}/$starts | \
+			sed -e "s/FFFFFFFFFF/${cube2}/" | \
+			sed -e "s/AAAAAACMDLIBRARY/${lib}/" > \
+				${dir}/$starts
+
+
+sed -e "s/FFFFFFFFFF/${cube2}/" ${source}/cmd.1 | \
+		sed -e "s/CMDSSTART/${start}/" > ${dir}/cmd.1
+
+chmod 775 ${dir}/cmd.1
+
+
+if [ "$?" -gt 0 ]
+then
+	echo "ERROR creating $start  Exiting."
+	exit 1
+fi
+
+echo "copying restart file"
+cp ${source}/restart_files/${restart} ${dir}/r1
+
+echo "copying davinci scripts"
+cp ${source}/cmds.all.support/*   ${dir}/cmds.all.support
+
+chmod 555 ${dir}/cmds.all.support/*
+
+echo "setup of ${dir} complete"
+
+
+#====================================================================
+
+echo ""
+echo "Setup complete"
+echo "To run Tetracorder, cd to $dir and execute the command tetrun:"
+echo " "
+echo "	cd $dir"
+echo " "
+echo '  time ./tetrun >& tetrun.out &'

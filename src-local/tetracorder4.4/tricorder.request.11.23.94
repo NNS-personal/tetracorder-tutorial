@@ -1,0 +1,54 @@
+From gswayze@speclab.cr.usgs.gov Tue Nov 22 18:33 MST 1994
+Received: by speclab.cr.usgs.gov
+	(1.37.109.4/16.2) id AA16740; Tue, 22 Nov 94 18:33:42 -0700
+Date: Tue, 22 Nov 94 18:33:42 -0700
+From: Gregg A Swayze <gswayze@speclab.cr.usgs.gov>
+Return-Path: <gswayze@speclab.cr.usgs.gov>
+To: rclark@speclab.cr.usgs.gov
+Subject: tricorder
+Reply-To: gswayze@speclab.cr.usgs.gov
+Status: R
+
+if you look at the file "results" in /i1/tmp/resolution/work you will see that it contains 
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                           Analyzing spectrum:
+calcite     228                 Calc /w noise std=.0250 AVIRIS93.1
+                                          \# comment
+The spectrum: calcite     228   Calc /w noise std=.0250 AVIRIS93.1
+
+is best matched by              Calcite WS272              =a AVIRIS93.1
+                                ========================================
+
+ Material  Fit      Depth        F*D
+    58    .943       .296       .281
+
+
+
+What I need is for the unknown mineral title (with s/n) and tricorder pick
+to occur on the same line.  Would it be a hard modification for you to do?
+
+This way I could do Tricorder on all the mineral spectra and append to the
+results file.  Then I could do the greping for the tricorder identification
+and s/n.
+
+
+What I will do to the results file is:
+
+1) grep for a given s/n
+
+then grep this output for the mineral id
+
+this will give me from one grepped line all the information I need.
+
+2) I will do a word count on the output from the greps
+
+
+What I need as output is:
+
+Title of unknown             Title of Tricorder ID mineral
+
+
+all on the same line.  can you do this please?
+
+

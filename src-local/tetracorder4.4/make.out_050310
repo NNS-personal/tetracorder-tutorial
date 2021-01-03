@@ -1,0 +1,92 @@
+sspp -r -LINUX -INTEL  -XWIN  tetracorder.r > tetracorder.x
+ratfor77 < tetracorder.x > tetracorder.f
+rm tetracorder.x
+gfortran -C -O -m64 -c tetracorder.f
+rm tetracorder.f
+ratfor77 < makvicarlabel.r > makvicarlabel.f
+gfortran -C -O -m64 -c makvicarlabel.f
+rm makvicarlabel.f
+ratfor77 < parsevicarlabel.r > parsevicarlabel.f
+gfortran -C -O -m64 -c parsevicarlabel.f
+rm parsevicarlabel.f
+ratfor77 < parseenvilabel.r > parseenvilabel.f
+gfortran -C -O -m64 -c parseenvilabel.f
+rm parseenvilabel.f
+ratfor77 < wrtenvihdr.r > wrtenvihdr.f
+gfortran -C -O -m64 -c wrtenvihdr.f
+rm wrtenvihdr.f
+ratfor77 < str2tmonth.r > str2tmonth.f
+gfortran -C -O -m64 -c str2tmonth.f
+rm str2tmonth.f
+ratfor77 < read2sheet.r > read2sheet.f
+gfortran -C -O -m64 -c read2sheet.f
+rm read2sheet.f
+ratfor77 < setupreadsheet.r > setupreadsheet.f
+gfortran -C -O -m64 -c setupreadsheet.f
+rm setupreadsheet.f
+sspp -r -LINUX -INTEL  -XWIN  rstbgn.r > rstbgn.x
+ratfor77 < rstbgn.x > rstbgn.f
+gfortran -C -O -m64  -c rstbgn.f
+rm rstbgn.f rstbgn.x
+ratfor77 < strdate.r > strdate.f
+gfortran -C -O -m64 -c strdate.f
+rm strdate.f
+ratfor77 < delhist.r > delhist.f
+gfortran -C -O -m64 -c delhist.f
+rm delhist.f
+ratfor77 < tri1setup.r > tri1setup.f
+gfortran -C -O -m64 -c tri1setup.f
+rm tri1setup.f
+ratfor77 < reflsetup.r > reflsetup.f
+gfortran -C -O -m64 -fno-backslash -c reflsetup.f
+rm reflsetup.f
+ratfor77 < cubecorder.r > cubecorder.f
+gfortran -C -O -m64 -c cubecorder.f
+rm cubecorder.f
+ratfor77 < specorder.r > specorder.f
+gfortran -C -O -m64 -c specorder.f
+rm specorder.f
+ratfor77 < tp1mat.r > tp1mat.f
+gfortran -C -m64  -c tp1mat.f
+rm tp1mat.f
+ratfor77 < tp1all.r > tp1all.f
+gfortran -C -m64  -c tp1all.f
+rm tp1all.f
+ratfor77 < flushseqfile.r > flushseqfile.f
+gfortran -C -O -m64 -c flushseqfile.f
+rm flushseqfile.f
+ratfor77 < opencube.r > opencube.f
+gfortran -C -O -m64 -c opencube.f
+rm opencube.f
+ratfor77 < wrtspcrdrout.r > wrtspcrdrout.f
+gfortran -C -O -m64 -c wrtspcrdrout.f
+rm wrtspcrdrout.f
+ratfor77 < wrtcrdrout.r > wrtcrdrout.f
+gfortran -C -O -m64 -c wrtcrdrout.f
+rm wrtcrdrout.f
+ratfor77 < gcsetup.r > gcsetup.f
+gfortran -C -O -m64 -c gcsetup.f
+rm gcsetup.f
+ratfor77 < wrtgcsetup.r > wrtgcsetup.f
+gfortran -C -O -m64 -c wrtgcsetup.f
+rm wrtgcsetup.f
+ratfor77 < creatoutfiles.r > creatoutfiles.f
+gfortran -C -O -m64 -c creatoutfiles.f
+rm creatoutfiles.f
+ratfor77 < cublineout.r > cublineout.f
+gfortran -C -O -m64 -c cublineout.f
+rm cublineout.f
+ratfor77 <  tp1cse.r > tp1cse.f
+gfortran -C -m64  -c tp1cse.f
+rm tp1cse.f
+ratfor77 < nvres1mat.r > nvres1mat.f
+gfortran -C -O -m64 -c nvres1mat.f
+rm nvres1mat.f
+sspp -r -LINUX -INTEL  -XWIN  i4pack4.r > i4pack4.x
+ratfor77 < i4pack4.x > i4pack4.f
+rm i4pack4.x
+gfortran -C -O -m64 -c i4pack4.f
+rm i4pack4.f
+gfortran -C -O -m64 -L/usr/lib64 -o tetracorder tetracorder.o makvicarlabel.o parsevicarlabel.o parseenvilabel.o wrtenvihdr.o str2tmonth.o read2sheet.o setupreadsheet.o rstbgn.o strdate.o delhist.o tri1setup.o reflsetup.o cubecorder.o specorder.o tp1mat.o tp1all.o flushseqfile.o opencube.o wrtspcrdrout.o wrtcrdrout.o gcsetup.o wrtgcsetup.o creatoutfiles.o cublineout.o tp1cse.o nvres1mat.o i4pack4.o ../specpr/src.specpr/common/spblockdata.o \
+			../specpr//lib/specpr.a	\
+			-L/usr/X11R6/lib -lX11

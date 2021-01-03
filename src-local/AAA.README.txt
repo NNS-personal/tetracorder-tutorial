@@ -1,0 +1,38 @@
+Installation of specpr and tetracorder packages on linux.
+
+Be sure the latest versions of gfortran and ratfor are installed.
+
+Be sure X11 is installed (e.g. X11/Xlib.h is needed)
+
+Untar the tetracorder and specpr source code in the same directory,
+we recommend /usr/local
+
+cd to the specpr directory (specpr must be compiled before tetracorder):
+
+     cd specpr
+
+View and follow the directions in AAA.INSTALL.INSTRUCTIONS.linux_unix.txt
+
+Next cd to the tetracorder directory and run make:
+
+     cd /src/local/tetracorder4.4
+     make
+     make install
+     cp /usr/local/bin/tetracorder4.4 /usr/local/bin/tetracorder
+
+cd to the usr.local.bin_tetracorder_support directory and copy
+all the scripts to /usr/local/bin
+
+     cd  /src/local/usr.local.bin_tetracorder_support
+     cp * /usr/local/bin
+
+Confirm that the scripts are executable by all users who will
+run tetracorder.
+
+Install the davinci package from http://davinci.asu.edu
+
+   Davinci is needed to run post tetracorder analysis scripts
+   These tools analyze results and create the gif and jpeg
+   image products of the results that enable rapid assessment
+   of results.
+

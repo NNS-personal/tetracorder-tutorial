@@ -1,0 +1,209 @@
+#!/bin/sh
+#
+# run all tetracorder modes for standard mapping run, and compress the results.
+# Roger N. Clark,   December 21, 1994 - 2012
+
+# usage:
+#        tetrun   [cube] [band]
+#
+# if band is not on the command line, default = channel 20
+
+# Note: either include the full path to the image cube, or edit the following
+# line to be the full path
+
+# the FFFFFFFFFF will get changed to the cube file by the cmd-install
+#                script (lunix/unix).  If not, then it can be passed on
+#                the command line, or simply hard coded by hand here.
+
+# The cube can be a relative or absolute path
+# for example, a full lunix/unix path is:
+# cube=/data/mountains/2006.aviris/cubes/f060506t01p00r09.rtgc
+# If a relative path, like:
+#   ../cubes/f060506t01p00r09.rtgc
+# the scripts which change directories will attempt to add a
+# relative path, but for non standard implimentations, the path
+# might not be found.  If that problem occurs, it should be detected
+# and the script will stop.
+
+
+cube=FFFFFFFFFF
+if [ ! -z "$1" ]
+then
+	cube=$1
+fi
+
+# set band number.  This is used as the base image for the jpeg results generation.
+if [ ! -z "$2" ]
+then
+	a=$2
+else
+	# hard code band number here if desired.
+	band=20
+fi
+
+echo "cmd.1 start: " `date`
+
+##### now run tetracorder ################
+##########################################
+
+# Tetracorder reads from the command file using the < directive.
+# when installed, the install script modifies the 
+# CMDSSTART string to the cmds.start.tX.Xn file name
+# where the tetracorder setup commands are located.
+# for example, the commands might be in cmds.start.t4.4a
+# so CMDSSTART should be chaned to cmds.start.t4.4a
+
+echo "tetracorder r1"
+time tetracorder r1 <<EOI > tetracorder.out 2>&1
+<CMDSSTART
+e
+EOI
+
+echo "tetracorder complete" `date`
+
+for i in `ls -d group.* case*`
+do
+	echo "compressing files in $i"
+
+	cd $i
+	a=`ls *.fit`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+	a=`ls *.depth`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+	a=`ls *.fd`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+
+	cd ..
+done
+
+cd Band.images
+
+# note: aviris.true.color and aviris.to.TM valid only with AVIRIS Data
+
+# check that we can find the cube
+bcube=$cube
+if [ ! -f "$cube" ]
+then
+        a=$cube
+        bcube=../$a
+        if [ ! -f "$cube" ]
+        then
+                echo "ERROR: $a not found from sub-directory Band.images"
+                echo "   we tried adding .. but that didn't work either: $bcube"
+                echo "try using full path to cube"
+                echo "skipping aviris.true.color  and aviris.to.TM"
+        fi
+fi
+
+if [ -f "$bcube" ]
+then
+	echo "NOTE: aviris.true.color and aviris.to.TM valid only with AVIRIS Data"
+	aviris.true.color $bcube band > makem.out 2>&1
+	aviris.to.TM      $bcube band > makem.out 2>&1
+
+        # now add envi headers
+        for bb in band*
+        do
+                if [ -f "$bb" ]
+                then
+                        davinci.make.envi.header.from.vicar $bb > ${bb}.hdr
+
+                        # now make jpg images for easy viewing
+
+                        echo "davinci.image.to.jpeg $bb  0  ${bb}.jpg -gamma 500"
+                        davinci.image.to.jpeg $bb  0  ${bb}.jpg  -gamma 500
+                fi
+        done
+fi
+
+cd ..
+
+# add some images together into more general groups
+
+./cmds.all.support/davinci.add.iron.oxides
+
+./cmds.all.support/davinci.add.kaol+smect
+
+./cmds.all.support/davinci.alunite+kaolinite.muscovite
+
+./cmds.all.support/davinci.add.ALUNITE_COMP
+
+./cmds.all.support/davinci.add.ALUN+PYROPH
+
+./cmds.all.support/davinci.add.KAOL+MUSC
+
+./cmds.all.support/davinci.add.PYROPH+MUSC
+
+./cmds.all.support/davinci.add.TALCS
+
+./cmds.all.support/davinci.add.generic_Fe2+
+
+############### make sure all newly generated images are compressed
+for i in `ls -d group.* case*`
+do
+	echo "compressing files in $i"
+
+	cd $i
+	a=`ls *.fit`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+	a=`ls *.depth`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+	a=`ls *.fd`
+	if [ ! -z "$a" ]
+	then
+		gzip $a
+	fi
+
+	cd ..
+done
+
+###############
+
+echo "add geometry info to all created image files with envi headers " `date`
+
+./cmds.all.support/cmd.add.geometry.info.to.envi.headers $cube
+
+###############
+
+date
+
+echo "Begin cluster analysis" `date`
+./cmds.all.support/cluster.analysis
+
+echo "Generating pw commands of top materials" `date`
+./cmds.all.support/gen.pw.clustered25.cmds
+
+echo "Generating gamma stretched gif images" `date`
+./cmds.all.support/gen.fd.gif.images
+
+if [ -f "$cube" ]
+then
+	echo "Generating gamma stretched jpeg results on gray background images" `date`
+	./cmds.all.support/gen.fd.jpg.overlay+base.images $cube $band
+
+	echo "Generating gamma stretched dual jpeg results on gray background + results on black images" `date`
+	./cmds.all.support/gen.fd.jpg.overlay+base-dual.images $cube $band
+else
+	echo "ERROR: cannot find image cube: $cube"
+	echo "       skipping jpeg results generation"
+fi
+
+echo "making notzero directories and copy notzero jpeg results there" `date`
+./cmds.all.support/gen.fd.jpg.overlay+base-dual.images-notzero
+
+echo "tetrun complete: " `date`

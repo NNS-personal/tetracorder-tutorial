@@ -1,0 +1,193 @@
+	sspp -r -IA64HPUX -NODEC -XWIN tetracorder.r > tetracorder.x
+	ratfor90 < tetracorder.x > tetracorder.f
+	rm tetracorder.x
+	f90 -C +fp_exception -O -c tetracorder.f
+tetracorder.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   program TETRACORDER
+
+1558 Lines Compiled
+	rm tetracorder.f
+	ratfor90 < makvicarlabel.r > makvicarlabel.f
+	f90 -C +fp_exception -O -c makvicarlabel.f
+makvicarlabel.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine MAKVICARLABEL
+
+261 Lines Compiled
+	rm makvicarlabel.f
+	ratfor90 < readi2sheet.r > readi2sheet.f
+	f90 -C +fp_exception -O -c readi2sheet.f
+readi2sheet.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine READI2SHEET
+
+130 Lines Compiled
+	rm readi2sheet.f
+	ratfor90 < setupreadsheet.r > setupreadsheet.f
+	f90 -C +fp_exception -O -c setupreadsheet.f
+setupreadsheet.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine SETUPREADSHEET
+
+179 Lines Compiled
+	rm setupreadsheet.f
+	sspp -r -IA64HPUX -NODEC -XWIN rstbgn.r > rstbgn.x
+	ratfor90 < rstbgn.x > rstbgn.f
+	f90 -C +fp_exception -O  -c rstbgn.f
+rstbgn.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine RSTBGN
+
+463 Lines Compiled
+	rm rstbgn.f rstbgn.x
+	ratfor90 < strdate.r > strdate.f
+	f90 -C +fp_exception -O -c strdate.f
+strdate.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine STRDATE
+
+77 Lines Compiled
+	rm strdate.f
+	ratfor90 < delhist.r > delhist.f
+	f90 -C +fp_exception -O -c delhist.f
+delhist.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine DELHIST
+
+154 Lines Compiled
+	rm delhist.f
+	ratfor90 < tri1setup.r > tri1setup.f
+	f90 -C +fp_exception -O -c tri1setup.f
+tri1setup.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine TRI1SETUP
+
+1244 Lines Compiled
+	rm tri1setup.f
+	ratfor90 < reflsetup.r > reflsetup.f
+	f90 -C +fp_exception -O -c reflsetup.f
+reflsetup.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine REFLSETUP
+
+4287 Lines Compiled
+	rm reflsetup.f
+	ratfor90 < cubecorder.r > cubecorder.f
+	f90 -C +fp_exception -O -c cubecorder.f
+cubecorder.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine CUBECORDER
+
+1867 Lines Compiled
+	rm cubecorder.f
+	ratfor90 < specorder.r > specorder.f
+	f90 -C +fp_exception -O -c specorder.f
+specorder.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine SPECORDER
+
+1466 Lines Compiled
+	rm specorder.f
+	ratfor90 < tp1mat.r > tp1mat.f
+	f90 -C +fp_exception +O3 +Oall -c tp1mat.f
+tp1mat.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine TP1MAT
+
+1837 Lines Compiled
+	rm tp1mat.f
+	ratfor90 < tp1all.r > tp1all.f
+	f90 -C +fp_exception +O3 +Oall -c tp1all.f
+tp1all.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine TP1ALL
+
+1163 Lines Compiled
+	rm tp1all.f
+	ratfor90 < flushseqfile.r > flushseqfile.f
+	f90 -C +fp_exception -O -c flushseqfile.f
+flushseqfile.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine FLUSHSEQFILE
+
+78 Lines Compiled
+	rm flushseqfile.f
+	ratfor90 < opencube.r > opencube.f
+	f90 -C +fp_exception -O -c opencube.f
+opencube.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine OPENCUBE
+
+165 Lines Compiled
+	rm opencube.f
+	ratfor90 < wrtspcrdrout.r > wrtspcrdrout.f
+	f90 -C +fp_exception -O -c wrtspcrdrout.f
+wrtspcrdrout.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine WRTSPCRDROUT
+
+709 Lines Compiled
+	rm wrtspcrdrout.f
+	ratfor90 < wrtcrdrout.r > wrtcrdrout.f
+	f90 -C +fp_exception -O -c wrtcrdrout.f
+wrtcrdrout.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine WRTCRDROUT
+
+593 Lines Compiled
+	rm wrtcrdrout.f
+	ratfor90 < gcsetup.r > gcsetup.f
+	f90 -C +fp_exception -O -c gcsetup.f
+gcsetup.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine GCSETUP
+
+612 Lines Compiled
+	rm gcsetup.f
+	ratfor90 < wrtgcsetup.r > wrtgcsetup.f
+	f90 -C +fp_exception -O -c wrtgcsetup.f
+wrtgcsetup.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine WRTGCSETUP
+
+991 Lines Compiled
+	rm wrtgcsetup.f
+	ratfor90 < creatoutfiles.r > creatoutfiles.f
+	f90 -C +fp_exception -O -c creatoutfiles.f
+creatoutfiles.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine CREATOUTFILES
+
+1344 Lines Compiled
+	rm creatoutfiles.f
+	ratfor90 < cublineout.r > cublineout.f
+	f90 -C +fp_exception -O -c cublineout.f
+cublineout.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine CUBLINEOUT
+
+1699 Lines Compiled
+	rm cublineout.f
+	ratfor90 <  tp1cse.r > tp1cse.f
+	f90 -C +fp_exception +O3 +Oall -c tp1cse.f
+tp1cse.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine TP1CSE
+
+1077 Lines Compiled
+	rm tp1cse.f
+	ratfor90 < nvres1mat.r > nvres1mat.f
+	f90 -C +fp_exception -O -c nvres1mat.f
+nvres1mat.f
+Warning 4040 :  -C flag is not yet supported for IA F90 compiler. 
+   external subroutine NVRES1MAT
+
+1465 Lines Compiled
+	rm nvres1mat.f
+	sspp -c -IA64HPUX -NODEC -XWIN i4pack4.c > tmpi4pack4.c
+	cc -O -c -o i4pack4.o tmpi4pack4.c
+	rm tmpi4pack4.c
+	f90 -C +fp_exception -O +U77 -N -o tetracorder tetracorder.o	 makvicarlabel.o		 readi2sheet.o		 setupreadsheet.o	 rstbgn.o		 strdate.o		 delhist.o		 tri1setup.o		 reflsetup.o		 cubecorder.o		 specorder.o		 tp1mat.o		 tp1all.o		 flushseqfile.o		 opencube.o		 wrtspcrdrout.o		 wrtcrdrout.o		 gcsetup.o		 wrtgcsetup.o		 creatoutfiles.o		 cublineout.o		 tp1cse.o		 nvres1mat.o		 i4pack4.o		 ../specpr/src.specpr/common/blockdata.o \
+			../specpr//lib/specpr.a	\
+			../cubeio/cubeio.a /usr/lib/hpux32/libX11.so -lm

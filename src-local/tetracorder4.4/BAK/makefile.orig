@@ -1,0 +1,187 @@
+GET= get
+########FFLAGS=-C +T
+SPRDIR=../specpr/
+
+OBJ = tetracorder.o	\
+makvicarlabel.o		\
+readi2sheet.o		\
+setupreadsheet.o	\
+rstbgn.o		\
+strdate.o		\
+delhist.o		\
+tri1setup.o		\
+reflsetup.o		\
+cubecorder.o		\
+specorder.o		\
+tp1mat.o		\
+tp1all.o		\
+flushseqfile.o		\
+opencube.o		\
+wrtspcrdrout.o		\
+wrtcrdrout.o		\
+gcsetup.o		\
+wrtgcsetup.o		\
+creatoutfiles.o		\
+cublineout.o		\
+tp1cse.o		\
+nvres1mat.o		\
+i4pack4.o		\
+../specpr/src.specpr/common/blockdata.o
+
+INCL= \
+../specpr/src.specpr/common/label1 \
+../specpr/src.specpr/common/lbl3 \
+../specpr/src.specpr/common/lbl4 \
+../specpr/src.specpr/common/lbl7 \
+../specpr/src.specpr/common/lundefs \
+../specpr/src.specpr/common/alphabet \
+../specpr/src.specpr/common/cmd \
+../specpr/src.specpr/common/lblg \
+../specpr/src.specpr/common/lblwav \
+../specpr/src.specpr/common/cmdarg \
+../specpr/src.specpr/common/dscrch \
+../specpr/src.specpr/common/ioftyp \
+../specpr/src.specpr/common/blank \
+../specpr/src.specpr/common/lblvol \
+tri1.h	\
+obuffers.h	\
+multmap.h
+
+tetracorder:	$(OBJ) $(SPRDIR)/lib/specpr.a ../cubeio/cubeio.a
+	f77 $(FFLAGS) -o tetracorder $(OBJ) \
+			$(SPRDIR)/lib/specpr.a	\
+			../cubeio/cubeio.a $(LDLIBS)
+
+install:	tetracorder
+	mv tetracorder /usr/local/bin/tetracorder4.0
+	chmod 755 /usr/local/bin/tetracorder4.0
+	size /usr/local/bin/tetracorder4.0
+
+.SUFFIXES:
+.SUFFIXES: .o .r .f
+
+
+tetracorder.o:	tetracorder.r $(INCL) tricube.h tri1.h multmap.h obuffers.h
+		sspp -r -$(SSPPFLAGS) tetracorder.r > tetracorder.x
+		ratfor $(RFLAGS) tetracorder.x > tetracorder.f
+		rm tetracorder.x
+		f77 $(FFLAGS) -c tetracorder.f
+		rm tetracorder.f
+
+makvicarlabel.o:	makvicarlabel.r
+		ratfor $(RFLAGS) makvicarlabel.r > makvicarlabel.f
+		f77 $(FFLAGS) -c makvicarlabel.f
+		rm makvicarlabel.f
+
+readi2sheet.o:	readi2sheet.r
+		ratfor $(RFLAGS) readi2sheet.r > readi2sheet.f
+		f77 $(FFLAGS) -c readi2sheet.f
+		rm readi2sheet.f
+
+setupreadsheet.o:	setupreadsheet.r
+		ratfor $(RFLAGS) setupreadsheet.r > setupreadsheet.f
+		f77 $(FFLAGS) -c setupreadsheet.f
+		rm setupreadsheet.f
+
+strdate.o:	strdate.r
+		ratfor $(RFLAGS) strdate.r > strdate.f
+		f77 $(FFLAGS) -c strdate.f
+		rm strdate.f
+
+rstbgn.o:	rstbgn.r
+		sspp -r -$(SSPPFLAGS) rstbgn.r > rstbgn.x
+		ratfor $(RFLAGS) rstbgn.x > rstbgn.f
+		rm rstbgn.x
+		f77 $(FFLAGS)  -c rstbgn.f
+		rm rstbgn.f
+
+i4pack4.o:	i4pack4.c
+		sspp -c -$(SSPPFLAGS) i4pack4.c > tmpi4pack4.c
+		cc $(CFLAGS) -c -o i4pack4.o tmpi4pack4.c
+		rm tmpi4pack4.c
+
+delhist.o:	delhist.r
+		ratfor $(RFLAGS) delhist.r > delhist.f
+		f77 $(FFLAGS) -c delhist.f
+		rm delhist.f
+
+tri1setup.o:	tri1setup.r tri1.h multmap.h
+		ratfor $(RFLAGS) tri1setup.r > tri1setup.f
+		f77 $(FFLAGS) -c tri1setup.f
+		rm tri1setup.f
+
+reflsetup.o:	reflsetup.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) reflsetup.r > reflsetup.f
+		f77 -C +T -c reflsetup.f
+		rm reflsetup.f
+
+cubecorder.o:	cubecorder.r tricube.h tri1.h multmap.h obuffers.h
+		ratfor $(RFLAGS) cubecorder.r > cubecorder.f
+		f77 $(FFLAGS) -c cubecorder.f
+		rm cubecorder.f
+
+specorder.o:	specorder.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) specorder.r > specorder.f
+		f77 $(FFLAGS) -c specorder.f
+		rm specorder.f
+
+tp1mat.o:	tp1mat.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) tp1mat.r > tp1mat.f
+		f77 $(FFLAGS2) $(FOPT2) -c tp1mat.f
+		rm tp1mat.f
+
+tp1all.o:	tp1all.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) tp1all.r > tp1all.f
+		f77 $(FFLAGS2) $(FOPT2) -c tp1all.f
+		rm tp1all.f
+
+flushseqfile.o:	flushseqfile.r
+		ratfor $(RFLAGS) flushseqfile.r > flushseqfile.f
+		f77 $(FFLAGS) -c flushseqfile.f
+		rm flushseqfile.f
+
+opencube.o:	opencube.r
+		ratfor $(RFLAGS) opencube.r > opencube.f
+		f77 $(FFLAGS) -c opencube.f
+		rm opencube.f
+
+wrtspcrdrout.o:	wrtspcrdrout.r multmap.h
+		ratfor $(RFLAGS) wrtspcrdrout.r > wrtspcrdrout.f
+		f77 $(FFLAGS) -c wrtspcrdrout.f
+		rm wrtspcrdrout.f
+
+wrtcrdrout.o:	wrtcrdrout.r multmap.h
+		ratfor $(RFLAGS) wrtcrdrout.r > wrtcrdrout.f
+		f77 $(FFLAGS) -c wrtcrdrout.f
+		rm wrtcrdrout.f
+
+gcsetup.o:	gcsetup.r multmap.h
+		ratfor $(RFLAGS) gcsetup.r > gcsetup.f
+		f77 $(FFLAGS) -c gcsetup.f
+		rm gcsetup.f
+
+wrtgcsetup.o:	wrtgcsetup.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) wrtgcsetup.r > wrtgcsetup.f
+		f77 $(FFLAGS) -c wrtgcsetup.f
+		rm wrtgcsetup.f
+
+creatoutfiles.o:	creatoutfiles.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) creatoutfiles.r > creatoutfiles.f
+		f77 $(FFLAGS) -c creatoutfiles.f
+		rm creatoutfiles.f
+
+cublineout.o:	cublineout.r tricube.h tri1.h multmap.h obuffers.h
+		ratfor $(RFLAGS) cublineout.r > cublineout.f
+		f77 -C +T -c cublineout.f
+		rm cublineout.f
+
+nvres1mat.o:	nvres1mat.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS) nvres1mat.r > nvres1mat.f
+		f77 $(FFLAGS) -c nvres1mat.f
+		rm nvres1mat.f
+
+tp1cse.o:	tp1cse.r tricube.h tri1.h multmap.h
+		ratfor $(RFLAGS)  tp1cse.r > tp1cse.f
+		f77 $(FFLAGS2) $(FOPT2) -c tp1cse.f
+		rm tp1cse.f
+

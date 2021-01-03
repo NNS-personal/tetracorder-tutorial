@@ -1,0 +1,1573 @@
+#HPUX	Program tricorder (ach1, ach2, ach3)
+
+	implicit integer*4 (i-n)
+
+#ccc  name:         tricorder
+#ccc  version date: 
+#ccc  author(s): Roger N. Clark
+#ccc  language: ratfor
+#ccc
+#ccc  short description: map multiple features from spectra of
+#ccc                     multiple minerals in an imaging spectrometer data set.
+#ccc
+#ccc  algorithm description: See Clark et al, 1990, JPL AVIRIS Conf.
+#ccc  system requirements: Unix
+#ccc  subroutines called: many specpr routines, need specpr.a library
+#ccc  argument list description: see below
+#ccc  parameter description: see below
+#ccc  common description: see below
+#ccc  message files referenced: none
+#ccc  internal variables: see below
+#ccc  file description: see below
+#ccc  user command lines: see below
+#ccc  update information: see below
+#ccc  NOTES:
+#ccc
+#ccc            This routine generates a band depth map
+#ccc            from a multi-spectral data cube.  The input
+#ccc            reference (library) spectrum, wavelengths, and
+#ccc            3d data file must all have been previously as-
+#ccc            signed using specpr so that the restart file info
+#ccc            can be used to open the appropriate files.  The
+#ccc            format of the 3d data file must be band inter-
+#ccc            leaved by line (BIL), 2-byte integers.  3d data
+#ccc            files not of this format cause the program to
+#ccc            terminate.  The output of this program is a
+#ccc            2-plane image in BIL, 1-byte integers, scaled from
+#ccc            values ranging from 0.0 to 1.0 to values ranging
+#ccc            from 0 to 255.  In addition to this data file a
+#ccc            REMAPP header file and a specpr-like history file
+#ccc            is also generated.  These files are written using
+#ccc            FORTRAN file i/o.  The output data file is opened
+#ccc            and written using C i/o via calls to cdiskio3.
+#ccc            Command line arguments ach1,ach2,ach3 are used to
+#ccc            provide arguments to the restart module rstbgn in
+#ccc            the form:  tricorder r1 -      where tricorder is the pro-
+#ccc            gram (executable) is called tricorder, r1 is the name
+#ccc            of the restart file and - indicates the non-verbose
+#ccc            option.
+#ccc---------------------------------------------------------------
+#cccVARIABLES:
+#ccc            ach1,2,3     - Command line args used in the form:
+#ccc                         tricorder r1 -
+#ccc            i4buff       - Integer*4 array used in 3d data cube
+#ccc                         reading routines and contains band
+#ccc                         depth values on output (equiv'd to
+#ccc                         chbuff)
+#ccc            i4buf2       - Integer*4 array used in 3d data cube
+#ccc                         reading routines and contains quality
+#ccc                         of fit values for output (equiv'd to
+#ccc                         chbuf2)
+#ccc            fcb          - File control block array (I*4) used
+#ccc                         in generating remapp headers (equi-
+#ccc                         valenced to cfcb)
+#ccc            work2        - Working array (equivalenced to
+#ccc                         chdata) passed to cdiskio3.  Returns
+#ccc                         header file name.
+#ccc            i2sht        - Integer*2 array for holding 3d data
+#ccc                         sheets (equivalenced to chidata)
+#ccc            fname        - File name (char) variable returned
+#ccc                         from namdev (dev -> name) routine
+#ccc            bdhdr        - Band depth header file name (char)
+#ccc            bdfile       - Band depth file name (char)
+#ccc            reflib       - Reference spectrum from specpr lib,
+#ccc                         equivalenced to datsc1 (R*4)
+#ccc            refcrm       - Reference spectrum with continuum
+#ccc                         removed, equiv'd to datsc2 (R*4)
+#ccc            wavlen       - Wavelengths array, equiv'd to wdata
+#ccc                         (R*4)
+#ccc            obscrm       - Observed (from 3d data file) con-
+#ccc                         tinuum removed, eqv'd to datab (R*4)
+#ccc            bdarr        - Band depth array, equiv'd to datsc3
+#ccc                         (R*4)
+#ccc            rfid         - Reflectance file id (u,v,w or y)
+#ccc                         (I*4)
+#ccc            rrecno       - Reflectance file record number (I*4)
+#ccc            rflun        - Reflectance file unit number (I*4)
+#ccc            wfid         - Wavelength file id (use upper case)
+#ccc                         (I*4)
+#ccc            wrecno       - Wavelength file record number (I*4)
+#ccc            wflun        - Wavelength file unit number (I*4)
+#ccc            f3did        - 3d data file id (I*4)
+#ccc            qlun         - 3d data file unit number (I*4)
+#ccc            minch        - Channel (of band) with minimum value
+#ccc                         (I*4)
+#ccc            dx,y,z       - Dimensions of 3d data file (I*4)
+#ccc            dx2          - x-dimension divided by 2 (indicates
+#ccc                         the x coordinate of pixel to print
+#ccc                         diagnostic info on) (I*4)
+#ccc            flag         - Indicates extraction direction (not
+#ccc                         relevant in this application) (I*4)
+#ccc            ier/ioerr    - Error flag variables (I*4)
+#ccc            bdrecl       - Band depth file record length (I*4)
+#ccc            icrst        - Update restart file routine code
+#ccc                         (I*4)
+#ccc            bndstb,e     - Band start ranges (continuum begin.)
+#ccc                         (I*4)
+#ccc            bndenb,e     - Band end ranges (continuum end)
+#ccc                         (I*4)
+#ccc            emtogl       - Error message toggle (bandmp arg)
+#ccc                         (I*4)
+#ccc            imgflg       - Image file flag for bandmp (should=1)
+#ccc                         (I*4)
+#ccc            reclen       - 3d data file record length (I*4)
+#ccc            rechdr       - 3d data file record header length
+#ccc            nrecshdr     - 3d data file header length (in records) (I*4)
+#ccc            diaflg       - Diagnostics print flag (I*4)
+#ccc            nth          - Diagnostics printed every nth line
+#ccc                         (I*4)
+#ccc            filorg       - File organization (BIL, BSQ, BIP)
+#ccc                         (I*4)
+#ccc            i2pack       - Packing routine (written in C)
+#ccc                         (I*4)
+#ccc            bdnlen       - Band depth file name length (bytes)
+#ccc                         (I*4)
+#ccc            paksiz       - Number of bits to pack number to
+#ccc                         (I*4)
+#ccc            outfil       - Band depth output file unit number
+#ccc                         (I*4)
+#ccc            key          - Record number of 3d data file (obs)
+#ccc                         (I*4)
+#ccc            idnoff       - DN offset (y=mx+b, where b=idnoff)
+#ccc                         (I*4)
+#ccc            itmp*        - Temporary variables (I*4)
+#ccc            iptdrop      - Point drop value (I*4)
+#ccc            oper         - Operation value for cdiskio3 (I*4)
+#ccc            indx         - Index for determining # of chars
+#ccc                         in a string (I*4)
+#ccc            ictlimflg    - continuum threshold set (I*4)
+#ccc
+#ccc---------------------------------------------------------------
+
+
+	include 	../specpr/src.specpr/common/label1
+	include 	../specpr/src.specpr/common/lbl3
+	include 	../specpr/src.specpr/common/lbl4
+	include 	../specpr/src.specpr/common/lbl7
+	include 	../specpr/src.specpr/common/lundefs
+	include 	../specpr/src.specpr/common/alphabet
+	include 	../specpr/src.specpr/common/cmd
+	include 	../specpr/src.specpr/common/lblg
+	include 	../specpr/src.specpr/common/lblwav
+	include 	../specpr/src.specpr/common/cmdarg
+	include 	../specpr/src.specpr/common/dscrch
+	include 	../specpr/src.specpr/common/ioftyp
+	include 	../specpr/src.specpr/common/blank
+	include		../specpr/src.specpr/common/lblvol
+
+###???	include 	lmrefl.h
+###???	include 	convh.h
+
+#HPUX	character*80 	ach1, ach2, ach3
+
+	integer*4	i4buff(1000),i4buf2(1000),i4buf3(1000)
+	integer*2	i2sht(1000,320)
+	integer*4	bdfcb(40),erfcb(40),rcfcb(40)
+	integer*4	work2(2048)
+	character*2000 	chibuff(320)
+	character*4000 	chbuff,chbuf2,chbuf3
+	real*4          specdat(320,1000) #extracted spectral sheet, BIP format
+	character 	chdata*8192,fname*8,bdfile*20,errfil*20,rcfile*20
+	character 	cbdfcb*160,cerfcb*160,crcfcb*160
+	equivalence	(work2,chdata)
+	equivalence	(bdfcb,cbdfcb)
+	equivalence	(erfcb,cerfcb)
+	equivalence	(rcfcb,crcfcb)
+ 	equivalence 	(i2sht,chibuff)
+ 	equivalence 	(i4buff,chbuff)
+ 	equivalence 	(i4buf2,chbuf2)
+ 	equivalence 	(i4buf3,chbuf3)
+	real*4		reflib(4864),refcrm(4864),work(4864)
+	real*4		obscrm(4864),wavlen(4864),bdarr(4864)
+
+#####	real*4		refcon(1024,1024)
+#####	equivalence	(refcon,chref)
+
+ 	equivalence 	(reflib,datsc1)
+ 	equivalence 	(refcrm,datsc2)
+ 	equivalence 	(bdarr,datsc3)
+ 	equivalence 	(work,datsc4)
+ 	equivalence 	(obscrm,datab)
+ 	equivalence 	(wavlen,wdata)
+	integer*4 	rfid,wfid,f3did,rrecno,wrecno,rflun,wflun,qlun,minch
+	integer*4	maxch, ifeattype
+	integer*4 	dx,dx2,dy,dz,flag,ier,ioerr,bdrecl,icrst,bndstb,emtogl
+	integer*4	xel,yel,zel,outfil,nrec,bndste,bndenb,bndene,imgflg
+	integer*4	reclen,rechdr,diaflg,nth,filorg,pack4,bdnlen,paksiz
+	integer*4	nrecshdr
+	integer*4	oreclen # output file record length (=reclen/2)
+	parameter	(outfil=50)
+	real*4 		bdepth,kfactr,minqerr,qfit,scale,reclin,rcscal
+	real*4		rflctn,maxrc,minrc,intcpt,slope,yinter
+	integer*4	key,idnoff,itmp,itmp1,i,itmp2,itmp3,iptdrop,oper,indx
+	integer*4	indx2,lastsl,filhdr,cdiskio3,dot
+	integer*4	chfirst, chlast
+	integer*4	idlt(4864) # deleted points array
+
+	integer*4		histun,ictlimflg
+	character*8 inam, inamr, inamwi
+
+	character*80     histfile  # history file, file name
+	integer*4        lunhist   # logical unit for writing history info
+        character*1      ihbcksl   # this is the backslash character
+	character*1      chdltflg  # delete flag =d to delete points, else =' '
+	integer*4	lsetup     # reference lib setup flag:
+                                   #    = 0 hasn't been done yet
+                                   #    = 1 has been done.
+
+# arrays for multiple materials
+
+	include multmap.h
+
+# on HP-UX ignore underflows
+
+#HPUX	ON REAL UNDERFLOW IGNORE
+
+# Initialize variables
+#HPUX	charg1 = ach1
+#HPUX	charg2 = ach2
+#HPUX	charg3 = ach3
+
+        ihbcksl = char(92)  # this is the backslash character
+	lunhist = 61
+	nrec = 0
+	imgflg = 1
+	maxrc=32676.0
+	minrc=0.0
+
+	bdepth = 0.0
+	fit    = 0.0
+
+	lsetup = 0  # reference lib setup has not yet been done.
+
+	chfirst= 99999  # first spectral channel used
+	chlast =     0  # last  spectral channel used
+
+	call getcmdargs
+
+# Invoke restart initialization module
+	call rstbgn
+
+# program start, history file, wavelength set.
+
+	call tri1setup (inamwi, irecw, iwidok,
+                        iwtmpf, maxrec, nchans)
+
+# now set up reference spectral library features to map on.
+
+	call reflsetup
+
+# now let user choose analysis options.
+
+50	write (ttyout,51)
+51	format (////,' Tricorder Analysis Options:',//,
+		10x, 'Type  l  to setup new reference library spectrs',/,
+		10x, 'Type  c  to analyze imaging spec BIL data cube',/,
+		10x, 'Type  s  to analyze a single spectrum',//,
+		10x, 'Type  e  or  x  to exit program.',/)
+
+	call crtin
+	i = 1
+	call wjfren (i,x,il)
+	if (il==ihx || il==ihe)  {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+	}
+	if ( il == ihl) {
+		call reflsetup
+		go to 50
+	}
+	if ( il == ihc) {
+		call cubeanal
+		go to 50
+	}
+	if ( il == ihs) {
+		call specanal
+		go to 50
+	}
+
+	go to 50
+	end
+
+ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+210	write (ttyout,215)
+215	format (///,' Enter the number of materials to map')
+	call crtin
+	i = 1
+	call wjfren (i,x,il)
+	if (il==ihx || il==ihe)  {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+	}
+	if (il != 0) {
+		call what(i)
+		go to 210
+	}
+	if (x < 1 || x > maxmat) {
+		write (ttyout,218) maxmat
+218		format ('ERROR: Number of material must be',
+			' > 1 and <= ',i4,/,
+                        18x,'(Note: this limit can be inceased by a ',
+				'simple recompile',/,
+			25x,'of the program.  See your software manager')
+		go to 210
+	}
+	nmats = x+0.5
+
+# write history
+	write (lunhist,3020) nmats,ihbcksl
+3020	format (i5,17x,a,'# number of materials to map')
+
+
+# Now get the 3d file id
+
+4	write (ttyout,401)
+401	format (///,' Type in the specpr letter ID of the 3D ',
+		'IMAGING SPECTROMETER DATA SET',/,
+		'      (lower case letter v, w, d, u, or y).')
+
+# Get 3d file id
+	call crtin
+	i=1
+	call wjfren (i,x,f3did)
+
+	if (f3did == ihe | f3did == ihx) {
+		icrst = 1
+		call rstart (icrst)
+		call closef
+		write (ttyout,*)'Exiting.'
+		stop
+	}
+
+#  Check device (3d file id) validity and get device unit number
+
+	call devok (4,f3did,1,qlun,ier) 
+
+	if (ier != 0) {
+		write (ttyout,*)
+		write (ttyout,403)
+403		format ('ERROR: enter a valid ID',//)
+		go to 4
+	}
+
+# write history
+	write (lunhist,3030) f3did,ihbcksl
+3030	format (a1,21x,a,'# specpr 3D file ID')
+
+# Initalize 3d file parameter variables: given logical unit,
+#	qlun, find all the headers, dimensions, etc of the 3d file.
+
+	call setupreadsheet (qlun, filhdr, reclen, rechdr, idnoff,
+		dx, dy, dz, numtyp, filorg, iptdrop, scale)
+
+	if (numtyp != 1 || filorg != 1) {
+		write (ttyout,413)
+413		format ('ERROR: the only valid file type is',
+			' BIL, Integer*2.',/,
+			' Current file type =',i3,
+			'   Organization =',i3,//)
+		go to 4
+	}
+	if (rechdr > 0) {
+		write (ttyout,*) 'Program is not yet set up to work',
+				'with record headers > 0.  rechdr=',rechdr
+		go to 4
+	}
+	if (dx < 1 || dy < 1 || dz < 1) {
+		write (ttyout,414) dy,dx,dz
+414		format (' ERROR: dimensions invalid:',
+			'lines:',i5,'   samples:',i5,'   bands:',i5,//)
+		go to 4
+	}
+	if (dx > maxpix ) {
+		write (ttyout,415) dx, maxpix
+415		format (' ERROR: number of samples (',i6,') is larger',
+			' than maximum (',i6,') allowed',//)
+		go to 4
+	}
+
+#       compute number of header records
+
+        nrecshdr = int(float(filhdr)/float(reclen)+0.9999)
+
+	write (ttyout,416) dy,dx,dz
+416	format (' Imaging spectrometer data:',/,
+		28x,'Lines:',i5,'   Samples:',i5,'   Bands:',i5,/)
+        write (ttyout,*) 'Note: found ',nrecshdr,' header records'
+
+	write (lunhist, 3040) ihbcksl, dy, dx, dz
+3040	format (a,'#',23x,'3D data set: Lines:',i5,
+		'   Samples:',i5,'   Bands:',i5)
+	write (lunhist,3111) ihbcksl
+
+	flag = 1
+	bdrecl = dx
+	reclin = float((2*dx)/reclen)
+	oreclen = dx  # output record length (bytes, so = dx pixels)
+
+
+###########################################################
+#### primary setup do loop ################################
+
+do imat = 1, nmats {
+
+#     ********************************************
+#     * get library data file
+#     ********************************************
+
+69      write(ttyout,70) imat
+70      format (///,40('-'),/,
+			' Enter file id and record number for',
+			' REFERENCE SPECTRUM',i4,
+                        ' (then a  d  to delete points)',/,
+			' or e or x to exit.'/)
+
+	chdltflg=' '  # default: no delete points
+	call crtin
+	i = 1
+	call wjfren(i,x1,idevb)
+	if (i >= 79 && idevb == 0) {
+		call what(i)
+		go to 69
+	}
+	call wjfren(i,xfilb,ic2)
+
+	if (ic2 == ihd) {    # want to delete points
+		chdltflg='d'
+		ic2=0
+	}
+
+#        *** check for hard or soft exit ***
+	if (ic2==ihx || ic2==ihe)  {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+	} else if (idevb==ihx || ic2==ihx) {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+
+#       *** check for invalid input ***
+	} else if (x1!=0.0 || ic2!=0 || xfilb<=0.0) {
+		write(ttyout,66)
+66		format ('invalid input, reenter')
+		go to 69
+
+#       *** looks ok so get file b ***
+	} else {
+		ifilb = xfilb
+		call devok (4,idevb,ifilb,lun,ier)
+		if (ier!=0) {
+			go to 69
+		}
+		itmp = ifilb
+		call redfil(itmp,lun,ier)
+		if (ier != 0) {
+			go to 69
+		}
+		iform = 1
+		write (ttyout,68) imat, idevb, ifilb, ititl
+68		format (' Reference spectrum:',i4,'  ',a,i7,5x,a,//)
+		call namdev (idevb, inamr)
+
+		ndevr(imat) = idevb
+		nrrec(imat) = ifilb
+		mtitle(imat) = ititl
+	}
+	call wjfren(i,x1,ic2)  # check for delete points indicator
+	if (ic2 == ihd) {    # want to delete points
+		chdltflg='d'
+		ic2=0
+	}
+
+# write history
+	write (lunhist,3050) idevb, ifilb,chdltflg, ihbcksl,
+				 imat, ihbcksl, ititl
+3050	format (a1,i6,1x,a,15x,a,
+		'# file ID, rec no. for material',i5,/,
+		a,'#',11('=-'),' TITLE=',a)
+# delete points
+
+	if (chdltflg == 'd') {
+		write (ttyout,*) 'Enter channels to delete, then a c to continue'
+		call crtin
+		i=1
+		call dltpts(i,jdlt,idlt,nchans,ic2)
+		if (ic2==ihx)  {
+			icrst = 1
+			call rstart(icrst)
+			call closef
+			stop
+		}
+		if (ic2!=ihe & jdlt > 1) {
+			mxstrdel=240   # 3 lines of 80 characters
+			call delhist(jdlt,idlt,mhist,mxstrdel)
+
+			write (lunhist,3055) mhist(1:lnb(mhist(1:80)))
+3055			format (a)
+			if (mhist(81:81) != ' ') {
+				write (lunhist,3055) mhist(81:lnb(mhist(81:160)))
+			}
+			if (mhist(161:161) != ' ') {
+				write (lunhist,3055) mhist(161:lnb(mhist(161:240)))
+			}
+			do jj = 1, jdlt {               # delete the channels
+				data(idlt(jj))=-1.23e34
+			}
+		} else {
+			write (lunhist,3055) 'c'
+		}
+
+	}
+
+# Title for material "imat"
+
+	write (ttyout,162)
+162	format (' Type in an output title',/,
+		'-------------------------------|')
+	call crtin
+	i = 1
+	call wjfren (i,x,il)
+	if (i > 1) i = i-1
+	jend=lnb(iopcon)
+	length = jend - i + 1
+	if (length > 32) length = 32
+	jend = i + length - 1
+	otitle(imat)(1:length) = iopcon(i:jend)
+	do ij = 1, 32 {
+		if(otitle(imat)(ij:ij) == char(0)) {
+			otitle(imat)(ij:ij) = ' '
+		}
+	}
+
+# write history
+	write (lunhist, 3060) otitle(imat)(1:32),ihbcksl
+3060	format (a, 2x,a,'# output title')
+
+# Base file name for material "imat"
+
+180	ibits = 8        # output file is 8 bits per pixel
+	lblsiz= oreclen  # output file size is record length
+	iorg  = 1        # out vicar file organization is BIL
+	ioutbnds = 1     # one band image for each output
+	
+	write (ttyout,182) oreclen
+182	format (///,' Output files: record length=',i6,//,
+		' Type in the output BASE file name',/,
+		'      The output files will be called:',/,
+		'               filename.depth',/,
+		'               filename.fit',/,
+		'               filename.fd',/,
+		'-------------------------------------------|')
+	call crtin
+	i = 1
+	call wjfren (i,x,il)
+	if (i > 1) i = i-1
+	jend=lnb(iopcon)
+	length = jend - i + 1
+	if (length > mfilelen) length = mfilelen
+	jend = i + length - 1
+	mfile(imat)(1:length) = iopcon(i:jend)      # check for blanks
+	itmp = index(mfile(imat)(1:length),' ')
+	if (itmp != 0) {
+		call what(i+itmp)
+		write (ttyout,184)
+184		format (' ERROR: blanks are not allowed in file names',/)
+		go to 180
+	}
+	itmp = index(mfile(imat)(1:length),char(9))  # check for tabs
+	if (itmp != 0) {
+		call what(i+itmp)
+		write (ttyout,185)
+185		format (' ERROR: tabs are not allowed in file names',/)
+		go to 180
+	}
+	do ij = 1, mfilelen {
+		if (mfile(imat)(ij:ij) == char(0)) mfile(imat)(ij:ij)=' '
+	}
+
+	lenfile(imat)=length
+
+	dfile = mfile(imat)(1:length) // '.depth'
+	open (unit=lund, file=dfile(1:length+6), access='direct',recl=oreclen,
+              form='unformatted', status='new', iostat=ier)
+
+	if (ier != 0) {
+		write (ttyout,187) ier, 'depth', dfile
+187		format (' OPEN ERROR',i5,' on ',a,' file:',/,a)
+		go to 180
+	}
+
+# now write a VICAR header to the file
+
+	call makvicarlabel(chbuff(1:lblsiz),lblsiz,ibits,oreclen,
+		iorg,dy,dx,ioutbnds,otitle(imat)//' DEPTHS','tricorder',ier)
+
+	write(lund,rec=1,iostat=ier) chbuff(1:oreclen)
+	if (ier != 0) {
+		write (ttyout,188) ier, 'depth', dfile
+188		format (' VICAR header write ERROR',i5,' on ',a,' file:',/,a)
+		go to 180
+	}
+
+	close (lund, iostat=ier)
+	if (ier != 0) {
+		write (ttyout,189) ier, 'depth', dfile
+189		format (' CLOSE ERROR',i5,' on ',a,' file:',/,a)
+		go to 180
+	}
+	write (ttyout,*) 'New file ', dfile,' CREATED'
+
+	ffile = mfile(imat)(1:length) // '.fit'
+	open (unit=lunf, file=ffile(1:length+4), access='direct',recl=oreclen,
+              form='unformatted', status='new', iostat=ier)
+
+	if (ier != 0) {
+		write (ttyout,187) ier, 'fit', ffile
+		go to 180
+	}
+
+# now write a VICAR header to the file
+
+	call makvicarlabel(chbuff(1:lblsiz),lblsiz,ibits,oreclen,
+		iorg,dy,dx,ioutbnds, otitle(imat)//' FITS','tricorder',ier)
+
+	write(lunf,rec=1,iostat=ier) chbuff(1:oreclen)
+	if (ier != 0) {
+		write (ttyout,188) ier, 'fit', ffile
+		go to 180
+	}
+
+	close (lunf, iostat=ier)
+	if (ier != 0) {
+		write (ttyout,189) ier, 'fit', ffile
+		go to 180
+	}
+	write (ttyout,*) 'New file ', ffile,' CREATED'
+
+	fdfile = mfile(imat)(1:length) // '.fd'
+	open (unit=lunfd, file=fdfile(1:length+3), access='direct',recl=oreclen,
+              form='unformatted', status='new', iostat=ier)
+
+	if (ier != 0) {
+		write (ttyout,187) ier, 'fit*depth', fdfile
+		go to 180
+	}
+
+# now write a VICAR header to the file
+
+	call makvicarlabel(chbuff(1:lblsiz),lblsiz,ibits,oreclen,
+		iorg,dy,dx,ioutbnds, otitle(imat)//' F*D','tricorder',ier)
+
+	write(lunfd,rec=1,iostat=ier) chbuff(1:oreclen)
+	if (ier != 0) {
+		write (ttyout,188) ier, 'fit*depth', fdfile
+		go to 180
+	}
+
+	close (lunfd, iostat=ier)
+	if (ier != 0) {
+		write (ttyout,189) ier, 'fit*depth', fdfile
+		go to 180
+	}
+	write (ttyout,*) 'New file ', fdfile,' CREATED'
+
+	write (ttyout,*) ' '
+	write (ttyout,*) ' '
+
+# write history
+	write (lunhist,3070) mfile(imat)(1:mfilelen), ihbcksl
+3070	format (a,3x,a,'# Output base file name')
+
+
+220	write (ttyout,225) imat
+225	format ('Enter the number of features to map for material',i4)
+	call crtin
+	i = 1
+	call wjfren (i,x,il)
+	if (il==ihx || il==ihe)  {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+	}
+	if (il != 0) {
+		call what(i)
+		go to 220
+	}
+	if (x < 1 || x > maxfeat) {
+		write (ttyout,226) maxfeat
+226		format ('ERROR: Number of features per material must be',
+			' > 1 and < ',i4)
+		go to 220
+	}
+	nfeat(imat) = x+0.5
+
+# write history
+	write (lunhist, 3080) nfeat(imat), ihbcksl, imat
+3080	format (i5,28x,a,'# Number of features for Material',i5)
+
+#	continuum points
+
+  dlbar(imat) = 0.0
+  do ifeat = 1, nfeat(imat) {
+
+298	write (ttyout,300) imat, ifeat
+300	format (1x, 'LEFT and RIGHT CONTINUUM INTERVALS for material',
+			i4,'  feature',i3':',//,
+		'Enter two channel numbers to describe the continuum',
+			' interval on the ',/,5x,
+			'LEFT side of the absorption, and',//,
+		'Enter two channel numbers to describe the continuum',
+			' interval on the ',/,5x,
+			'RIGHT side of the absorption ',//,
+		' (enter 4 channel numbers total), then OPTIONS:',//,
+		' Options:',/,
+		'         ct n m  where ct mean continuum threshold',/,
+		17x, 'n is lower, and (optional) m is upper.',/,
+		17x, 'Values outside this range will not be mapped',
+		17x, '       default = 0.1e-1 to 0.2e+20')
+	call crtin
+	i=1
+	call wjfren (i,x,il)        # get channel 1
+	if (il==ihx || il==ihe) {
+		ic=il
+		icrst = 1
+		call rstart(icrst)
+		call closef
+		stop
+	}
+	if (il == ihw) {
+		icmode = 1
+	} else {
+		icmode = 0
+	}
+
+	if (icmode == 1) { # values in wavelengths
+		call wjfren (i,x,il)      # get wav1
+		if (il != 0 || x < 0.1e-30) {
+			call what(i)
+			write (ttyout, 311)
+311			format ('ERROR: WAVELENGTH OUT OF RANGE', //)
+			go to 298
+		}
+		wav1 = x
+
+		call wjfren (i,x,il)      # get wav2
+		if (il != 0 || x < 0.1e-30) {
+			call what(i)
+			write (ttyout, 311)
+			go to 298
+		}
+		wav2 = x
+
+		call wjfren (i,x,il)      # get wav3
+		if (il != 0 || x < 0.1e-30) {
+			call what(i)
+			write (ttyout, 311)
+			go to 298
+		}
+		wav3 = x
+
+		call wjfren (i,x,il)      # get wav4
+		if (il != 0 || x < 0.1e-30) {
+			call what(i)
+			write (ttyout, 311)
+			go to 298
+		}
+		wav4 = x
+		if (il == ihi) i = i -1  # i set for imaging mode (gotten later)
+
+		call wtochbin (dataa, nchans, wav1, wav2, nch1, nch2, ier)
+		if (ier != 0) go to 298
+
+		call wtochbin (dataa, nchans, wav3, wav4, nch3, nch4, ier)
+		if (ier != 0) go to 298
+
+		write (ttyout,309) wav1, wav2, wav3, wav4,
+                                   nch1, nch2, nch3, nch4
+309		format (' NOTE: Wavelengths      ',3(f11.5,4x),f11.5,/,
+                        '  translate to channels:',3(i6,9x),i6,/)
+
+	} else {
+	
+		nch1=x
+		if (nch1 < 1 || nch1 > nchans) {
+			call what(i)
+			write (ttyout, 310)
+310			format ('ERROR: CHANNEL OUT OF RANGE', //)
+			go to 298
+		}
+		call wjfren (i,x,il)      # get channel 2
+		nch2=x
+		if (nch2 < 1 || nch2 > nchans) {
+			call what(i)
+			write (ttyout, 310)
+			go to 298
+		}
+		call wjfren (i,x,il)      # get channel 3
+		nch3=x
+		if (nch3 < 1 || nch3 > nchans) {
+			call what(i)
+			write (ttyout, 310)
+			go to 298
+		}
+		call wjfren (i,x,il)      # get channel 4
+		nch4=x
+		if (nch4 < 1 || nch4 > nchans) {
+			call what(i)
+			write (ttyout, 310)
+			go to 298
+		}
+		if (il == ihi) i = i -1  # i set for imaging mode (gotten later)
+	}
+
+	if (nch1 > nch2 || nch2+1 >= nch3 || nch3 > nch4) {
+		write (ttyout,312)
+312		format ('ERROR: channels are not in a valid sequence:',/,
+			'       If channels = n1 n2 n3 n4, then the following',
+					' must hold:',/,
+			'       n1 <= n2, n2+1 < n3, and n3 <= n4',//,
+			' REENTER ALL POINTS',//)
+		go to 298
+	}
+	cchans(1,ifeat,imat) = nch1
+	cchans(2,ifeat,imat) = nch2
+	cchans(3,ifeat,imat) = nch3
+	cchans(4,ifeat,imat) = nch4
+	if (nch1 < chfirst) chfirst = nch1
+	if (nch4 > chlast ) chlast  = nch4
+
+#	set default continuaa limits
+
+	zcontmn(ifeat,imat) = 0.1e-6
+	zcontmx(ifeat,imat) = 0.1e+20
+	ictlimflg = 0
+
+	call wjfren (i,x,il)      # check if continuum limits set.
+
+	if ((i < 80) & (il == ihc) & (iopcon(i:i) == iht)) {  # ct option found
+		i = i+1
+		call wjfren (i,x,il)
+		if (il==ihx || il==ihe) {
+			ic=il
+			icrst = 1
+			call rstart(icrst)
+			call closef
+			stop
+		}
+		if (il != 0) {
+			call what(i)
+			go to 298
+		}
+		ictlimflg = 1
+		zcontmn(ifeat,imat) = x
+
+		call wjfren (i,x,il)  # now see if max continuum is set.
+		if (il==ihx || il==ihe) {
+			ic=il
+			icrst = 1
+			call rstart(icrst)
+			call closef
+			stop
+		}
+		if (il != 0) {
+			call what(i)
+			go to 298
+		}
+		if (i < 80) {
+			if (x <= zcontmn(ifeat,imat)) {
+				call what(i)
+				go to 298
+			}
+			ictlimflg = 2
+			zcontmx(ifeat,imat) = x
+		}
+	}
+
+# write history
+	if (icmode == 1) { # values in wavelengths
+		if (ictlimflg == 0) {               # no continuum threshold
+			write (lunhist, 3091) wav1, wav2, wav3, wav4, ihbcksl,
+					ihbcksl, nch1, nch2, nch3, nch4
+3091			format ('w',4(f8.4,1x),1x,a,
+				'# continuum wavelengths',
+				/,a,'#',31x,'(continuum channels=)',
+				4(i4,' '))
+		} else if (ictlimflg == 1) {       # 1 continuum threshold
+			write (lunhist, 3092) wav1, wav2, wav3, wav4,
+					zcontmn(ifeat,imat), ihbcksl,
+					ihbcksl, nch1, nch2, nch3, nch4
+3092			format ('w',4(f8.4,1x),1x,'ct',f8.4,1x,a,
+				'# continuum wavelengths',
+				/,a,'#',31x,'(continuum channels=)',
+				4(i4,' '))
+		} else if (ictlimflg == 2) {       # 2 continuum threshold
+			write (lunhist, 3093) wav1, wav2, wav3, wav4,
+					zcontmn(ifeat,imat),
+					zcontmx(ifeat,imat), ihbcksl,
+					ihbcksl, nch1, nch2, nch3, nch4
+3093			format ('w',4(f8.4,1x),1x,'ct',f8.4,1x,f8.4,1x,a,
+				'# continuum wavelengths',
+				/,a,'#',31x,'(continuum channels=)',
+				4(i4,' '))
+		}
+	} else {
+		if (ictlimflg == 0) {               # no continuum threshold
+			write (lunhist, 3094) nch1, nch2, nch3, nch4,
+					ihbcksl, imat, ifeat,
+					ihbcksl, dataa(nch1), dataa(nch2),
+					dataa(nch3), dataa(nch4)
+3094			format (4(i5,' '),2x,a,'# continuum chanls for Mat.:',
+				i3,' Feat:',i3,/,
+				a,'#',33x, a,'waves:',4(f7.4,' '))
+		} else if (ictlimflg == 1) {       # 1 continuum threshold
+			write (lunhist, 3095) nch1, nch2, nch3, nch4,
+					zcontmn(ifeat,imat),
+					ihbcksl, imat, ifeat,
+					ihbcksl, dataa(nch1), dataa(nch2),
+					dataa(nch3), dataa(nch4)
+3095			format (4(i5,' '),2x,'ct',f8.4,1x,
+				a,'# continuum chanls for Mat.:',
+				i3,' Feat:',i3,/,
+				a,'#',33x, a,'waves:',4(f7.4,' '))
+		} else if (ictlimflg == 2) {       # 2 continuum threshold
+			write (lunhist, 3096) nch1, nch2, nch3, nch4,
+					zcontmn(ifeat,imat),
+					zcontmx(ifeat,imat),
+					ihbcksl, imat, ifeat,
+					ihbcksl, dataa(nch1), dataa(nch2),
+					dataa(nch3), dataa(nch4)
+3096			format (4(i5,' '),2x,'ct',f8.4,1x,f8.4,1x,
+				a,'# continuum chanls for Mat.:',
+				i3,' Feat:',i3,/,
+				a,'#',33x, a,'waves:',4(f7.4,' '))
+		}
+	}
+
+
+#     parameter description for bdm set call:
+#        INPUT:
+#           dataa = wavelengths
+#           data  = reference library spectrum  R*4 (nch4 elements)
+#           nch1   = continuum point begin on left side of band  I*4
+#           nch2    = continuum point end on left side of band  I*4
+#                      note: nch2 >= nch1  (checked)
+#           nch3    = continuum point begin on right side of band  I*4
+#                      note: nch3 > nch2 + 1 (checked)
+#           nch4    = continuum point end on right side of band  I*4
+#                      note: nch4 >= nch3 (checked)
+#                      note: nch4 also determines the max array sizes
+#        OUTPUT:
+#           refcrm = reference library spectrum, continuum
+#                                    removed  R*4 (nch4 elements)
+#           minch  = minimum channel in the reference library spectrum.
+#                    This is defined to be the band minimum.
+#           maxch  = maximum channel in the reference library spectrum.
+#                    This is defined to be the band maximum.
+#           ifeattype = -1 is an emission feature
+#                     =  1 is an absorption band
+#           ier    = error detected in input:
+#                       = 0 no error
+#                       = 1 error
+#   
+
+	do i = 1, nchans {
+		rlb(i,imat) = data(i)
+		rlbc(i,ifeat,imat) = 0.0
+	}
+
+	call bdmset (dataa,data,nch1,nch2,nch3,nch4,
+                           refcrm,minch,maxch,ifeattype,ier)
+
+	if (ier != 0) {
+		write (ttyout, 320)
+320		format ('ERROR in band mapping library setup',/,
+			'Press return to start over',///)
+		go to 50
+	}
+
+	do i = nch1, nch4 {
+		rlbc(i,ifeat,imat) = refcrm(i)
+	}
+	nchmin(ifeat,imat)= minch
+	nchmax(ifeat,imat)= maxch
+	nftype(ifeat,imat)= ifeattype
+	if (ifeattype == -1) {
+		write (ttyout,*) 'Emisssion feature maximum channel=', maxch
+	} else if (ifeattype == 1) {
+		write (ttyout,*) 'Absorption feature maximum channel=', minch
+	} else {
+		write (ttyout,*) 'ERROR: invalid feature type'
+		write (ttyout,*) ' '
+		go to 298
+	}
+	nsp1 = nch2 +1  # first point in band not part of continuum
+	nsp2 = nch3 -1  # last point in band not part of continuum
+	area = 0.0
+	do i = nsp1, nsp2 {
+		if (refcrm(i) != -1.23e34) {
+			area = area + abs(1.0 - refcrm(i)) # integrate absolute
+							# area under contin
+		}
+	}
+	if (area <= 0.0) {
+		write (ttyout, 322) area, ifeat, imat
+322		format (' ERROR: area of continuum removed',
+			' absorption is < 0:',1pe10.4,' ifeat:',
+			i4,' imat:',i4)
+		write (ttyout, 322) area, ifeat, imat
+	}
+	dl(ifeat,imat) = area
+	dlbar(imat) = dlbar(imat) + dl(ifeat,imat)
+
+  }  # end of do ifeat loop
+  dlsum(imat) = dlbar(imat)
+  dlbar(imat) = dlbar(imat)/ float(nfeat(imat))
+
+  do ifeat = 1, nfeat(imat) {   # compute normalized lib band depths
+	dln(ifeat,imat) = dl(ifeat,imat)/dlsum(imat)
+
+#       history notes:
+	if (ifeat == 1) write (lunhist,3101) ihbcksl
+	write (lunhist, 3100) ihbcksl, imat, ifeat, dln(ifeat,imat)
+3100	format (a,'#',7x,'Mat:',i3,'  Feat:',i3,
+		'  has a weight of',f6.3)
+3101	format (a,'# Notes:')
+  }
+  
+
+     # Prompt the user for scaling factors for output
+7	bdscal(imat) = 1.0
+	qfscal(imat) = 1.0  # note this is hard set to 1.0
+
+	write (ttyout,465) imat, mtitle(imat)
+465	format(///,' Enter the full scale values for the output:',//,
+		' Material',i3,': ',a,/,
+		' for Band Depth.  Default = 1.0.',//,
+		' Example:  0.5 would scale the band depth so',
+			' that an output DN of 255 is 0.5,',/,
+		'           (and the fit*depth DN of 255 is 1.0).',//,
+		' Enter Band Depth full scale value.')
+
+	call crtin
+	i=1
+	call wjfren (i,x,il)
+
+	if (il == ihe | il == ihx) {
+		icrst = 1
+		call rstart (icrst)
+		call closef
+		write (ttyout,*)'Exiting.'
+		stop
+	} else if (il != 0) {
+		call what(i)
+		go to 7
+	} else {
+		bdscal(imat) = x
+	}
+
+	if ((bdscal(imat) > 10.0 | bdscal(imat) <= 0.0) & 
+		(qfscal(imat) > 1.0 | qfscal(imat) <= 0.0)) {
+		write (ttyout,*)' ERROR - value out of bounds'
+		write (ttyout,*)' depth valid range: >0.0, <= 10.0'
+		go to 7
+	}
+
+# write history
+	write (lunhist, 3110) bdscal(imat), ihbcksl, imat
+3110	format (f7.5,15x,a,'# Full scale value for material',i3)
+	write (lunhist,3111) ihbcksl
+3111	format (a,'#',70('#'))
+
+# Set scaling value multipliers
+	bdscal(imat) = 255./bdscal(imat)
+	qfscal(imat) = 255./qfscal(imat)
+	write (6,*)'band depth values will be multiplied by ',bdscal(imat)
+	write (6,*)'quality of fit values will be multiplied by ',qfscal(imat)
+
+
+
+} # end of do imat loop
+
+
+# Set error message toggle on or off
+8	write (ttyout,*)
+	write (ttyout,*)'If an error occurs the output is set to a deleted'
+	write (ttyout,*)'point value.  Please set the error message option:'
+	write (ttyout,*)
+	write (ttyout,*)'0	DO NOT PRINT error messages.'
+	write (ttyout,*)
+	write (ttyout,*)'1	PRINT error messages.'
+	write (ttyout,*)
+	#read (ttyin,*)emtogl
+
+# Get input 
+	call crtin
+	i=1
+	call wjfren (i,x,il)
+
+	if (il == ihe | il == ihx)
+	{
+		icrst = 1
+		call rstart (icrst)
+		call closef
+		write (ttyout,*)'Exiting.'
+		stop
+	}
+
+	emtogl = nint(x)
+
+	if (emtogl != 0 & emtogl != 1)
+	{
+		write (ttyout,*)'Invalid response.  Please re-enter.'
+		write (ttyout,*)
+		go to 8
+	}
+
+	write (ttyout,*)'Error msg toggle = ',emtogl
+
+# write history
+	write (lunhist, 3120) emtogl, ihbcksl
+3120	format (i1,22x, a,'# Error message toggle flag')
+	
+# Get interval to print out values being calculated in do loop
+9	write (ttyout,*)
+	write (ttyout,*)'The loop calculating the band depth and fit'
+	write (ttyout,*)'will print out the calculated values every nth line.'
+	write (ttyout,*)'In addition, you can flag for full diagnostic '
+	write (ttyout,*)'printout or normal printout.'
+	write (ttyout,*)
+	write (ttyout,*)'Diagnostic flag values:'
+	write (ttyout,*)
+	write (ttyout,*)'0	Print pixel coordinates, band depth, error fit,'
+	write (ttyout,*)'	and scaled (8 bit) band depth and error fit.'
+	write (ttyout,*)
+	write (ttyout,*)'1	Print wavelengths, continuum removed reference,'
+	write (ttyout,*)'	observed reflectance, continuum removed ob-'
+	write (ttyout,*)'	served reflectance, beginning and end band '
+	write (ttyout,*)'	ranges, pixel coordinates, band depth, quality'
+	write (ttyout,*)'	of  fit and scaled (8 bit) band depth and '
+	write (ttyout,*)'	quality of fit.'
+	write (ttyout,*)
+	write (ttyout,*)'Enter n and diagnostics flag:'
+	write (ttyout,*)'n   flag:'
+	#read (ttyin,*)nth,diaflg
+
+# Get nth variable value
+	call crtin
+	i=1
+	call wjfren (i,x,il)
+
+	if (il == ihe | il == ihx)
+	{
+		icrst = 1
+		call rstart (icrst)
+		call closef
+		write (ttyout,*)'Exiting.'
+		stop
+	}
+
+	nth = nint(x)
+
+# Get diagnostics flag
+	call wjfren (i,x,il)
+
+	if (il == ihe | il == ihx)
+	{
+		icrst = 1
+		call rstart (icrst)
+		call closef
+		write (ttyout,*)'Exiting.'
+		stop
+	}
+
+	diaflg = nint(x)
+
+# Check and verify diagnostics flag value
+	if (diaflg != 0 & diaflg != 1)
+	{
+		write (ttyout,*)'ERROR: Diagnostics flag must = 1 or 0.'
+		write (ttyout,*)'Please re-enter.'
+		write (ttyout,*)
+		go to 9
+	}
+	else if (diaflg == 0)
+	{
+		write (ttyout,*)
+		write (ttyout,*)'Limited diagnostic output selected.'
+		write (ttyout,*)
+	}
+	else
+	{
+		write (ttyout,*)
+		write (ttyout,*)'Full diagnostic output selected.'
+		write (ttyout,*)
+	}
+
+# Check and verify nth variable value
+	if (nth <= 0 | nth > dy)
+	{
+		write (ttyout,*)'ERROR: Out of range value for n.'
+		write (ttyout,*)'Please re-enter.'
+		write (ttyout,*)
+		go to 8
+	}
+	else
+	{
+		write (ttyout,*)
+		write (ttyout,*)'Information printed every ',nth,'th line.'
+		write (ttyout,*)
+	}
+
+# write history
+	inth = nth
+	idiaflg = diaflg
+	write (lunhist,3130) nth, diaflg, ihbcksl, inth, idiaflg
+3130	format (i4,2x,i2,15x,a,'# print every',i5,
+		' with diagnostic flag=',i2)
+
+# TEMPORARY:
+	close (lunhist,iostat=ier)
+
+# Loop to extract spectra from 3d data file and compute band depth
+	nrec = 0
+	dx2 = dx / 2
+
+	write (ttyout,*) 'WORKING...wait'
+
+	do yel = 1,dy {    # process a line at a time, yel - line number
+
+#
+#               read a spectral sheet and put in BIP, Real*4 format
+#
+		call readi2sheet(qlun,reclen,nrecshdr,dx,dy,dz,
+				idnoff,scale,iptdrop,
+				chfirst,chlast,yel,specdat,ioerr)
+	
+		do xel = 1,dx {     # Process each spectrum in sheet
+
+######## now loop each material and feature
+		  do imat = 1, nmats {
+
+		    sumf = 0.0
+		    sumd = 0.0
+		    sumfd= 0.0
+
+		    do ifeat = 1, nfeat(imat) {
+
+			
+			# Calculate observed continuum removed, band depth, 
+			# k factor, slope, intercept and error fit
+			call bandmp (dataa,rlbc(1,ifeat,imat),
+					specdat(1,xel),
+					cchans(1,ifeat,imat),
+					cchans(2,ifeat,imat),
+					cchans(3,ifeat,imat),
+					cchans(4,ifeat,imat),
+					emtogl,nchmin(ifeat,imat),
+					nchmax(ifeat,imat),
+					nftype(ifeat,imat),
+					imgflg, xel,yel,obscrm,kfactr,
+					bdepth, fit,
+					slope,yintcp,datac,conref)
+
+			if (bdepth == -1.23e34 || abs(bdepth) < 0.0e-9) {
+				bdepth = 0.0
+				fit    = 0.0
+			} else if (conref < zcontmn(ifeat,imat) ||
+				   conref > zcontmx(ifeat,imat)) { # continuum
+								# is beyond
+								# limits
+				bdepth = 0.0
+				fit    = 0.0
+
+			} else {
+				xdn = dln(ifeat,imat)          # weighted area
+				xfeat=real(nftype(ifeat,imat)) # feature type
+
+				xx=1.0                         # fit factor
+				if (bdepth/xfeat < 0.0) {      # fit factor=0
+					xx=0.0                 # feature is
+				}                              # negative of
+                                                               # expected.
+				sumf = sumf + fit *xx* xdn     # sum fits
+				xbdxdn = bdepth * xdn * xfeat
+				sumd = sumd + xbdxdn           # sum depths
+				sumfd= sumfd+ xbdxdn * fit     # sum fit*depth
+			}
+
+			zfit(ifeat,imat)   = fit
+			zdepth(ifeat,imat) = bdepth
+			zfd(ifeat,imat)    = fit * bdepth
+			zcompf(ifeat,imat) = xx
+
+		    } # end ifeat do loop
+
+		    # output fit, depth, f*d before decisions
+
+		    ofit(imat,xel)   = sumf
+		    odepth(imat,xel) = sumd
+		    ofd(imat,xel)    = sumfd
+
+		    
+		  } # end imat do loop
+
+		  ibest = 1
+		  if (nmats == 1) go to 600
+
+		  # now make decisions as to best material
+
+		  do imat = 1, nmats {  # find best fit
+			if (ofit(imat,xel) > ofit(ibest,xel)) {
+				ibest = imat
+			}
+		  }
+			
+##################################### not used ##########
+#		  i2best = 1
+#		  if (ibest == 1) i2best = 2
+#		  do imat = 1, nmats {  # find second best fit
+#			if (imat == ibest) next
+#			if (ofit(imat,xel) > ofit(i2best,xel)) {
+#				i2best = imat
+#			}
+#		  }
+#
+#		  # check if second best is close, if so look at f*d
+#
+#		  if (ofit(i2best,xel)*1.02 > ofit(ibest,xel)) {
+#			aa = ofit(ibest,xel) * odepth(ibest,xel)
+#			bb = ofit(i2best,xel) * odepth(i2best,xel)
+#			if (bb > aa) ibest = i2best
+#		  }
+#########################################################
+
+		  # now that best is found, others are zero
+		  do imat = 1, nmats {
+			if (imat == ibest) next
+			ofit(imat,xel)   = 0.0
+			odepth(imat,xel) = 0.0
+			ofd(imat,xel)    = 0.0
+		  }
+
+600		  continue
+
+#ZZZZZZZ start analysis do loops
+
+			# Write diagnostic output at user specified intervals
+			if (xel == dx2 & mod(yel,nth) == 0) {
+
+				if (diaflg == 0) {
+					write (ttyout,*) ' '
+					write (ttyout,*) ' '
+					write (ttyout,108) yel,xel
+108					format ('====',
+						'Pxl(',I4,',',I4,') ',
+						'====')
+					write (ttyout,111)yel,xel,
+						ibest,ofit(ibest,xel),
+						odepth(ibest,xel),
+						ofd(ibest,xel)
+111					format ('CHOSEN OUTPUT:',/,
+						'Pxl(',I4,',',I4,') ',
+						' Material  Fit  ',
+						'    Depth      F*D',/,
+						(15x, i6,1x,f7.3,4x,
+							f7.3,4x,f7.3,/))
+				} else {
+					write (ttyout,108) yel,xel
+					write (ttyout,109)
+109					format (/,' FITS, DEPTHS, F*D',
+						' before best fit selection:',/)
+					do jj = 1, nmats {
+					   write (ttyout,112) (ii,jj,
+						zfit(ii,jj),
+						zdepth(ii,jj),
+						zfd(ii,jj),dln(ii,jj),
+						zcompf(ii,jj),
+						ii=1,nfeat(jj))
+112					   format (' feat:',i3,
+						'  mat:',i3,
+						'  fit=',f6.3,
+						'  depth=',f6.3,
+						'  f*d=',f6.3,
+						'  nrmlz=',f6.3,', ',
+						   f4.1)
+					}
+					write (ttyout,*) ' '
+					write (ttyout,111)yel,xel,
+						ibest,ofit(ibest,xel),
+						odepth(ibest,xel),
+						ofd(ibest,xel)
+
+				} 
+			}  # end diagnostic write if block
+		}  # end analysis of one sheet
+
+#                    now output sheet
+
+		do imat = 1, nmats {    # output each material
+		    do i = 1,dx  {       # prepare sheet analysis for output
+
+			i4buff(i) = nint(odepth(imat,i)*bdscal(imat)) # depth
+			i4buf2(i) = nint(ofit(imat,i)*qfscal(imat))   # fit
+			i4buf3(i) = nint(ofd(imat,i)*bdscal(imat)) # f*d
+
+			# Check for values outside of range ( < 0 or > 255)
+
+			if (i4buff(i) < 0) i4buff(i) = 0  # depth
+			if (i4buf2(i) < 0) i4buf2(i) = 0  # fit
+			if (i4buf3(i) < 0) i4buf3(i) = 0  # f*d
+
+			if (i4buff(i) > 255) i4buff(i) = 255  # depth
+			if (i4buf2(i) > 255) i4buf2(i) = 255  # fit
+			if (i4buf3(i) > 255) i4buf3(i) = 255  # f*d
+		    }
+
+		    # Pack band depths to 1 byte integers
+
+		    paksiz = 8
+		    ierr = i4pack4 (i4buff,dx,paksiz)
+
+		    if (ierr != 0) {  # Check for error in packing
+			write (ttyout,*)
+			write (ttyout,*)'ERROR: packing depths to 8 bit numbers'
+			write (ttyout,*)
+			stop
+		    }
+
+		    # Pack fits to 1 byte integers
+		    ierr = i4pack4 (i4buf2,dx,paksiz)
+
+		    if (ierr != 0) {  # Check for error in packing
+			write (ttyout,*)
+			write (ttyout,*)'ERROR: packing fits to 8 bit numbers'
+			write (ttyout,*)
+			stop
+		    }
+
+		    # Pack f*d to 1 byte integers
+		    ierr = i4pack4 (i4buf3,dx,paksiz)
+
+		    if (ierr != 0) {  # Check for error in packing
+			write (ttyout,*)
+			write (ttyout,*)'ERROR: packing f*d to 8 bit numbers'
+			write (ttyout,*)
+			stop
+		    }
+
+		# Write band depths to output file
+
+		length= lenfile(imat)
+		dfile = mfile(imat)(1:length) // '.depth'
+		open (unit=lund, file=dfile(1:length+6),
+			access='direct',recl=oreclen,
+			form='unformatted', status='old', iostat=ier)
+
+		if (ier != 0) {
+			write (ttyout,187) ier, 'depth', dfile
+			stop
+		}
+
+		write(lund,rec=yel+1,iostat=ier) chbuff(1:dx)
+
+		if (ier != 0) {   # Check for error in writing
+
+			write (ttyout,288) ier, 'depth', dfile
+288			format (' VICAR write ERROR',i5,' on ',a,' file:',/,a)
+			stop
+		}
+		close (lund, iostat=ier)
+		if (ier != 0) {
+			write (ttyout,189) ier, 'depth', dfile
+			stop
+		}
+
+		# Write fits to output file
+
+		ffile = mfile(imat)(1:length) // '.fit'
+		open (unit=lunf, file=ffile(1:length+4),
+			access='direct',recl=oreclen,
+			form='unformatted', status='old', iostat=ier)
+
+		if (ier != 0) {
+			write (ttyout,187) ier, 'fit', ffile
+			stop
+		}
+
+		write(lunf,rec=yel+1,iostat=ier) chbuf2(1:dx)
+
+		if (ier != 0) {   # Check for error in writing
+
+			write (ttyout,288) ier, 'fit', ffile
+			stop
+		}
+		close (lunf, iostat=ier)
+		if (ier != 0) {
+			write (ttyout,189) ier, 'fit', ffile
+			stop
+		}
+
+		# write fit*depth file
+
+		fdfile = mfile(imat)(1:length) // '.fd'
+		open (unit=lunfd, file=fdfile(1:length+3),
+			access='direct',recl=oreclen,
+			form='unformatted', status='old', iostat=ier)
+
+		if (ier != 0) {
+			write (ttyout,187) ier, 'f*d', fdfile
+			stop
+		}
+
+		write(lunfd,rec=yel+1,iostat=ier) chbuf3(1:dx)
+
+		if (ier != 0) {   # Check for error in writing
+
+			write (ttyout,288) ier, 'f*d', fdfile
+			stop
+		}
+		close (lunfd, iostat=ier)
+		if (ier != 0) {
+			write (ttyout,189) ier, 'f*d', fdfile
+			stop
+		}
+
+	  } # end material I/O loop
+	}
+
+222	format ('Pixel coordinate: x = ',I3,' y = ',I3,/,
+	' Band start range  = ',I3,'-',I3,/,
+	' Band end range    = ',I3,'-',I3)
+333	format ('Channel=',I3,'  Wavelen= ',F6.3,'  Ref (CR)= ',
+	F6.3,'  Obs= ',F6.3,'  Obs (CR)= ',F6.3)
+444	format ('Band depth     = ',F6.3,' scaled 8 bit = ',I3,/,
+	'Quality of fit = ',F6.3,' scaled 8 bit = ',I3,/,
+	'K-factor       = ',F6.3,/,
+	'Slope          = ',F6.3,/,
+	'Y-intercept    = ',F6.3,/,
+	'Min chan       = ',I3,/,
+	'Error message toggle (1/on, 0/off) = ',I3,/,
+	'Image file flag (1/on, 0/off)      = ',I3)
+
+
+# End program
+	write (ttyout,*)'Updating restart file.'
+	icrst = 1
+	call rstart (icrst)
+	call closef
+######$	close (lunhist,iostat=ier)  # file is presently closed above
+	stop
+	end

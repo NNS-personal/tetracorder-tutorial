@@ -1,0 +1,101 @@
+http://speclab.cr.usgs.gov
+
+Roger N. Clark
+U. S. Geological Survey
+
+May 20, 2012
+
+The directory contains setup scripts for making a
+tetracorder run.
+
+Place the contents of this directory into your own
+directory, then edit the file:
+
+          tetsetup
+
+and change the line:
+
+    source=/info/tetracorder/tetracorder4.4.cmds
+
+to point to the directory where you installed these files.
+
+Next, cd to the directory where you want to do a mapping run
+(e.g. cd /mymapping/ ), and type:
+
+      tetsetup
+
+and it will tell you the parameters you need.  They are:
+
+1) a sub-directory name where the mapping is to be done.
+   This must not presently exist.
+
+2) A data set keyword and a list of recognized data sets
+   is listed if no parameters are given on the command line
+
+3) The cube naem including the lunix/unix path.  The total path length
+   must be less than 70 characters.  Example:
+
+       /cubes/cuprite95-beta-intel_rtgc
+
+   If the cube is an envi file, specify the header file, e.g.
+
+       /cubes/cuprite95-beta-intel_rtgc.hdr
+
+   The cube MUST be in the byte order of the machine where tetracorder
+   is running.  Tetracorder will not swap bytes.
+
+   example setup command:
+
+   /info/tetracorder/tetracorder4.4.cmds/tetsetup cuprite-mapping1 aviris_1995 /cubes/cuprite95-beta-intel_rtgc.hdr
+
+Running Tetracorder:
+
+   The install script created the cuprite-mapping1 directory
+   in the above example, makes the necessary sub-directories
+   needed by tetracorder, copies the tetracorder start up script
+   and expert system commands, and post processing support
+   programs to the mapping directory.
+
+   It then tells you to cd to the directory and
+   gives you the command to cut and paste to start the tetracorder
+   run.
+
+   If tetracorder encounters any problems, it will stop.  You will
+   need to foreground the process, type e<carriage return>x<carriage return>
+   and repeat until tetracorder exits.  The examine the 
+   tetracorder.out and cmd.1.out files to diagnose any problems.
+   Common problems are needing to tune continuum end-points for
+   spectral library entries in the expert system to to limited
+   spectral range by the imaging spectrometer (for example, because
+   of some bad bands).  In that case you will need to make
+   scientific decisions on how to modify the expert system.
+
+======================
+To add a new data set:
+
+3 files must be edited:
+
+1) Add do the tetsetup script (search for Hymap_2007a and copy
+that style for the new data set).
+
+2) Edit the DELETED.channels file and add the new daat set bad bands
+   list.  The list is specpr deleted points style, a letter "c"
+   a "#" and the keyword (e.g. Hymap_2007a) and any other comments
+   you want.
+
+3) Copy a restart file in the directory restart_files and name it with:
+   r1-<data set keyword>   For example:
+
+   cp restart_files/r1-s06hy07a restart_files/r1-mydata01
+
+   The specpr file names are limited to 8 characters.
+   s06hy07a = specptral library 06, hymap 2007 a wavelengths.
+
+   Nest edit the new file (restart_files/r1-mydata01) and change
+   the s06hy07a in 3 locations to your new name (e.g. mydata01)
+
+Next you will need to create a convolved spectral library
+(use your favorite tools or see our speclib package).
+
+Roger N. Clark
+U. S. Geological Survey

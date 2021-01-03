@@ -1,0 +1,23 @@
+
+  5350  Tumbleweed ANP92-2C Dry   W1R1Ba ABS REF   512  11:23:34.00  05/19/1992
+
+              Header Information Display and Change Routine
+               ---------------------------------------------
+               display of: v  5350   Tumbleweed ANP92-2C Dry   W1R1Ba ABS REF
+ type in the number and/or letter code next to the information you
+ wish to change
+
+  t: title=   Tumbleweed ANP92-2C Dry   W1R1Ba ABS REF
+  h: history= copy of splib003 r 5046                                     
+
+  m: manual history: (type m and the line number to change only one line)
+  -------------------------------------------------------------------------
+                                                                           
+            SID=ANP92-2C.  GRAINSIZE=50 microns.                           
+  TEMPK=293.             SPEC=ASD.                                         
+      TYPE=REFL  but there is no perios, so an error  CAL=12.              
+  -------------------------------------------------------------------------
+  a: airmass=    0.0000
+  u: username= gswayze 
+
+

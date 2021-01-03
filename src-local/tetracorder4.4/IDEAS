@@ -1,0 +1,408 @@
+in spectral feature setup:
+
+    Ignore spectrasl regions, e.g. CO2 bands in a 2-micron ice band
+
+    better:
+    If a feature is detected, ignore a set of features.
+       If sharp 2-um CO2 band detected, ignore the CO2 triplet.
+
+--------------
+
+beyond tetracorder 4.2:
+
+ability to do band ratios as both an independant algorothm
+as within a feature fit.  also, ratios of slopes.
+also intensities inside a feature, not just the conininuaa.
+    E. Livo, 4/9/2007
+
+------------
+thermal emission analysis
+
+cloud and shadow detection
+   R. Clark 4/9/2007
+
+New ideas for tricorder to be implimented in tricorder 3.0:
+Roger Clark
+
+================================================================
+Before the library setup, set a flag to enable cube processing.
+If the flag is not set, then cube output files are ignored,
+and you can run the setup in the same directory as a cube analysis
+and analyze individual spectra.
+================================================================
+case stuff
+
+At the end of each commandlet, have an action command:
+
+action: none         \# do nothing
+action: case 1       \# do case 1
+action: case 1 4 5   \# do case 1 then 4 then 5
+
+(there is no case 0)
+
+cases are like groups, but are not done until a certain match
+is found first.  
+
+see examples in the group description below.
+COMPLETE in tricorder 3.0 12/20/94
+          except, cases can't yet call other cases
+================================================================
+Groups are all done.  Group 0 is applied to all groups.
+(Meaning group 1 comparisons are group 0 + 1)
+
+COMPLETE in tricorder 3.0 12/20/94
+================================================================
+after the convolve statement
+
+preratio: URATIO [splib04] 496 RRATIO [splib04] 496
+
+where URATIO = unknown   spectrum / spectrum [splib04] 496
+      RRATIO = reference spectrum / spectrum [splib04] 496
+
+
+Typical uses:
+
+group 0: green vegetation, dry veg, water, ice/snow, melting snow, clouds
+             (cloud shadows?)
+group 1: minerals/materials in 0.4 to ~1.2um
+         (mostly electronic bands)
+group 2: minerals/materials in 2-2.5 um region with support from 1-1.5um
+         (mostly vibrational bands)
+case 1: vegetation species (from veg, group 0)
+case 2: vegetation stress (from veg, group 0)
+group 3: any level vegetation chlorophyll detection
+            (group 3 -0)
+case 3:  red-edge shift from group 3
+
+A special flag "-0" can be added after the group # to not include group
+0 in the analysis.  (Note all entries in the group should be treated the
+same, or bizzare results might be encountered.)  Example:
+
+group 4 -0 URATIO [splib04] 496 RRATIO [splib04] 496
+
+MOSTLY COMPLETE in tricorder 3.0 12/20/94
+                you can do a URATIO, or an RATIO, but can't
+                yet do both. (trivial to add both: 20 minutes work)
+================================================================
+The udata specifier specifies on what data to analyze:
+          (udata is the unknown, e.g. spectra from the cube)
+
+udata: reflectance     # operate on reflectance data (#2)
+udata: emittance       # operate on emittance data (#3)
+udata: radiance        # operate on radiance data (#1)
+udata: raw             # operate on raw data (#0)
+
+the following are valid only in cases:
+
+udata: previous answer library spectrum             # (#5)
+udata: continuum removed previous answer            # (#6)
+udata: reversed continuum removed previous answer   # (#7)
+           (this one makes the reference the unknown, the unknown spectrum,
+            the reference library spectrum, and substitutes the
+            continuum removed values)
+
+The observed data set will later be specified what type it is in.
+The udata specifier says what it should be converted to before this
+analysis is done or used for this analysis.
+
+The idea here is that in the future, we only store one data type (e.g.
+the AVIRIS radiance data) and compute what we need on the fly.  The
+specification of how to convert is specified elsewhere (in the section
+where the cube is assigned).
+
+For example, if the input data were in radiance, and the analysis
+should be done in reflectance, then convert the data to reflectance
+first.  At Tricorder 3.0, this will be informational only.  A future
+version will have conversions added.  For example, the radiance to
+reflectance will do an ATREM correction followed by an offset and
+multiplier ground calibration.
+
+This feature allows us to do atmospheric analyses on radiance data and
+surface reflectance analysis at the same time!  For example, one group
+could be atmospheric analysis, the others surface reflectance.  In the
+future when we have thermal data in the same cube, coregistered, yet
+another group could be analyzing emittance.
+
+Currently, reflectance and emittance are the same.  (With the Mars
+Surveyor TES instrument, a calibration to emittance could be applied.)
+
+The raw specifier means don't do anything to the data.
+
+The alternate modes for cases say take the various previous answers and use
+one of them.
+ e.g.:             in a special case, use the continuum removed spectral
+		   feature for additional analysis.  It could be done
+		   with vegetation stress on the chlorophyll absorption
+		   band.  The continuum removed band can be normalized
+		   to a referenced depth (using the reversed mode
+		   option) and then the red edge shift can be calibrated
+		   in nanometers.  If you didn't do this, the derived
+		   shift would be depth dependent.
+
+================================================================
+When a group/case is complete, the answer is put into a holding
+array (the original spectrum, pointer to the the continuum removed
+reference spectra which is the answer, the band depths, fits, etc)
+================================================================
+the convolve specifier tells whether or not to convolve the
+             input reference spectrum to the resolution and sampling
+             of the flight instrument
+
+With this feature, we can convolve the reference spectra on the fly and
+we don't have to generate separate spectral libraries for each data set.
+(Of course, when comparing spectra, we will need the convolved ones, so
+maybe this really won't help.)
+
+convolve: no     # don't convolve (flag=0, =1 convolve with gaussians)
+convolve: BKMN1X: gaussian wav= [splib04] 12 res= [splib04] 14
+convolve: AVIRIS: gaussian wav= [splib04] 12 res= [splib04] 14
+
+The string after convolve specifies alternate data sets.
+
+where the wav= specifies the specpr file and record for the
+               reference spectrum input wavelengths
+          res= specifies the specpr file and record for the
+               reference spectrum input resolution
+          gaussian specifies do a gaussian convolution
+
+The tricorder setup will now ask for the resolution as well as
+    the wavelengths of the data that are being analyzed.
+
+================================================================
+
+Preprocess specifier allows various algorithms to be applied to the data
+before the main algorithm (specified below).
+
+e.g.:
+preprocess: linunmix case 6     # linear unmixing case 6
+preprocess: lminimize case 7    # linear unmix with band depths
+                                  (clark's new algorithm, specified
+                                  in case 7)
+
+The case specifies the algorithm and how it should be applied.
+
+================================================================
+The algorithm specifier:
+After the preprocess designation, the method of analysis is specified:
+
+algorithm: tricorder-primary          # the band fitting routines
+algorithm: reversed tricorder-primary # the band fitting routines
+                                       (here the library reference and the
+                                        unknown spectra are reversed.)
+                                        This would mainly be used in special
+                                        applications.
+algorithm: canopychem  # canopy chemistry
+algorithm: linunmix    # linear unmixing (e.g. John Adams)
+algorithm: bandratio   # band ratioing
+algorithm: lminimize   # linear unmixing to minimize an absorption feature
+
+The linear unmixing algorithms must be able to access answers from other
+algorithms like the tricorder-primary.  How this will be done can be
+specified by the udata specifier (see above).
+
+Generally, the tricorder-primary would be used in all the groups, then the
+other algorithms used in cases.
+
+For example, when you find a lot of veg, do a case and determine
+canopy chemistry.
+
+This has the potential for very complex analysis.  For example, determine
+there is veg in the pixel, apply a software defoliant, then do an
+analysis on the veg removed spectra.  (Need to be careful about infinite
+loops here.)
+
+a linear unmixing algorithm might call on answers from groups 0, 1, 2, 3,
+and case 3.  all groups are processed first, then cases in their numerical
+order.  So if this is case 4, then answers exist from groups 0, 1, 2, 3 and
+case 1, 2, and 3.
+
+At tricorder 3.0, only tricorder-primary will be implimented; others will follow.
+================================================================
+predefine the paths for group1, group2, etc.
+
+all group 0 identifications (done in conjunction with each group 1,
+2, ...) are put in with the path with the group currently being
+identified.  For example, if material A is group 0, and group 2
+materials are being analyzed, if A is found, then the output is in
+the directory of group 2 materials.
+
+Implications: if group 0 material has further action, then must set
+a flag so it is not done twice?
+================================================================
+history:
+          add specpr file names for v, w, u, d, and y as comments in the
+          history file.
+================================================================
+Cube assignment:  allow from command line so doesn't have to be
+                  assigned in specpr
+
+                  DONE in tricorder 2.4
+================================================================
+Output file bits/pixel and scale, compression, and what to save.
+
+bits   DN # = #
+ 8     DN 255   = 0.5       #  8 bit output
+16     DN 32000 = 1.0 +/-   # 16 bit output
+
+compress=zip
+compress=none
+
+output=fit depth
+
+The +/- allows both positive and negative feature output.
+	(normally, if an absorption band is expected, and a negative one
+	is found, tricorder zeros the output.  The +/- stops that
+	truncation.  This could be used, for example, in tracking
+	residual 2.0um CO2 features.
+
+The compress option allows compressing the output file after the program is
+complete (so a lot of disk space is still required).
+
+the output specifier says what files to output.  all is default.
+others are fit, depth, and fd
+
+================================================================
+Also make thresholding options a separate line after output
+     with an option specifier.
+================================================================
+Add continuum thresholding in place of the ct with each feature:
+
+     rct low high  # right continuum threshold
+     cct low high  # center continuum threshold
+     lct low high  # left continuum threshold
+
+the cct stands for continuum threshold at center and used to be
+called ct.
+
+Add band depth thresholding on a per feature basis:
+
+     bd low high   # band depth
+================================================================
+
+Allow alternate library reference spectra, to be selected at time of library
+setup:
+
+alternatelib=2  # two alternate library reference spectra.
+BKMN1X          # keyword for alternate 1
+AVIRIS          # keyword for alternate 2
+
+keyword applied to the specpr reference library file.  Note that you
+must properly have the alias definitions set to refer to the correct
+specpr file.  Note that you must also set the deleted points alias for
+the alternate in use.
+
+================================================================
+Gregg has suggested that we create an output specpr file of the
+convolved spectra.  That way, we can archive the spectral library
+used to map a cube.  It also give us a convolved library for comparison
+when we convolve on the fly.
+
+Roger adds:
+In addition, we could output a continuum removed feature library.
+
+In both above cases, we could delete the points, so we can see just what
+is fitted.  These outputs would be defined at the beginning of the
+library setup.
+
+liboutput filename  # convolved spectral library output file
+                      (none means no output) 
+
+featoutput filename # continuum-removed feature library output file
+                      (none means no output)
+
+================================================================
+
+EXAMPLES:
+
+\#######################################################################
+==[alternatelib]AVIRIS  # define this in startup command file.
+                       this says which set of library reference spectra to get
+
+enable cube  # enable cube processing: in setup, be sure files can be allocated.
+liboutput none
+featoutput none
+2               # two alternate library reference spectra.
+BKMN1X          # keyword for alternate 1
+AVIRIS          # keyword for alternate 2
+use [alternatelib]	# use [alternatelib] for this setup
+3     2      # define 3 groups (0, 1, 2) and 2 cases (1, 2)
+[DIRg0]      # group 0 path
+[DIRg1]      # group 1 path
+[DIRg2]      # group 2 path
+[DIRc1]      # case 1 path
+[DIRc2]      # case 2 path
+BEGIN SETUP
+group 0
+udata: reflectance
+convolve: no
+preratio: none
+preprocess: none
+algorithm: tricorder-primary
+AVIRIS: [splib04]   496 d                \# file ID, rec no.
+BKMN1X: [splib04]  5266 d                \# file ID, rec no.
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=Fir_Tree IH91-2 Complete   =a AVIRIS
+[DELETPTS]
+vegetation1.conifer              \# output title
+    3    0                       \# Number of features, and not feats
+Dw 0.522   0.552   0.737   0.767  cct 0.05 \# continuum wavelengths
+Dw 0.870   0.900   1.033   1.063  cct 0.10 \# continuum wavelengths
+Dw 1.033   1.063   1.245   1.275  cct 0.08 \# continuum wavelengths
+FITALL>0.5  DEPTHALL>0.6   \# thresholding
+output=fit depth
+vegetation1                      \# Output base file name
+8 DN 255 = 1.00000                 \# Full scale
+compress=none
+action: case 1     \# do case 1
+\#######################################################################
+group 0
+udata: reflectance
+convolve: no
+preratio: none
+preprocess: none
+algorithm: tricorder-primary
+AVIRIS: [splib04]   182 d                \# file ID, rec no.
+BKMN1X: [splib04]  1900 d                \# file ID, rec no.
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=H2O-Ice GDS136 77K         =a AVIRIS
+[DELETPTS]
+Snow.H2O                         \# output title
+    2    1                       \# Number of features, and not feats
+Dw 0.958   0.986   1.080   1.110  cct 0.08 \# continuum wavelengths
+Dw 1.150   1.178   1.315   1.345  cct 0.08 \# continuum wavelengths
+NOT [splib04] 496  1  0.50 0.5   \# NOT vegetation, feat 1, depth .50, fit .5
+FITALL>0.6  DEPTHALL>0.05  \# and thresholding
+output=fit depth
+snow.and.ice                     \# Output base file name
+16 DN 255 = 0.50 +/-  \# output bits, Full scale
+compress=zip
+action: none
+\#######################################################################
+case 1
+udata: reflectance
+convolve: no
+preratio: none
+preprocess: none
+algorithm: tricorder-primary
+AVIRIS: [splib04]   498 d
+BKMN1X: [splib04]  5286 d
+\#=-=-=-=-=-=-=-=-=-=-=- TITLE=vegetation species 1
+[DELETPTS]
+Vegetation species 1
+etc.
+
+END SETUP
+
+last line instead of group/case is "END SETUP"
+
+at end of setup, tricorder should summarize total number of groups, cases,
+materials, features, etc, and if cube processing is enabled, estimate the
+total disk space required.
+
+
+
+================================================================
+tetracorder3.6:
+
+added weak features
+added file compression on completed files.
+
+   - Roger N. Clark 1/19/2000

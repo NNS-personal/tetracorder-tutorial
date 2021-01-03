@@ -1,0 +1,18 @@
+#!/bin/sh
+
+davinci.3maps.on.gray-image group.2um/kaolwxl.fd.gz -15 \
+                            group.2um/alunNa03.fd.gz -15 \
+                            group.2um/muscovite-medhigh-Al.fd.gz -15 \
+                            ../cubes/cuprite95-beta-intel_rtgc 20 0 \
+                            cuprite.r=kaolwxl,g=alunNa03,b=illite,bw.linear \
+                            -vicar
+
+davinci.3maps.on.gray-image group.2um/kaolwxl.fd.gz -15 \
+                            group.2um/alunNa03.fd.gz -15 \
+                            group.2um/muscovite-medhigh-Al.fd.gz -15 \
+                            ../cubes/cuprite95-beta-intel_rtgc 20 0 \
+                            cuprite.r=kaolwxl,g=alunNa03,b=illite,bw.g \
+                            -gamma
+davinci.red.overlay.gray-image group.2um/kaolwxl.fd.gz -20 \
+			../cubes/cuprite95-beta-intel_rtgc 20 0 \
+			cuprite.r=kaolwxl.on.ch20 -gamma

@@ -1,0 +1,109 @@
++ diff ../tricorder3.5/creatoutfiles.r creatoutfiles.r
++ diff ../tricorder3.5/cubecorder.r cubecorder.r
++ diff ../tricorder3.5/cublineout.r cublineout.r
++ diff ../tricorder3.5/delhist.r delhist.r
++ diff ../tricorder3.5/flushseqfile.r flushseqfile.r
++ diff ../tricorder3.5/gcsetup.r gcsetup.r
++ diff ../tricorder3.5/makvicarlabel.r makvicarlabel.r
++ diff ../tricorder3.5/multmap.h multmap.h
+19,22c19,22
+< 	parameter       (maxmat=600)   # maximum materials
+< 	parameter       (maxmat1=400)  # maximum materials in one group/case
+<         parameter       (maxfeat=16)    # maximum features per material
+<         parameter       (maxnotfeat=6) # maximum NOT features per material
+---
+> 	parameter       (maxmat=350)   # maximum materials
+> 	parameter       (maxmat1=180)  # maximum materials in one group/case
+>         parameter       (maxfeat=8)    # maximum features per material
+>         parameter       (maxnotfeat=4) # maximum NOT features per material
+40,42c40,42
+<         parameter       (maxgrp=30)   # maximum number of spectral groups
+<         parameter       (maxcse=30)   # maximum number of spectral cases
+<         parameter       (maxgrpcse=60)# maximum number of cases + groups
+---
+>         parameter       (maxgrp=20)   # maximum number of spectral groups
+>         parameter       (maxcse=20)   # maximum number of spectral cases
+>         parameter       (maxgrpcse=40)# maximum number of cases + groups
++ diff ../tricorder3.5/nblures.r nblures.r
+diff: input file ../tricorder3.5/nblures.r: No such file or directory
++ diff ../tricorder3.5/nblures1mat.r nblures1mat.r
+diff: input file ../tricorder3.5/nblures1mat.r: No such file or directory
++ diff ../tricorder3.5/nvres1mat.r nvres1mat.r
+116,119c116
+< 		# use < -1.e34 in case -1.23e34 doesn't get deleted
+< 		#	point due to inexact floating point
+< 
+< 		if (bdnorm < -1.e34 || 
+---
+> 		if (bdnorm == -1.23e34 || 
+121c118
+< 				fit < -1.e34) {
+---
+> 				fit == -1.23e34) {
++ diff ../tricorder3.5/obuffers.h obuffers.h
++ diff ../tricorder3.5/opencube.r opencube.r
+24c24
+< #ccc        filhdr: file header length in recorde
+---
+> #ccc        filhdr: file header length in bytes
++ diff ../tricorder3.5/readi2sheet.r readi2sheet.r
++ diff ../tricorder3.5/reflsetup.r reflsetup.r
++ diff ../tricorder3.5/rstbgn.r rstbgn.r
++ diff ../tricorder3.5/setupreadsheet.r setupreadsheet.r
++ diff ../tricorder3.5/specorder.r specorder.r
++ diff ../tricorder3.5/strdate.r strdate.r
++ diff ../tricorder3.5/tp1all.r tp1all.r
++ diff ../tricorder3.5/tp1cse.r tp1cse.r
++ diff ../tricorder3.5/tp1mat.r tp1mat.r
+266,274d265
+< 			#	if(imat == 140) { 
+< 			#		write (ttyout,*) 'DEBUG: imat 140',
+< 			#			'  ofit=',ofit(imat,xel),
+< 			#			'  notflg=',notflg(ntmpnotfeat,ntmpnotmat)
+< 			#		write (lunresult,*) 'DEBUG: imat 140',
+< 			#			'  ofit=',ofit(imat,xel),
+< 			#			'  notflg=',notflg(ntmpnotfeat,ntmpnotmat)
+< 			#		pause 1  # DEBUG
+< 			#	}
+279,287d269
+< 			#	if(imat == 140) { 
+< 			#		write (ttyout,*) 'DEBUG: imat 140',
+< 			#			'  ofit=',ofit(imat,xel),
+< 			#			'  notflg=',notflg(ntmpnotfeat,ntmpnotmat)
+< 			#		write (lunresult,*) 'DEBUG: imat 140',
+< 			#			'  ofit=',ofit(imat,xel),
+< 			#			'  notflg=',notflg(ntmpnotfeat,ntmpnotmat)
+< 			#		pause 2  # DEBUG
+< 			#	}
++ diff ../tricorder3.5/tri1.h tri1.h
++ diff ../tricorder3.5/tri1setup.r tri1setup.r
++ diff ../tricorder3.5/tricorder.r tricorder.r
++ diff ../tricorder3.5/tricube.h tricube.h
++ diff ../tricorder3.5/tritf.h tritf.h
++ diff ../tricorder3.5/wrtcrdrout.r wrtcrdrout.r
++ diff ../tricorder3.5/wrtgcsetup.r wrtgcsetup.r
++ diff ../tricorder3.5/wrtspcrdrout.r wrtspcrdrout.r
+180,182c180
+< 						' excludes material ',jj,' (',
+< 						'notflag=',notflg(ntmpnotfeat,ntmpnotmat),
+< 						' feat=',ntmpnotfeat,ntmpnotmat,')'
+---
+> 						' excludes material ',jj
+187,189c185
+< 						' excludes material ',jj,' (',
+< 						'notflag=',notflg(ntmpnotfeat,ntmpnotmat),
+< 						' feat=',ntmpnotfeat,ntmpnotmat,')'
+---
+> 						' excludes material ',jj
+193,195c189
+< 						', material',ntmpnotmat,' (',
+< 						'notflag=',notflg(ntmpnotfeat,ntmpnotmat),
+< 						' feat=',ntmpnotfeat,ntmpnotmat,')'
+---
+> 						', material',ntmpnotmat
+198,200c192
+< 						', material',ntmpnotmat,' (',
+< 						'notflag=',notflg(ntmpnotfeat,ntmpnotmat),
+< 						' feat=',ntmpnotfeat,ntmpnotmat,')'
+---
+> 						', material',ntmpnotmat

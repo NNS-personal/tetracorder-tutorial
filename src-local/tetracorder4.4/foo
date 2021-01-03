@@ -1,0 +1,30 @@
+#!/bin/sh
+
+for i in \
+	creatoutfiles.r	\
+	cubecorder.r	\
+	cublineout.r	\
+	delhist.r	\
+	flushseqfile.r	\
+	gcsetup.r	\
+	nblures1mat.r	\
+	nvres1mat.r	\
+	readi2sheet.r	\
+	reflsetup.r	\
+	rstbgn.r	\
+	setupreadsheet.r	\
+	specorder.r	\
+	tetracorder.r	\
+	tp1all.r	\
+	tp1cse.r	\
+	tp1mat.r	\
+	tri1setup.r	\
+	wrtcrdrout.r	\
+	wrtgcsetup.r	\
+	wrtspcrdrout.r
+do
+	echo "============== $i ==============="
+	#diff $i ../tetracorder4.2/$i
+	#cp $i ../tetracorder4.2/$i
+
+done

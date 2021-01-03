@@ -1,0 +1,3 @@
+#!/bin/sh
+
+pr -o8 -l45 results.cluster.sorted | laser3ne -os -olandscape

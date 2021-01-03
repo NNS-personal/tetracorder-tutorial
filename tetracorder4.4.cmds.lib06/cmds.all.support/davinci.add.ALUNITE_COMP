@@ -1,0 +1,35 @@
+#!/usr/local/bin/davinci -f
+
+# image ratio
+
+fout1="group.2um/alunite_k.all.fd"
+fout2="group.2um/alunite_na.all.fd"
+fout3="group.2um/alunite_int-comp.all.fd"
+
+#############################################################
+
+a=    load(filename="group.2um/kalun150c.fd.gz")
+b=    load(filename="group.2um/kalun250c.fd.gz")
+c=    load(filename="group.2um/kalun450c.fd.gz")
+j=    load(filename="group.2um/alunNa03.fd.gz")
+
+d=    load(filename="group.2um/naalun150c.fd.gz")
+e=    load(filename="group.2um/naalun300c.fd.gz")
+f=    load(filename="group.2um/naalun450c.fd.gz")
+g=    load(filename="group.2um/na82alun100c.fd.gz")
+
+h=    load(filename="group.2um/na63alun300c.fd.gz")
+i=    load(filename="group.2um/na40alun400c.fd.gz")
+k=    load(filename="group.2um/alunNa56450c.fd.gz")
+l=    load(filename="group.2um/alunNa78.450c.fd.gz")
+m=    load(filename="group.2um/alun35K65Na.low.fd.gz")
+n=    load(filename="group.2um/alun73K27Na.low.fd.gz")
+o=    load(filename="group.2um/alun66K34Na.low.fd.gz")
+
+x = byte (a + b + c + j)
+y = byte (d + e + f + g)
+z = byte (h + i + k + l + m + n + o)
+
+write(x,filename=fout1,type=vicar)
+write(y,filename=fout2,type=vicar)
+write(z,filename=fout3,type=vicar)

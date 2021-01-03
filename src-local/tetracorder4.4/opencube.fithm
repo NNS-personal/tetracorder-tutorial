@@ -1,0 +1,123 @@
+      subroutine opencube (qlun, icube, filhdr, reclen, rechdr,dx, dy, 
+     % dz, numtyp, filorg, ier)
+      implicit integer*4 (i-n)
+cccc  name:  parsvicarlabel
+cccc  version date: 4/24/90
+cccc  author(s): Roger N. Clark
+cccc  language: ratfor
+cccc
+cccc  short description: open a cube check header and pase it.
+cccc                     at present only recognizes vicar
+cccc
+cccc  algorithm description: search strings label for
+cccc                         various fields to recognize correct
+cccc				format, then call parsing routine.
+cccc  system requirements: none
+cccc  subroutines called:       wjfren
+cccc  argument list description:
+cccc     INPUT:
+cccc        qlun:   3D logical unit number
+cccc        icube:  cube file name
+cccc     OUTPUT:
+cccc        filhdr: file header length in bytes
+cccc        reclen: record length in bytes
+cccc        rechdr: record header length in bytes
+cccc
+cccc        dx: x dimension in pixels = number of samples
+cccc        dy: y dimension in pixels = number of lines
+cccc        dz: z dimension in pixels = number of bands
+cccc
+cccc        numtyp: Data type 1= int*2
+cccc        filorg: file organization (1 = BIL)
+cccc
+cccc  parameter description:
+cccc  common description:
+cccc  message files referenced: none
+cccc  internal variables:
+cccc  file description: none
+cccc  user command lines: none
+cccc  update information:
+cccc  NOTES:
+cccc
+      integer*4 qlun, reclen, rechdr, idnoff
+      integer*4 dx, dy, dz, numtyp, filorg, ier
+      character*1536 ch
+      character*(*) icube
+      character*120 ivtitl,avlab1
+      integer*4 lblsiz,form,recsiz
+      integer*4 ivdate,ivtime,ivdat2,ivtim2,ier
+      character*1 ichil,iquote,lowch,highch,cnull
+      character*3 cm
+      integer*4 ttyout
+c
+c##### TEMPROARY:
+      ttyout = 6
+c
+c initialize variables
+c
+c a single quote character
+      iquote = char(39)
+c open the cube
+      open (unit=qlun, file=icube,access='direct', recl=1536, form=
+     % 'unformatted', status='old',iostat=ier)
+      if(.not.(ier .ne. 0))goto 23000
+         write (ttyout,*)'ERROR on initial open in opencube: ',ier
+         return
+c
+c determine if header is recognizable
+c
+23000 continue
+      read (qlun,rec=1,iostat=ier) ch
+      if(.not.(ioerr .ne. 0))goto 23002
+         write (ttyout,*)'ERROR on read in opencube: ',ier
+         return
+23002 continue
+      if(.not.(ch(1:8) .eq. 'LBLSIZE='))goto 23004
+c found basic vicar label
+         call parsvicarlabel (ch,lblsiz,form,recsiz,filorg,dy,dx,dz,
+     %    ivdate,ivtime,ivdat2,ivtim2,ivtitl,avlab1,ier)
+         rechdr = 0
+         if(.not.(form .eq. 16))goto 23006
+c 16-bit int values
+            numtyp = 1
+            reclen = dx * 2
+            goto 23007
+c        else
+23006       continue
+c temporary
+            numtyp = 0
+            write (ttyout,*) 'can only do 16-bit files ','at present'
+            ier = 0
+            return
+23007    continue
+         filhdr = lblsiz / reclen
+         if(.not.(filhdr*reclen .ne. lblsiz))goto 23008
+            write (ttyout,*) 'ERROR: filhdr*reclen=',filhdr*reclen,
+     %       ' is not =',lblsiz,'filhdr=',filhdr,'reclen=',reclen
+            write (ttyout,*) 'header size must be a',
+     %       ' multiple of the record size'
+            write (ttyout,*) 'because this is fortran I/O'
+            ier =1
+            return
+23008    continue
+         close (qlun, iostat=ier)
+         if(.not.(ier .ne. 0))goto 23010
+            write (ttyout,*)'ERROR on close ','in opencube: ',ier
+            return
+23010    continue
+         open (unit=qlun, file=icube,access='direct',recl=reclen,form=
+     %    'unformatted', status='old',iostat=ier)
+         if(.not.(ier .ne. 0))goto 23012
+            write (ttyout,*)'ERROR on initial',' open in opencube: ',
+     %       ier
+            return
+23012    continue
+         goto 23005
+c     else
+23004    continue
+         write (ttyout,*) 'unrecognized file header'
+         ier = 0
+         return
+23005 continue
+      return
+      end

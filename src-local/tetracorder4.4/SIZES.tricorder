@@ -1,0 +1,37 @@
+Tricorder 2.0 sizes (for single spectra; cubes are a little more)
+
+maxmaterials  maxfeatures   maxchans    Program Size
+--------------------------------------I----------------
+   500            15          4096      135.6 Megabytes
+
+   700            15          1220       59.4 Megabytes
+   200            15          1220       19.7 Megabytes
+   100            15          1220       11.8 Megabytes
+
+   500            15          1024       37.2 Megabytes
+   500            10          1024       26.9 Megabytes
+   500            10          1024       26.9 Megabytes
+
+   700            15           480       26.2 Megabytes
+   500            15           480       19.9 Megabytes
+   500            10           480       14.9 Megabytes
+   100            10           480        6.2 Megabytes
+   100 (+1000pxl) 10           480        7.4 Megabytes Current default
+                                                        (3/31/94)
+
+
+
+
+------------------------------------------------------------------
+Analytical Spectral Devices PS2 ~ 1220 channels
+Beckman 1x                         480 channels
+Nicolet standard 4 wavenumber run 4096 channels
+------------------------------------------------------------------
+size ~ 3888605 bytes + maxmat*178 + maxch*maxmat*(maxfeat+1)*4 +
+                       maxmat*maxfeat*68 + a little misc
+
+for cube processing, add: maxmat*maxpix*12 + maxpix*3
+                          (100 materials, 1000 pixels = 1.2 MBytes)
+
+additional groups add a little (mainly for titles and pointers,
+                                so not significant).

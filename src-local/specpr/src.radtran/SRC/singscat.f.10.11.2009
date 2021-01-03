@@ -1,0 +1,191 @@
+      subroutine singscat (Se, Si, aD, sD, D, wav, dp, mc, n, k
+     c                     Qs1, Qs, Qa, Qe,  wsingl)
+
+            implicit none
+
+            real*4 Se, Si, aD, sD, D, wav, dp, n, k
+            complex*4 mc
+
+            real*4 Qs1, Qs, Qa, Qe, wsingl
+
+c local variables:
+
+            real*4 nnkk, nnkk2, Qstop, Qsbot, xfact, dpw
+
+c was: subroutine Qsubs (Se,Si,aD,sD,Qs1,Qs)
+
+c WAS:  this subroutine computes equation 24 of Hapke (1981) JGR vol 16
+c          pages 3039-3054.    - pre 2009
+c
+c          plus modficstions for diffraction, Rayleigh scattering,
+c               and Rayleigh absorption.  
+c                                   - RNC 10/10/2009
+c
+c     input variables:
+c           Se = external reflection
+c           Si = internal reflection
+c           aD = absoprtion coefficient * grain diameter
+c           sD = grain internal scattering coeff * grain diameter
+c            D = grain diameter in cm
+c          wav = wavelength in microns
+c           dp = interparticle distance (cm)
+c           mc = complex index of refraction mc = n + ik  (complex)
+c           n  = real part of index of refraction
+c           k  = imaginary part of index of refraction
+c    
+c     computed:
+c           Qs = scattering efficiency
+c           Qa = absorption efficiency
+c           Qe = extinction efficiency
+c       wsingl = singlescattering albedo
+c
+c                note: Se,Si,r1 are >= 0.0 and <= 1.0.
+c
+c          Qs1 = Qs - Se which is the single scattering
+c                             albedo for first order scattering
+c                             but not including first surface
+c                             reflection from grain surfaces.
+c           Qs = the single scattering albedo in Hapke 1981
+c                    and assumed Qe = 1.0
+c
+c                BUT now we do more rigorous:
+c
+c     more rigorous is 
+c
+c               Qs = Qe - Qa,  Qe = Qs + Qa
+c
+c               wsingl = Qs/Qe = Qs/(Qs + Qa) - 1/(1+Qa/Qs)
+c
+c               Qs = Qd + Qs' = diffraction component + geometric component.
+c
+c               Previously (pre 2009) we assumed Qd =0
+c               Now add Qd =0 when particles touching, growing to 1 when
+c               particles separated by a wavelength.
+c
+c               XX = Hakpe's X parameter = pi * D / wav   (D. wav in same units)
+c
+c               irregular particles widely separated: Qe = 2 with diffraction.
+c
+c               distance between particles: Hapke 1993, eqn 10.58, p280
+c                    mass of one particle: 4/3 pi r^3 rho
+c                                       rho = density.
+c                    pv = particles/volume = mx *p/(4/3 pi r^3) 
+c                                          = 12 mx *p/(pi D^3) 
+c                         mx = mass fraction, p packing density.
+c                    dp = distance between particles = (1/pv)^(1/3)
+c
+c     first compute how much diffraction to add,
+c        df = diffraction factor, 0 to 1
+c     NOTE: this should be computed outside this routine and passed
+c           for increased speed.
+
+      df = dp/D 
+
+      XX = 3.14159265 * D / (wav / 10000.)
+      xfact = 3(n-1)XX
+
+c
+c     Qs = Qd + Qs'  after Hapke 1993, p94 last line and eq 5.25 p87
+c
+      if ( df .gt. xfact) then
+	Qd = 1.0
+      else
+	Qd = xfact/df
+      endif
+
+c
+c According to Hapke (1981 and 1993), for particles touching, Qe=1 and
+c there is no diffraction component.  But for small abundance particles,
+c in a larger matrix, they are separated enough so that diffraction
+c is a factot.  So add the diffraction component back in when
+c the average particle spacing is greater than 1 wavelength.  If
+c less than 1 wavelength, then decrease the diffraction component
+c proportionally.
+c
+c remember dp is in centimeters, wav in microns, so the 10,000 factor
+c
+
+	dpw = (dp/10000.0)/wav
+	if (dpw < 1.0) then
+		Qd = Qd * dpw
+	endif
+	
+c now if particles are really small:
+c
+c     note: the Qs below has Qd included, so we don't have the
+c           above Qd modifications.  Must resolve this in the future.
+c           Until then, this code is limited over what will be valid (see Hapke).
+
+      if (xfact < 1.0) then
+
+		nnkk = n*n + k*k
+		nnkk2= (n*n + k*k)**2
+		nnmkk= (n*n - k*k)
+		bot  = (nnkk2 +4.0*nnmkk+4.0)
+
+c                    eqn 5.13 Hapke 1993, p. 73
+
+		Qa = 24.0*n*k*XX/bot
+
+c                    eqn 5.14 Hapke 1993, p. 73
+
+		Qstop =8.0*(([nnkk2+n*n-k*k-2.0]**2.0)+36.0n*n*k*k)
+		Qsbot =3.0*(bot**2)
+
+		Qs = (XX**4)*Qstop/Qsbot
+		Qe = Qs + Qa
+
+		wsingl = Qs / Qe
+
+
+      else     
+
+c              this is the old Hapke stuff (Hapke, 1981) using geometric
+c              optics (pre 2009)
+c              plus the diffraction component added (10/11/2009)
+c
+               x = (aD/(aD+sD))**0.5
+               r1 = (1.0-x)/(1.0+x)
+c
+c     compute argument to exponent, if overrange set to max value
+c
+               xe = -0.6666667*(aD*(aD+sD))**0.5
+               if (xe.lt.-80.0) then
+	  		xe = -80.0
+			xexp = 0.0
+      		else
+			xexp = exp(xe)
+      		endif
+c
+c   debug write
+c
+c	write(6,25) xe, xexp
+c 25	format('xe= ',f8.1,'   xexp= ',e10.4)
+c
+c debug write
+c
+c	write(6,35) Se, Si, r1
+c 35	format('Se= ',f7.4,'  Si= ',f7.4,'  R1 = ',e10.4)
+c	utest = (r1-Si)*xexp
+c	write(6,45) utest
+c 45	format('Test for underflow',e10.4)
+
+                Qs = Se + ((1.0-Se)*(1.0-Si)*(r1+xexp))
+     1               /(1.0 - r1*Si + (r1-Si)*xexp)
+
+
+      		Qs1 = Qs - Se
+c
+c      		write (6,*) 'Q sub s = ', Qs
+
+		wsingl = (Qs + Qd)/(1.0 + Qd)
+
+
+      endif
+
+      write (6,222) Qs, Qd, Qa, wsingl
+222   format (' Qs=',f7.2 ,'  Qd=',f7.2 ,'  Qa=',f7.2 ,
+     6        '  wsingl=',f7.2)
+
+      return
+      end

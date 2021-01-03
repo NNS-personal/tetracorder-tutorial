@@ -1,0 +1,151 @@
+sspp -r -LINUX -INTEL  -XWIN   radtran.r > radtran.x
+ratfor77 < radtran.x > radtran.f
+gfortran -C -O -m64 -c radtran.f
+rm -f radtran.x radtran.f
+ratfor77 < abscf.r > abscf.f
+gfortran -C -O -m64 -c abscf.f
+rm -f abscf.f
+ratfor77 < getns.r > getns.f
+gfortran -C -O -m64 -c getns.f
+rm -f getns.f
+ratfor77 < getspec.r > getspec.f
+gfortran -C -O -m64 -c getspec.f
+rm -f getspec.f
+ratfor77 < getdfp.r > getdfp.f
+gfortran -C -O -m64 -c getdfp.f
+rm -f getdfp.f
+ratfor77 < kweigh.r > kweigh.f
+gfortran -C -O -m64 -c kweigh.f
+rm -f kweigh.f
+ratfor77 < abpeak.r > abpeak.f
+gfortran -C -O -m64 -c abpeak.f
+rm -f abpeak.f
+ratfor77 < getmu.r > getmu.f
+gfortran -C -O -m64 -c getmu.f
+rm -f getmu.f
+ratfor77 < calcr.r > calcr.f
+gfortran -C -O -m64 -c calcr.f
+calcr.f:91.13:
+
+      do23004 angle = astep/2., 90, astep                               
+             1
+Warning: Deleted feature: Loop variable at (1) must be integer
+calcr.f:91.21:
+
+      do23004 angle = astep/2., 90, astep                               
+                     1
+Warning: Deleted feature: Start expression in DO loop at (1) must be integer
+calcr.f:91.35:
+
+      do23004 angle = astep/2., 90, astep                               
+                                   1
+Warning: Deleted feature: Step expression in DO loop at (1) must be integer
+rm -f calcr.f
+ratfor77 < cnvg1g.r > cnvg1g.f
+gfortran -C -O -m64 -c cnvg1g.f
+rm -f cnvg1g.f
+ratfor77 < cnvgbr.r > cnvgbr.f
+gfortran -C -O -m64 -c cnvgbr.f
+rm -f cnvgbr.f
+ratfor77 < nweigh.r > nweigh.f
+gfortran -C -O -m64 -c nweigh.f
+rm -f nweigh.f
+ratfor77 < kfind.r > kfind.f
+gfortran -C -O -m64 -c kfind.f
+rm -f kfind.f
+ratfor77 < spcwri.r > spcwri.f
+gfortran -C -O -m64 -c spcwri.f
+rm -f spcwri.f
+ratfor77 < wavavg.r > wavavg.f
+gfortran -C -O -m64 -c wavavg.f
+rm -f wavavg.f
+ratfor77 < nfind.r > nfind.f
+gfortran -C -O -m64 -c nfind.f
+rm -f nfind.f
+ratfor77 < kiter.r > kiter.f
+gfortran -C -O -m64 -c kiter.f
+rm -f kiter.f
+ratfor77 < plotit.r > plotit.f
+gfortran -C -O -m64 -c plotit.f
+plotit.f:189.2:
+
+10    call crtpsc(igo,bbnd,ubnd,nchans,datac,error,wmina,wmaxa,i)       
+  1
+plotit.f:162.72:
+
+      go to 10                                                          
+                                                                        2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+plotit.f:189.2:
+
+10    call crtpsc(igo,bbnd,ubnd,nchans,datac,error,wmina,wmaxa,i)       
+  1
+plotit.f:166.72:
+
+      go to 10                                                          
+                                                                        2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f plotit.f
+ratfor77 < getwav.r > getwav.f
+gfortran -C -O -m64 -c getwav.f
+rm -f getwav.f
+ratfor77 < getnset.r > getnset.f
+gfortran -C -O -m64 -c getnset.f
+rm -f getnset.f
+ratfor77 < dwcomp.r > dwcomp.f
+gfortran -C -O -m64 -c dwcomp.f
+rm -f dwcomp.f
+ratfor77 < getk.r > getk.f
+gfortran -C -O -m64 -c getk.f
+rm -f getk.f
+ratfor77 < getn.r > getn.f
+gfortran -C -O -m64 -c getn.f
+rm -f getn.f
+ratfor77 < getdefs.r > getdefs.f
+gfortran -C -O -m64 -c getdefs.f
+rm -f getdefs.f
+ratfor77 < mrefl3.r > mrefl3.f
+gfortran -C -O -m64 -c mrefl3.f
+rm -f mrefl3.f
+ratfor77 < csatrd.r > csatrd.f
+gfortran -C -O -m64 -c csatrd.f
+rm -f csatrd.f
+ratfor77 < cxband.r > cxband.f
+gfortran -C -O -m64 -c cxband.f
+rm -f cxband.f
+ratfor77 < xccont.r > xccont.f
+gfortran -C -O -m64 -c xccont.f
+rm -f xccont.f
+ratfor77 < eval1g.r > eval1g.f
+gfortran -C -O -m64 -c eval1g.f
+rm -f eval1g.f
+ratfor77 < bdrefl.r > bdrefl.f
+gfortran -C -O -m64 -c bdrefl.f
+rm -f bdrefl.f
+ratfor77 < stdref.r > stdref.f
+gfortran -C -O -m64 -c stdref.f
+rm -f stdref.f
+gfortran -C -O -m64 -c ssube.f
+gfortran -C -O -m64 -c ssubi.f
+gfortran -C -O -m64 -c qsmnh.f
+gfortran -C -O -m64 -c qsubs.f
+gfortran -C -O -m64 -c hr.f
+ratfor77 < refl.r > refl.f
+gfortran -C -O -m64 -c refl.f
+rm -f refl.f
+gfortran -C -O -m64 -c  singscat.f
+Warning: singscat.f:7: Illegal preprocessor directive
+Warning: singscat.f:132: Illegal preprocessor directive
+Warning: singscat.f:133: Illegal preprocessor directive
+ratfor77 < unmix.r > unmix.f
+gfortran -C -O -m64 -c unmix.f
+rm -f unmix.f
+ratfor77 < refcom.r > refcom.f
+gfortran -C -O -m64 -c refcom.f
+rm -f refcom.f
+gfortran -C -O -m64 -L/usr/lib64 -o dradtranx radtran.o abscf.o getns.o getspec.o getdfp.o kweigh.o abpeak.o getmu.o calcr.o cnvg1g.o cnvgbr.o nweigh.o kfind.o spcwri.o wavavg.o nfind.o kiter.o plotit.o getwav.o getnset.o dwcomp.o getk.o getn.o getdefs.o mrefl3.o csatrd.o cxband.o xccont.o eval1g.o bdrefl.o stdref.o ssube.o ssubi.o qsmnh.o qsubs.o hr.o refl.o singscat.o unmix.o refcom.o /src/local/specpr/lib/specpr.a \
+			/src/local/specpr/lib/sputil.a -L/usr/X11R6/lib -lX11
+mv dradtranx dradtran
+size dradtran
+   text	   data	    bss	    dec	    hex	filename
+ 765711	   3168	1118736	1887615	 1ccd7f	dradtran

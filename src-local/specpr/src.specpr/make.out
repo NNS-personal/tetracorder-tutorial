@@ -1,0 +1,2229 @@
+check_env SP_OBJ SP_LIB F77 SP_FFLAGS SP_LDFLAGS SP_LIB SP_LDLIBS
+Environment variable SP_OBJ is set to ${SPECPR}/obj.  OK to proceed
+Environment variable SP_LIB is set to ${SPECPR}/lib.  OK to proceed
+Environment variable F77 is set to gfortran.  OK to proceed
+Environment variable SP_FFLAGS is set to -C -O -m64.  OK to proceed
+Environment variable SP_LDFLAGS is set to -L/usr/lib64.  OK to proceed
+Environment variable SP_LIB is set to ${SPECPR}/lib.  OK to proceed
+Environment variable SP_LDLIBS is set to -L/usr/X11R6/lib -lX11.  OK to proceed
+making in common
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/common'
+ratfor77 < spblockdata.r >  spblockdata.f 
+gfortran -C -O -m64 -c spblockdata.f 
+rm -f spblockdata.f
+ld   -r -o /src/local/specpr/obj/common.o spblockdata.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/common'
+make: [/src/local/specpr/obj/3dio.o] Error 127 (ignored)
+making all in 3dio
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/3dio'
+ratfor77 < read3d.r > read3d.f
+gfortran -C -O -m64 -c read3d.f
+rm -f read3d.f
+ratfor77 < file3d.r > file3d.f
+gfortran -C -O -m64 -c file3d.f
+rm -f file3d.f
+ratfor77 < hedr3d.r > hedr3d.f
+gfortran -C -O -m64 -c hedr3d.f
+rm -f hedr3d.f
+ratfor77 < blkext.r > blkext.f
+gfortran -C -O -m64 -c blkext.f
+rm -f blkext.f
+ratfor77 < redbil.r > redbil.f
+gfortran -C -O -m64 -c redbil.f
+rm -f redbil.f
+ratfor77 < redbsq.r > redbsq.f
+gfortran -C -O -m64 -c redbsq.f
+rm -f redbsq.f
+ratfor77 < redbip.r > redbip.f
+gfortran -C -O -m64 -c redbip.f
+rm -f redbip.f
+ratfor77 < lstrec.r > lstrec.f
+gfortran -C -O -m64 -c lstrec.f
+rm -f lstrec.f
+ratfor77 < num2ch.r > num2ch.f
+gfortran -C -O -m64 -c num2ch.f
+rm -f num2ch.f
+ratfor77 < seth3d.r > seth3d.f
+gfortran -C -O -m64 -c seth3d.f
+rm -f seth3d.f
+ld   -r -o /src/local/specpr/obj/3dio.o read3d.o file3d.o hedr3d.o blkext.o redbil.o redbsq.o redbip.o lstrec.o num2ch.o seth3d.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/3dio'
+make: [/src/local/specpr/obj/add.o] Error 127 (ignored)
+making all in add
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/add'
+ratfor77 < dlterr.r > dlterr.f
+gfortran -C -O -m64 -c dlterr.f
+rm -f dlterr.f
+ratfor77 < dstdev.r > dstdev.f
+gfortran -C -O -m64 -c dstdev.f
+rm -f dstdev.f
+ratfor77 < runadd.r > runadd.f
+gfortran -C -O -m64 -c runadd.f 
+ In file runadd.f:185
+
+5     write(ttyout,130)                                                 
+1
+ In file runadd.f:210
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f runadd.f
+ratfor77 < stdev.r > stdev.f
+gfortran -C -O -m64 -c stdev.f 
+rm -f stdev.f
+ratfor77 < wegadd.r > wegadd.f
+gfortran -C -O -m64 -c wegadd.f
+rm -f wegadd.f
+ld   -r -o /src/local/specpr/obj/add.o dlterr.o dstdev.o runadd.o stdev.o wegadd.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/add'
+make: [/src/local/specpr/obj/band.o] Error 127 (ignored)
+making all in band
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/band'
+ratfor77 < bandel.r > bandel.f 
+gfortran -C -O -m64 -c bandel.f
+rm -f bandel.f
+ratfor77 < banins.r > banins.f
+gfortran -C -O -m64 -c banins.f
+rm -f banins.f
+ratfor77 < banmov.r > banmov.f 
+gfortran  -C -O -m64 -c banmov.f 
+rm -f banmov.f
+ratfor77 < banorm.r > banorm.f 
+gfortran -C -O -m64 -c banorm.f
+rm -f banorm.f
+ratfor77 < banscr.r > banscr.f   
+gfortran  -C -O -m64 -c banscr.f 
+rm -f banscr.f
+ld   -r -o /src/local/specpr/obj/band.o bandel.o banins.o banmov.o banorm.o banscr.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/band'
+make: [/src/local/specpr/obj/crtp.o] Error 127 (ignored)
+making all in crtp
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/crtp'
+ratfor77 < alplty.r >  alplty.f 
+gfortran -C -O -m64 -c alplty.f
+rm -f alplty.f
+ratfor77 < chplta.r >  chplta.f
+gfortran -C -O -m64 -c chplta.f
+rm -f chplta.f
+ratfor77 < crtplt.r >  crtplt.f 
+gfortran -C -O -m64 -c crtplt.f
+ In file crtplt.f:99
+
+270   if(iline .ne. 3)then                                              
+  1
+ In file crtplt.f:117
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f crtplt.f
+ratfor77 < crtpsc.r >  crtpsc.f 
+gfortran -C -O -m64 -c  crtpsc.f
+ratfor77 < er.r >  er.f 
+gfortran -C -O -m64 -c er.f
+rm -f er.f
+sspp -r -LINUX -INTEL  -XWIN  cursrd.r > cursrd.x
+ratfor77 < cursrd.x >  cursrd.f 
+gfortran -C -O -m64 -c cursrd.f
+rm -f cursrd.x cursrd.f
+ratfor77 < gcrpos.r > gcrpos.f 
+gfortran -C -O -m64 -c gcrpos.f
+ratfor77 < gcchan.r > gcchan.f 
+gfortran -C -O -m64 -c gcchan.f
+ratfor77 < in.r >  in.f 
+gfortran -C -O -m64 -c in.f
+rm -f in.f
+ratfor77 < inice.r > inice.f 
+gfortran -C -O -m64 -c inice.f
+rm -f inice.f
+ratfor77 < iwplta.r >  iwplta.f 
+gfortran -C -O -m64 -c iwplta.f
+rm -f iwplta.f
+ratfor77 < ma.r >  ma.f  
+gfortran -C -O -m64 -c ma.f
+rm -f ma.f
+ratfor77 < maw.r >  maw.f 
+gfortran -C -O -m64 -c maw.f
+rm -f maw.f
+ratfor77 < signif.r > signif.f 
+gfortran -C -O -m64 -c signif.f
+rm -f signif.f
+ratfor77 < ticks.r >  ticks.f
+gfortran -C -O -m64 -c ticks.f
+rm -f ticks.f
+ratfor77 < va.r >  va.f 
+gfortran -C -O -m64 -c va.f
+rm -f va.f
+ratfor77 < vaw.r >  vaw.f 
+gfortran -C -O -m64 -c vaw.f
+rm -f vaw.f
+ratfor77 < window.r >  window.f 
+gfortran -C -O -m64 -c window.f
+rm -f window.f
+sspp -r -LINUX -INTEL  -XWIN  wriout.r > wriout.x 
+ratfor77 < wriout.x >  wriout.f 
+gfortran -C -O -m64 -c wriout.f
+ In file wriout.f:190
+
+10    call crtpsc(igo,bbnd,ubnd,nchans,datac,error,wmina,wmaxa,i,dataa) 
+ 1
+ In file wriout.f:163
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file wriout.f:190
+
+10    call crtpsc(igo,bbnd,ubnd,nchans,datac,error,wmina,wmaxa,i,dataa) 
+ 1
+ In file wriout.f:167
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f wriout.x wriout.f
+ratfor77 < wvplta.r >  wvplta.f 
+gfortran -C -O -m64 -c  wvplta.f
+rm -f wvplta.f
+ld   -r -o /src/local/specpr/obj/crtp.o alplty.o chplta.o crtplt.o crtpsc.o er.o cursrd.o gcrpos.o gcchan.o in.o inice.o iwplta.o ma.o maw.o signif.o ticks.o va.o vaw.o window.o wriout.o wvplta.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/crtp'
+make: [/src/local/specpr/obj/dtol.o] Error 127 (ignored)
+making all in dtol
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/dtol'
+ratfor77 < lprint.r > lprint.f 
+gfortran -C -O -m64 -c lprint.f
+rm -f lprint.f
+ratfor77 < pdatl1.r > pdatl1.f 
+gfortran -C -O -m64 -c pdatl1.f
+rm -f pdatl1.f
+ratfor77 < ptxt1.r > ptxt1.f 
+gfortran -C -O -m64 -c ptxt1.f
+rm -f ptxt1.f
+ratfor77 < ptxtc.r > ptxtc.f 
+gfortran -C -O -m64 -c ptxtc.f
+rm -f ptxtc.f
+ratfor77 < prheader.r > prheader.f 
+gfortran -C -O -m64 -c prheader.f
+rm -f prheader.f
+ratfor77 < zeroin.r > zeroin.f 
+gfortran -C -O -m64 -c zeroin.f
+rm -f zeroin.f
+ratfor77 < cprint.r > cprint.f 
+gfortran -C -O -m64 -c cprint.f
+rm -f cprint.f
+ratfor77 < flname.r > flname.f 
+gfortran -C -O -m64 -c flname.f
+rm -f flname.f
+ratfor77 < wcomma.r > wcomma.f 
+gfortran -C -O -m64 -c wcomma.f
+rm -f wcomma.f
+ratfor77 < disv.r > disv.f 
+gfortran -C -O -m64 -c disv.f
+ In file disv.f:488
+
+735   mhist = mhistb                                                    
+  1
+ In file disv.f:593
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file disv.f:508
+
+712   ihist= ihistc                                                     
+  1
+ In file disv.f:596
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f disv.f
+ratfor77 < inftrn.r > inftrn.f 
+gfortran -C -O -m64 -c inftrn.f
+rm -f inftrn.f
+ratfor77 < listfl.r > listfl.f
+gfortran -C -O -m64 -c listfl.f
+ In file listfl.f:477
+
+25    if(ir .eq. 1)then                                                 
+ 1
+ In file listfl.f:556
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file listfl.f:487
+
+35    i = iisav                                                         
+ 1
+ In file listfl.f:588
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file listfl.f:485
+
+30    i = 1                                                             
+ 1
+ In file listfl.f:622
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file listfl.f:485
+
+30    i = 1                                                             
+ 1
+ In file listfl.f:656
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file listfl.f:578
+
+2100  rferfl(1) = 0                                                     
+   1
+ In file listfl.f:667
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file listfl.f:485
+
+30    i = 1                                                             
+ 1
+ In file listfl.f:709
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f listfl.f
+ratfor77 < startran.r > startran.f  
+gfortran -C -O -m64 -c startran.f
+rm -f startran.f
+ratfor77 < tapevol.r > tapevol.f 
+gfortran -C -O -m64 -c tapevol.f
+rm -f tapevol.f
+ratfor77 < tapelun.r > tapelun.f 
+gfortran -C -O -m64 -c tapelun.f
+rm -f tapelun.f
+ratfor77 < tcheck.r > tcheck.f
+gfortran -C -O -m64 -c tcheck.f
+rm -f tcheck.f
+ratfor77 < redcod.r > redcod.f
+gfortran -C -O -m64 -c redcod.f
+rm -f redcod.f
+sspp -r -LINUX -INTEL  -XWIN  search.r  > search.x
+ratfor77 < search.x > search.f
+gfortran -C -O -m64 -c search.f
+rm -f search.x search.f
+ratfor77 < getoverly.r > getoverly.f 
+gfortran -C -O -m64 -c getoverly.f
+rm -f getoverly.f
+sspp -c -LINUX -INTEL  -XWIN  fregex.cc > fregex.c
+cc -O -m64 -c fregex.c
+fregex.c: In function ‘recomp’:
+fregex.c:36: warning: assignment makes pointer from integer without a cast
+fregex.c:37: warning: incompatible implicit declaration of built-in function ‘printf’
+fregex.c: In function ‘reexec’:
+fregex.c:118: warning: assignment makes pointer from integer without a cast
+fregex.c:119: warning: incompatible implicit declaration of built-in function ‘printf’
+rm -f fregex.c
+ld   -r -o /src/local/specpr/obj/dtol.o lprint.o pdatl1.o ptxt1.o ptxtc.o prheader.o zeroin.o cprint.o flname.o wcomma.o disv.o inftrn.o listfl.o startran.o tapevol.o tapelun.o tcheck.o redcod.o search.o getoverly.o fregex.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/dtol'
+make: [/src/local/specpr/obj/dummy.o] Error 127 (ignored)
+making all in dummy
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/dummy'
+ratfor77 < work/f26.r >f26.f
+gfortran -C -O -m64 -c f26.f
+rm -f f26.f
+ratfor77 < work/f27.r >f27.f
+gfortran -C -O -m64 -c f27.f
+rm -f f27.f
+ratfor77 < work/f28.r >f28.f
+gfortran -C -O -m64 -c f28.f
+rm -f f28.f
+ratfor77 < work/f29.r >f29.f
+gfortran -C -O -m64 -c f29.f
+rm -f f29.f
+ld   -r -o /src/local/specpr/obj/dummy.o f26.o f27.o f28.o f29.o	
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/dummy'
+make: [/src/local/specpr/obj/dvml.o] Error 127 (ignored)
+making all in dvml
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/dvml'
+ratfor77 < mulrun.r > mulrun.f 
+gfortran -C -O -m64 -c mulrun.f
+rm -f mulrun.f
+ratfor77 < rundiv.r > rundiv.f
+gfortran -C -O -m64 -c rundiv.f
+rm -f rundiv.f
+ld   -r -o /src/local/specpr/obj/dvml.o mulrun.o rundiv.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/dvml'
+make: [/src/local/specpr/obj/extn.o] Error 127 (ignored)
+making all in extn
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/extn'
+ratfor77 < extnct.r > extnct.f
+gfortran -C -O -m64 -c extnct.f
+ In file extnct.f:121
+
+3000  call extnta (igo)                                                 
+   1
+ In file extnct.f:129
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file extnct.f:121
+
+3000  call extnta (igo)                                                 
+   1
+ In file extnct.f:139
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file extnct.f:121
+
+3000  call extnta (igo)                                                 
+   1
+ In file extnct.f:143
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f extnct.f
+ratfor77 < extnta.r > extnta.f
+gfortran -C -O -m64 -c extnta.f
+ In file extnta.f:195
+
+20    is(j+1) = is(j)                                                   
+ 1
+ In file extnta.f:127
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file extnta.f:177
+
+10    continue                                                          
+ 1
+ In file extnta.f:130
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file extnta.f:177
+
+10    continue                                                          
+ 1
+ In file extnta.f:133
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f extnta.f
+ratfor77 < extplt.r > extplt.f 
+gfortran -C -O -m64 -c extplt.f
+rm -f extplt.f
+ratfor77 < iplot.r > iplot.f
+gfortran -C -O -m64 -c iplot.f
+ In file iplot.f:467
+
+950   continue                                                          
+  1
+ In file iplot.f:226
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f iplot.f
+ratfor77 < linfit.r > linfit.f
+gfortran -C -O -m64 -c linfit.f
+rm -f linfit.f
+ld   -r -o /src/local/specpr/obj/extn.o extnct.o extnta.o extplt.o iplot.o linfit.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/extn'
+make: [/src/local/specpr/obj/fass.o] Error 127 (ignored)
+making all in fass
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fass'
+ratfor77 < chkdev.r > chkdev.f
+gfortran -C -O -m64 -c chkdev.f
+rm -f chkdev.f
+ratfor77 < dfasin.r > dfasin.f
+gfortran  -C -O -m64 -c dfasin.f
+rm -f dfasin.f
+ratfor77 < rmpath.r > rmpath.f
+gfortran  -C -O -m64 -c rmpath.f
+rm -f rmpath.f
+ld   -r -o /src/local/specpr/obj/fass.o chkdev.o dfasin.o rmpath.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fass'
+make: [/src/local/specpr/obj/fcn01-08.o] Error 127 (ignored)
+making all in fcn01-08
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn01-08'
+ratfor77 < comprs.r > comprs.f 
+gfortran -C -O -m64 -c comprs.f
+rm -f comprs.f
+ratfor77 < dtsort.r > dtsort.f 
+gfortran -C -O -m64 -c dtsort.f
+rm -f dtsort.f
+ratfor77 < f1.r > f1.f
+gfortran -C -O -m64 -c f1.f
+rm -f f1.f
+ratfor77 < f2.r > f2.f
+gfortran -C -O -m64 -c f2.f
+ In file f2.f:213
+
+62    x1=data(i-1)                                                      
+ 1
+ In file f2.f:223
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file f2.f:205
+
+61    x1=data(i)                                                        
+ 1
+ In file f2.f:225
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f f2.f
+ratfor77 < f3.r > f3.f
+gfortran -C -O -m64 -c f3.f
+ In file f3.f:53
+
+      data ih /1h /                                                     
+                1
+Warning: Extension: Hollerith constant at (1)
+ In file f3.f:54
+
+      data ihadd, ihsub, ihmul, ihdiv /1h+, 1h-, 1h*, 1h//              
+                                                       1
+Warning: Extension: Hollerith constant at (1)
+ In file f3.f:54
+
+      data ihadd, ihsub, ihmul, ihdiv /1h+, 1h-, 1h*, 1h//              
+                                         1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file f3.f:54
+
+      data ihadd, ihsub, ihmul, ihdiv /1h+, 1h-, 1h*, 1h//              
+                                              1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file f3.f:54
+
+      data ihadd, ihsub, ihmul, ihdiv /1h+, 1h-, 1h*, 1h//              
+                                                   1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file f3.f:54
+
+      data ihadd, ihsub, ihmul, ihdiv /1h+, 1h-, 1h*, 1h//              
+                                                        1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file f3.f:53
+
+      data ih /1h /                                                     
+                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file f3.f:81
+
+8     continue                                                          
+1
+ In file f3.f:95
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f f3.f
+ratfor77 < f4.r > f4.f
+gfortran -C -O -m64 -c f4.f
+rm -f f4.f
+ratfor77 < f5.r > f5.f
+gfortran -C -O -m64 -c f5.f
+rm -f f5.f
+ratfor77 < f6.r > f6.f
+gfortran -C -O -m64 -c f6.f
+rm -f f6.f
+ratfor77 < f7.r > f7.f
+gfortran -C -O -m64 -c f7.f
+rm -f f7.f
+ratfor77 < f8.r > f8.f
+gfortran -C -O -m64 -c f8.f
+rm -f f8.f
+ratfor77 < manhst.r > manhst.f
+gfortran -C -O -m64 -c manhst.f
+rm -f manhst.f
+ratfor77 < planck.r > planck.f
+gfortran -C -O -m64 -c planck.f
+rm -f planck.f
+ld   -r -o /src/local/specpr/obj/fcn01-08.o comprs.o dtsort.o f1.o f2.o f3.o f4.o f5.o f6.o f7.o f8.o manhst.o planck.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn01-08'
+make: [/src/local/specpr/obj/fcn09-11.o] Error 127 (ignored)
+making all in fcn09-11
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn09-11'
+ratfor77 < bchop.r > bchop.f
+gfortran -C -O -m64 -c bchop.f
+rm -f bchop.f
+ratfor77 < bndrem.r > bndrem.f
+gfortran -C -O -m64 -c bndrem.f
+rm -f bndrem.f
+ratfor77 < conrem.r > conrem.f
+gfortran -C -O -m64 -c conrem.f
+rm -f conrem.f
+ratfor77 < f9.r > f9.f 
+gfortran -C -O -m64 -c f9.f
+rm -f f9.f
+ratfor77 < f10.r > f10.f
+gfortran -C -O -m64 -c f10.f
+rm -f f10.f
+ratfor77 < f11.r > f11.f 
+gfortran -C -O -m64 -c f11.f
+rm -f f11.f
+ratfor77 < f11dfl.r > f11dfl.f
+gfortran -C -O -m64 -c f11dfl.f
+rm -f f11dfl.f
+ratfor77 < f11nrm.r > f11nrm.f
+gfortran -C -O -m64 -c f11nrm.f
+rm -f f11nrm.f
+ratfor77 < f11tml.r > f11tml.f 
+gfortran -C -O -m64 -c f11tml.f
+rm -f f11tml.f
+ratfor77 < filinp.r > filinp.f
+gfortran -C -O -m64 -c filinp.f
+rm -f filinp.f
+ld   -r -o /src/local/specpr/obj/fcn09-11.o bchop.o bndrem.o conrem.o f9.o f10.o f11.o f11dfl.o f11nrm.o f11tml.o filinp.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn09-11'
+make: [/src/local/specpr/obj/fcn12-13.o] Error 127 (ignored)
+making all in fcn12-13
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn12-13'
+ratfor77 < bubble.r > bubble.f 
+gfortran -C -O -m64 -c bubble.f
+rm -f bubble.f
+ratfor77 < f12.r > f12.f 
+gfortran -C -O -m64 -c f12.f
+rm -f f12.f
+ratfor77 < f12itp.r > f12itp.f
+gfortran -C -O -m64 -c f12itp.f
+rm -f f12itp.f
+ratfor77 < f12wav.r > f12wav.f 
+gfortran -C -O -m64 -c f12wav.f
+rm -f f12wav.f
+ratfor77 < f13.r > f13.f
+gfortran -C -O -m64 -c f13.f
+rm -f f13.f
+ratfor77 < icsicu.r > icsicu.f 
+gfortran -C -O -m64 -c icsicu.f
+rm -f icsicu.f
+ratfor77 < icsevu.r > icsevu.f
+gfortran -C -O -m64 -c icsevu.f
+rm -f icsevu.f
+ratfor77 < merger.r > merger.f
+gfortran -C -O -m64 -c merger.f
+rm -f merger.f
+ld   -r -o /src/local/specpr/obj/fcn12-13.o bubble.o f12.o f12itp.o f12wav.o f13.o icsicu.o icsevu.o merger.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn12-13'
+make: [/src/local/specpr/obj/fcn14-16.o] Error 127 (ignored)
+making all in fcn14-16
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn14-16'
+ratfor77 < chdata.r > chdata.f
+gfortran -C -O -m64 -c chdata.f
+rm -f chdata.f
+ratfor77 < chdel.r > chdel.f 
+gfortran -C -O -m64 -c chdel.f
+rm -f chdel.f
+ratfor77 < chinst.r > chinst.f
+gfortran -C -O -m64 -c chinst.f
+rm -f chinst.f
+ratfor77 < chlist.r > chlist.f
+gfortran -C -O -m64 -c chlist.f
+rm -f chlist.f
+ratfor77 < chprnt.r > chprnt.f 
+gfortran -C -O -m64 -c chprnt.f
+rm -f chprnt.f
+ratfor77 < f14.r > f14.f
+gfortran -C -O -m64 -c f14.f
+rm -f f14.f
+ratfor77 < f15.r > f15.f 
+gfortran -C -O -m64 -c f15.f
+rm -f f15.f
+ratfor77 < f15cde.r > f15cde.f 
+gfortran -C -O -m64 -c f15cde.f
+rm -f f15cde.f
+ratfor77 < f16.r > f16.f
+gfortran -C -O -m64 -c f16.f
+rm -f f16.f
+ld   -r -o /src/local/specpr/obj/fcn14-16.o chdata.o chdel.o chinst.o chlist.o chprnt.o f14.o f15.o f15cde.o f16.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn14-16'
+make: [/src/local/specpr/obj/fcn17-19.o] Error 127 (ignored)
+making all in fcn17-19
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn17-19'
+ratfor77 < convol.r > convol.f
+gfortran -C -O -m64 -c convol.f
+rm -f convol.f
+ratfor77 < delx.r > delx.f
+gfortran -C -O -m64 -c delx.f
+ In file delx.f:38
+
+200   continue                                                          
+  1
+ In file delx.f:77
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file delx.f:12
+
+100   continue                                                          
+  1
+ In file delx.f:96
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f delx.f
+ratfor77 < gfiles.r > gfiles.f
+gfortran -C -O -m64 -c gfiles.f
+rm -f gfiles.f
+ratfor77 < ggauss.r > ggauss.f
+gfortran -C -O -m64 -c ggauss.f
+rm -f ggauss.f
+ratfor77 < f17.r > f17.f
+gfortran -C -O -m64 -c f17.f
+rm -f f17.f
+ratfor77 < f18.r > f18.f
+gfortran -C -O -m64 -c f18.f
+rm -f f18.f
+ratfor77 < determ.r > determ.f
+gfortran -C -O -m64 -c determ.f
+rm -f determ.f
+ratfor77 < f19.r > f19.f 
+gfortran -C -O -m64 -c f19.f
+rm -f f19.f
+ratfor77 < polfit.r > polfit.f 
+gfortran -C -O -m64 -c polfit.f
+rm -f polfit.f
+ld   -r -o /src/local/specpr/obj/fcn17-19.o convol.o delx.o gfiles.o ggauss.o f17.o f18.o determ.o f19.o polfit.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn17-19'
+make: [/src/local/specpr/obj/fcn20-25.o] Error 127 (ignored)
+making all in fcn20-25
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn20-25'
+sspp -r -LINUX -INTEL  -XWIN  f20.r > f20.x
+ratfor77 < f20.x > f20.f
+gfortran -C -O -m64 -c f20.f
+rm -f f20.x f20.f
+ratfor77 < f21.r > f21.f
+gfortran -C -O -m64 -c f21.f
+rm -f f21.f
+ratfor77 < f22.r > f22.f
+gfortran -C -O -m64 -c f22.f
+rm -f f22.f
+ratfor77 < f24.r > f24.f
+gfortran -C -O -m64 -c f24.f
+rm -f f24.f
+ratfor77 < f24dfl.r > f24dfl.f
+gfortran -C -O -m64 -c f24dfl.f
+rm -f f24dfl.f
+ratfor77 < f24nrm.r > f24nrm.f
+gfortran -C -O -m64 -c f24nrm.f
+rm -f f24nrm.f
+ratfor77 < f24tml.r > f24tml.f
+gfortran -C -O -m64 -c f24tml.f 
+rm -f f24tml.f
+ratfor77 < f25.r > f25.f
+gfortran -C -O -m64 -c f25.f
+rm -f f25.f
+ratfor77 < lsqft.r > lsqft.f
+gfortran -C -O -m64 -c lsqft.f
+rm -f lsqft.f
+ld   -r -o /src/local/specpr/obj/fcn20-25.o f20.o f21.o f22.o f24.o f24dfl.o f24nrm.o f24tml.o f25.o lsqft.o	
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn20-25'
+make: [/src/local/specpr/obj/fcn35-39.o] Error 127 (ignored)
+making all in fcn35-39
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn35-39'
+ratfor77 < noise.r > noise.f 
+gfortran -C -O -m64 -c noise.f
+rm -f noise.f
+ratfor77 < f38.r > f38.f 
+gfortran -C -O -m64 -c f38.f
+rm -f f38.f
+ratfor77 < f37.r > f37.f 
+gfortran -C -O -m64 -c f37.f
+rm -f f37.f
+ratfor77 < nvres.r > nvres.f 
+gfortran -C -O -m64 -c nvres.f
+rm -f nvres.f
+ratfor77 < bandzmp.r > bandzmp.f 
+gfortran -C -O -m64 -c bandzmp.f
+rm -f bandzmp.f
+ratfor77 < bdmzset.r > bdmzset.f 
+gfortran -C -O -m64 -c bdmzset.f
+rm -f bdmzset.f
+ratfor77 < f36.r > f36.f 
+gfortran -C -O -m64 -c f36.f
+rm -f f36.f
+ratfor77 < f39.r > f39.f 
+gfortran -C -O -m64 -c f39.f
+rm -f f39.f
+ld   -r -o /src/local/specpr/obj/fcn35-39.o noise.o f38.o f37.o nvres.o bandzmp.o bdmzset.o f36.o f39.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn35-39'
+make: [/src/local/specpr/obj/fcn40-42.o] Error 127 (ignored)
+making all in fcn40-42
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn40-42'
+ratfor77 < f40.r > f40.f
+gfortran -C -O -m64 -c f40.f
+rm -f f40.f
+ratfor77 < f41.r > f41.f
+gfortran -C -O -m64 -c f41.f
+rm -f f41.f
+ratfor77 < xbin.r > xbin.f
+gfortran -C -O -m64 -c xbin.f
+rm -f xbin.f
+ratfor77 < f42.r > f42.f
+gfortran -C -O -m64 -c f42.f
+rm -f f42.f
+ratfor77 < bandmp.r > bandmp.f
+gfortran -C -m64 -O -c bandmp.f
+rm -f bandmp.f
+ratfor77 < bdmset.r > bdmset.f
+gfortran -C -O -m64 -c bdmset.f
+rm -f bmdset.f
+ratfor77 < wtochbin.r > wtochbin.f
+gfortran -C -O -m64 -c wtochbin.f
+rm -f bmdset.f
+ld   -r -o /src/local/specpr/obj/fcn40-42.o f40.o f41.o xbin.o f42.o bandmp.o bdmset.o wtochbin.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn40-42'
+make: [/src/local/specpr/obj/fcn43-47.o] Error 127 (ignored)
+making all in fcn43-47
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn43-47'
+ratfor77 < conanl.r > conanl.f
+gfortran -C -O -m64 -c conanl.f
+rm -f conanl.f
+ratfor77 < dpfix.r > dpfix.f
+gfortran -C -O -m64 -c dpfix.f
+rm -f dpfix.f
+ratfor77 < f44.r > f44.f
+gfortran -C -O -m64 -c f44.f
+rm -f f44.f
+ratfor77 < fill.r > fill.f
+gfortran -C -O -m64 -c fill.f
+rm -f fill.f
+ratfor77 < hull.r > hull.f
+gfortran -C -O -m64 -c hull.f
+rm -f hull.f
+ratfor77 < lowp.r > lowp.f
+gfortran -C -O -m64 -c lowp.f
+rm -f lowp.f
+ratfor77 < confix.r > confix.f
+gfortran -C -O -m64 -c confix.f
+rm -f confix.f
+ratfor77 < pfind.r > pfind.f
+gfortran -C -O -m64 -c pfind.f
+rm -f pfind.f
+ratfor77 < remove.r > remove.f
+gfortran -C -O -m64 -c remove.f
+rm -f remove.f
+ratfor77 < f43.r > f43.f
+gfortran -C -O -m64 -c f43.f
+rm -f f43.f
+ratfor77 < f46.r > f46.f
+gfortran -C -O -m64 -c f46.f
+rm -f f46.f
+ratfor77 < f47.r > f47.f
+gfortran -C -O -m64 -c f47.f
+rm -f f47.f
+ratfor77 < f45.r > f45.f
+gfortran -C -O -m64 -c f45.f
+rm -f f45.f
+ratfor77 < featur.r > featur.f
+gfortran -C -O -m64 -c featur.f
+rm -f featur.f
+ratfor77 < zstuf.r > zstuf.f
+gfortran -C -O -m64 -c zstuf.f
+rm -f zstuf.f
+ratfor77 < zfirst.r > zfirst.f
+gfortran -C -O -m64 -c zfirst.f
+rm -f zfirst.f
+ratfor77 < zfeat.r > zfeat.f
+gfortran -C -O -m64 -c zfeat.f
+rm -f zfeat.f
+ratfor77 < should.r > should.f
+gfortran -C -O -m64 -c should.f
+rm -f should.f
+ratfor77 < spopen.r > spopen.f
+gfortran -C -O -m64 -c spopen.f
+rm -f spopen.f
+ld   -r -o /src/local/specpr/obj/fcn43-47.o conanl.o dpfix.o f44.o fill.o hull.o lowp.o confix.o pfind.o remove.o f43.o f46.o f47.o f45.o featur.o zstuf.o zfirst.o zfeat.o should.o spopen.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn43-47'
+make: [/src/local/specpr/obj/fcn48-51.o] Error 127 (ignored)
+making all in fcn48-51
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/fcn48-51'
+ratfor77 < f48.r > f48.f
+gfortran -C -O -m64 -c f48.f
+rm -f f48.f
+ratfor77 < f49.r > f49.f
+gfortran -C -O -m64 -c f49.f
+rm -f f49.f
+ratfor77 < f49wav.r > f49wav.f
+gfortran -C -O -m64 -c f49wav.f
+rm -f f49wav.f
+ratfor77 < pltdat.r > pltdat.f
+gfortran -C -O -m64 -c pltdat.f
+rm -f pltdat.f
+ratfor77 < pltxtx.r > pltxtx.f
+gfortran -C -O -m64 -c pltxtx.f
+rm -f pltxtx.f
+ratfor77 < tabpos.r > tabpos.f
+gfortran -C -O -m64 -c tabpos.f
+rm -f tabpos.f
+ratfor77 < getcor.r > getcor.f
+gfortran -C -O -m64 -c getcor.f
+rm -f getcor.f
+ratfor77 < getpt.r > getpt.f
+gfortran -C -O -m64 -c getpt.f
+rm -f getpt.f
+ratfor77 < f50.r > f50.f
+gfortran -C -O -m64 -c f50.f
+rm -f f50.f
+ratfor77 < gtfl.r > gtfl.f
+gfortran -C -O -m64 -c gtfl.f
+rm -f gtfl.f
+ratfor77 < lngen.r > lngen.f
+gfortran -C -O -m64 -c lngen.f
+rm -f lngen.f
+ratfor77 < plot2.r > plot2.f
+gfortran -C -O -m64 -c plot2.f
+rm -f plot2.f
+ld   -r -o /src/local/specpr/obj/fcn48-51.o f48.o f49.o f49wav.o pltdat.o pltxtx.o tabpos.o getcor.o getpt.o f50.o gtfl.o lngen.o plot2.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/fcn48-51'
+make: [/src/local/specpr/obj/free.o] Error 127 (ignored)
+making all in free
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/free'
+ratfor77 < allist.r > allist.f
+gfortran -C -O -m64 -c allist.f
+rm -f allist.f
+ratfor77 < copyin.r > copyin.f
+gfortran -C -O -m64 -c copyin.f
+rm -f copyin.f
+ratfor77 < crtin.r > crtin.f
+gfortran -C -O -m64 -c crtin.f
+rm -f crtin.f
+ratfor77 < decod1.r > decod1.f
+gfortran -C -O -m64 -c decod1.f
+rm -f decod1.f
+ratfor77 < getstr.r > getstr.f
+gfortran -C -O -m64 -c getstr.f
+rm -f getstr.f
+ratfor77 < getkey.r > getkey.f
+gfortran -C -O -m64 -c getkey.f
+rm -f getkey.f
+sspp -r -LINUX -INTEL  -XWIN   ihchar.r > ihchar.x
+ratfor77 < ihchar.x > ihchar.f
+gfortran -C -O -m64 -c ihchar.f
+rm -f ihchar.x ihchar.f
+sspp -r -LINUX -INTEL  -XWIN   chchar.r > chchar.x
+ratfor77 < chchar.x > chchar.f
+gfortran -C -O -m64 -c chchar.f
+rm -f chchar.x chchar.f
+ratfor77 < keytrn.r > keytrn.f
+gfortran -C -O -m64 -c keytrn.f
+rm -f keytrn.f
+ratfor77 < list.r > list.f
+gfortran -C -O -m64 -c list.f
+rm -f list.f
+ratfor77 < prpixl.r > prpixl.f
+gfortran -C -O -m64 -c prpixl.f
+rm -f prpixl.f
+ratfor77 < refile.r > refile.f
+gfortran -C -O -m64 -c refile.f
+rm -f refile.f
+ratfor77 < rlchng.r > rlchng.f 
+gfortran -C -O -m64 -c rlchng.f
+rm -f rlchng.f
+ratfor77 < setals.r > setals.f
+gfortran -C -O -m64 -c setals.f
+rm -f setals.f
+ratfor77 < setkey.r > setkey.f
+gfortran -C -O -m64 -c setkey.f
+rm -f setkey.f
+ratfor77 < sphelp.r > sphelp.f
+gfortran -C -O -m64 -c sphelp.f
+rm -f sphelp.f
+ratfor77 < typein.r > typein.f
+gfortran -C -O -m64 -c typein.f
+rm -f typein.f
+ratfor77 < varsub.r > varsub.f
+gfortran -C -O -m64 -c varsub.f
+rm -f varsub.f
+ratfor77 < varpar.r > varpar.f
+gfortran -C -O -m64 -c varpar.f
+rm -f varpar.f
+ratfor77 < what.r > what.f
+gfortran -C -O -m64 -c what.f
+rm -f what.f
+ratfor77 < wjfren.r > wjfren.f
+gfortran -C -O -m64 -c wjfren.f
+rm -f wjfren.f
+ratfor77 < cmdverbose.r > cmdverbose.f
+gfortran -C -O -m64 -c cmdverbose.f
+rm -f cmdverbose.f
+ratfor77 < getiopconchar.r > getiopconchar.f
+gfortran -C -O -m64 -c getiopconchar.f
+rm -f getiopconchar.f
+ratfor77 < xfer.r > xfer.f
+gfortran -C -O -m64 -c xfer.f
+rm -f xfer.f
+ld   -r -o /src/local/specpr/obj/free.o allist.o copyin.o crtin.o decod1.o getstr.o getkey.o ihchar.o chchar.o keytrn.o list.o prpixl.o refile.o rlchng.o setals.o setkey.o sphelp.o typein.o varsub.o varpar.o what.o wjfren.o cmdverbose.o getiopconchar.o xfer.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/free'
+make: [/src/local/specpr/obj/gould.o] Error 127 (ignored)
+making all in gould
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/gould'
+ratfor77 < axis.r > axis.f
+gfortran -C -O -m64 -c axis.f
+rm -f axis.f
+ratfor77 < catn.r > catn.f
+gfortran -C -O -m64 -c catn.f
+rm -f catn.f
+ratfor77 < centim.r > centim.f
+gfortran -C -O -m64 -c centim.f
+rm -f centim.f
+ratfor77 < curves.r > curves.f
+gfortran -C -O -m64 -c curves.f
+rm -f curves.f
+ratfor77 < done.r > done.f
+gfortran -C -O -m64 -c done.f
+rm -f done.f
+ratfor77 < fnb.r > fnb.f
+gfortran -C -O -m64 -c fnb.f
+rm -f fnb.f
+ratfor77 < ifnb.r > ifnb.f
+gfortran -C -O -m64 -c ifnb.f
+rm -f ifnb.f
+ratfor77 < grid.r > grid.f
+gfortran -C -O -m64 -c grid.f
+rm -f grid.f
+ratfor77 < line.r > line.f
+gfortran -C -O -m64 -c line.f
+rm -f line.f
+ratfor77 < lnb.r > lnb.f
+gfortran -C -O -m64 -c lnb.f
+rm -f lnb.f
+ratfor77 < iopenp.r > iopenp.f
+gfortran -C -O -m64 -c iopenp.f
+rm -f iopenp.f
+ratfor77 < pltsym.r > pltsym.f
+gfortran -C -O -m64 -c pltsym.f
+rm -f pltsym.f
+ratfor77 < point.r > point.f
+gfortran -C -O -m64 -c point.f
+rm -f point.f
+ratfor77 < range.r > range.f
+gfortran -C -O -m64 -c range.f
+rm -f range.f
+ratfor77 < round.r > round.f
+gfortran -C -O -m64 -c round.f
+rm -f round.f
+ratfor77 < setup.r > setup.f
+gfortran -C -O -m64 -c setup.f
+rm -f setup.f
+ratfor77 < snorm.r > snorm.f
+gfortran -C -O -m64 -c snorm.f
+rm -f snorm.f
+ratfor77 < swap.r > swap.f
+gfortran -C -O -m64 -c swap.f
+rm -f swap.f
+ratfor77 < symbol.r > symbol.f
+gfortran -C -O -m64 -c symbol.f
+rm -f symbol.f
+ratfor77 < tname.r > tname.f
+gfortran -C -O -m64 -c tname.f
+rm -f tname.f
+ratfor77 < tocent.r > tocent.f
+gfortran -C -O -m64 -c tocent.f
+rm -f tocent.f
+ld   -r -o /src/local/specpr/obj/gould.o axis.o catn.o centim.o curves.o done.o fnb.o ifnb.o grid.o line.o lnb.o iopenp.o pltsym.o point.o range.o round.o setup.o snorm.o swap.o symbol.o tname.o tocent.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/gould'
+make: [/src/local/specpr/obj/hed.o] Error 127 (ignored)
+making all in hed
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/hed'
+ratfor77 < chgin1.r > chgin1.f
+gfortran -C -O -m64 -c chgin1.f
+rm -f chgin1.f
+ratfor77 < chgin2.r > chgin2.f
+gfortran -C -O -m64 -c chgin2.f
+ In file chgin2.f:254
+
+810   if(il.eq.ihr)then                                                 
+  1
+ In file chgin2.f:234
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file chgin2.f:254
+
+810   if(il.eq.ihr)then                                                 
+  1
+ In file chgin2.f:239
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file chgin2.f:254
+
+810   if(il.eq.ihr)then                                                 
+  1
+ In file chgin2.f:244
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f chgin2.f
+ratfor77 < chgin3.r > chgin3.f
+gfortran -C -O -m64 -c chgin3.f
+rm -f chgin3.f
+ratfor77 < chgin4.r > chgin4.f
+gfortran -C -O -m64 -c chgin4.f
+rm -f chgin4.f
+ratfor77 < chginf.r > chginf.f
+gfortran -C -O -m64 -c chginf.f
+ In file chginf.f:115
+
+      data ihbl/1h /                                                    
+                 1
+Warning: Extension: Hollerith constant at (1)
+ In file chginf.f:115
+
+      data ihbl/1h /                                                    
+                  1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file chginf.f:258
+
+250   write(ttyout, 251) ix                                             
+  1
+ In file chginf.f:246
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f chginf.f
+ratfor77 < chgtxt.r > chgtxt.f
+gfortran -C -O -m64 -c chgtxt.f
+rm -f chgtxt.f
+ratfor77 < chinfo.r > chinfo.f
+gfortran -C -O -m64 -c chinfo.f
+rm -f chinfo.f
+ratfor77 < dtchng.r > dtchng.f
+gfortran -C -O -m64 -c dtchng.f
+rm -f dtchng.f
+ratfor77 < getdt.r > getdt.f
+gfortran -C -O -m64 -c getdt.f
+ In file getdt.f:49
+
+110   write(ttyout,111)                                                 
+  1
+ In file getdt.f:54
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getdt.f:49
+
+110   write(ttyout,111)                                                 
+  1
+ In file getdt.f:59
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getdt.f:49
+
+110   write(ttyout,111)                                                 
+  1
+ In file getdt.f:64
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f getdt.f
+ratfor77 < getime.r > getime.f
+gfortran -C -O -m64 -c getime.f
+ In file getime.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getime.f:55
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getime.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getime.f:60
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getime.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getime.f:65
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f getime.f
+ratfor77 < getang.r > getang.f
+gfortran -C -O -m64 -c getang.f
+ In file getang.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getang.f:55
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getang.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getang.f:60
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file getang.f:50
+
+110   write(ttyout,104)                                                 
+  1
+ In file getang.f:65
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f getang.f
+ratfor77 < initdt.r > initdt.f
+gfortran -C -O -m64 -c initdt.f
+rm -f initdt.f
+ratfor77 < intchg.r > intchg.f
+gfortran -C -O -m64 -c intchg.f
+rm -f intchg.f
+ratfor77 < redtxt.r > redtxt.f
+gfortran -C -O -m64 -c redtxt.f
+rm -f redtxt.f
+ratfor77 < scrn00.r > scrn00.f
+gfortran -C -O -m64 -c scrn00.f
+rm -f scrn00.f
+ratfor77 < scrn01.r > scrn01.f
+gfortran -C -O -m64 -c scrn01.f
+ In file scrn01.f:83
+
+      data ihm/1h-/                                                     
+                1
+Warning: Extension: Hollerith constant at (1)
+ In file scrn01.f:84
+
+      data ihb/1h /                                                     
+                1
+Warning: Extension: Hollerith constant at (1)
+ In file scrn01.f:84
+
+      data ihb/1h /                                                     
+                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file scrn01.f:83
+
+      data ihm/1h-/                                                     
+                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+rm -f scrn01.f
+ratfor77 < scrn02.r > scrn02.f
+gfortran -C -O -m64 -c scrn02.f
+rm -f scrn02.f
+ratfor77 < scrn03.r > scrn03.f
+gfortran -C -O -m64 -c scrn03.f
+rm -f scrn03.f
+ratfor77 < timchg.r > timchg.f
+gfortran -C -O -m64 -c timchg.f
+rm -f timchg.f
+ld   -r -o /src/local/specpr/obj/hed.o chgin1.o chgin2.o chgin3.o chgin4.o chginf.o chgtxt.o chinfo.o dtchng.o getdt.o getime.o getang.o initdt.o intchg.o redtxt.o scrn00.o scrn01.o scrn02.o scrn03.o timchg.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/hed'
+make: [/src/local/specpr/obj/hpgraph.o] Error 127 (ignored)
+making all in hpgraph
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/hpgraph'
+ratfor77 < absbin.r > absbin.f
+gfortran -C -O -m64 -c absbin.f
+rm -f absbin.f
+ratfor77 < convrt.r > convrt.f
+gfortran -C -O -m64 -c convrt.f
+rm -f convrt.f
+sspp -r -LINUX -INTEL  -XWIN   drwabs.r > drwabs.x
+ratfor77 < drwabs.x > drwabs.f
+gfortran -C -O -m64 -c drwabs.f
+rm -f drwabs.x drwabs.f
+ratfor77 < eralph.r > eralph.f
+gfortran -C -O -m64 -c eralph.f
+rm -f eralph.f
+ratfor77 < gwrite.r > gwrite.f
+gfortran -C -O -m64 -c gwrite.f
+rm -f gwrite.f
+ratfor77 < hbell.r > hbell.f
+gfortran -C -O -m64 -c hbell.f
+rm -f hbell.f
+sspp -r -LINUX -INTEL  -XWIN  hpabs.r > hpabs.x
+ratfor77 < hpabs.x > hpabs.f
+gfortran -C -O -m64 -c hpabs.f
+rm -f hpabs.x hpabs.f
+ratfor77 < hpline.r > hpline.f
+gfortran -C -O -m64 -c hpline.f
+rm -f hpline.f
+ratfor77 < hpplot.r > hpplot.f
+gfortran -C -O -m64 -c hpplot.f
+rm -f hpplot.f
+ratfor77 < hreset.r > hreset.f
+gfortran -C -O -m64 -c hreset.f
+rm -f hreset.f
+sspp -r -LINUX -INTEL  -XWIN   initt.r >initt.x
+ratfor77 < initt.x > initt.f
+gfortran -C -O -m64 -c initt.f
+rm -f initt.x initt.f
+ratfor77 < movabs.r > movabs.f
+gfortran -C -O -m64 -c movabs.f
+rm -f movabs.f
+ratfor77 < newpag.r > newpag.f
+gfortran -C -O -m64 -c newpag.f
+rm -f newpag.f
+ratfor77 < othtrm.r > othtrm.f
+gfortran -C -O -m64 -c othtrm.f
+rm -f othtrm.f
+sspp -r -LINUX -INTEL  -XWIN  respag.r >respag.x
+ratfor77 < respag.x > respag.f
+gfortran -C -O -m64 -c respag.f
+rm -f respag.x respag.f
+sspp -r -LINUX -INTEL  -XWIN   sb.r >sb.x
+ratfor77 < sb.x > sb.f
+gfortran -C -O -m64 -c sb.f
+rm -f sb.x sb.f
+sspp -r -LINUX -INTEL  -XWIN   serase.r >serase.x
+ratfor77 < serase.x > serase.f
+gfortran -C -O -m64 -c serase.f
+rm -f serase.x serase.f
+ratfor77 < tabbin.r > tabbin.f
+gfortran -C -O -m64 -c tabbin.f
+rm -f tabbin.f
+ratfor77 < texmod.r > texmod.f
+gfortran -C -O -m64 -c texmod.f
+rm -f texmod.f
+ratfor77 < tmove.r > tmove.f
+gfortran -C -O -m64 -c tmove.f
+rm -f tmove.f
+ratfor77 < vgrmod.r > vgrmod.f
+gfortran -C -O -m64 -c vgrmod.f
+rm -f vgrmod.f
+ld   -r -o /src/local/specpr/obj/hpgraph.o absbin.o convrt.o drwabs.o eralph.o gwrite.o hbell.o hpabs.o hpline.o hpplot.o hreset.o initt.o movabs.o newpag.o othtrm.o respag.o sb.o serase.o tabbin.o texmod.o tmove.o vgrmod.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/hpgraph'
+make: [/src/local/specpr/obj/init.o] Error 127 (ignored)
+making all in init
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/init'
+ratfor77 < namef.r > namef.f
+gfortran -C -O -m64 -c namef.f
+ In file namef.f:32
+
+1     print *,' type in the tape name of the file v.'                   
+1
+ In file namef.f:28
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file namef.f:55
+
+2     print *,' type in the tape name of the file d.'                   
+1
+ In file namef.f:51
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file namef.f:78
+
+3     print *,' type in the tape name of the file u.'                   
+1
+ In file namef.f:74
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file namef.f:101
+
+4     print *,' type in the tape name of the file y.'                   
+1
+ In file namef.f:97
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f namef.f
+ratfor77 < wdgsb1.r > wdgsb1.f
+gfortran -C -O -m64 -c wdgsb1.f
+rm -f wdgsb1.f
+ratfor77 < wdgsb2.r > wdgsb2.f
+gfortran -C -O -m64 -c wdgsb2.f
+rm -f wdgsb2.f
+ratfor77 < wdgsb3.r > wdgsb3.f
+gfortran -C -O -m64 -c wdgsb3.f
+rm -f wdgsb3.f
+ratfor77 < wdgsb4.r > wdgsb4.f
+gfortran -C -O -m64 -c wdgsb4.f
+rm -f wdgsb4.f
+ratfor77 < wdgsb5.r > wdgsb5.f
+gfortran -C -O -m64 -c wdgsb5.f
+rm -f wdgsb5.f
+ratfor77 < wedgea.r > wedgea.f
+gfortran -C -O -m64 -c wedgea.f
+ In file wedgea.f:263
+
+30    call dfasin                                                       
+ 1
+ In file wedgea.f:152
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file wedgea.f:239
+
+20    call wdgsb2(iwdflg)                                               
+ 1
+ In file wedgea.f:160
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f wedgea.f
+ld   -r -o /src/local/specpr/obj/init.o namef.o wdgsb1.o wdgsb2.o wdgsb3.o wdgsb4.o wdgsb5.o wedgea.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/init'
+make: [/src/local/specpr/obj/interbandanl.o] Error 127 (ignored)
+making all in interbandanl
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/interbandanl'
+ratfor77 < bdanal.r > bdanal.f
+gfortran -C -O -m64 -c bdanal.f
+ In file bdanal.f:916
+
+27    call serase(0,310,511,358)                                        
+ 1
+ In file bdanal.f:610
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f bdanal.f
+ratfor77 < box.r > box.f
+gfortran -C -O -m64  -c box.f
+rm -f box.f
+ratfor77 < quad.r > quad.f
+gfortran -C -O -m64  -c quad.f
+rm -f quad.f
+ratfor77 < findrf.r > findrf.f
+gfortran -C -O -m64  -c findrf.f
+ In file findrf.f:53
+
+      pause '?????????'                                                 
+                                                                       1
+Warning: Obsolete: PAUSE statement at (1)
+rm -f findrf.f
+ratfor77 < findwd.r > findwd.f
+gfortran -C -O -m64  -c findwd.f
+rm -f findwd.f
+ratfor77 < sfwhm.r > sfwhm.f
+gfortran -C -O -m64  -c sfwhm.f
+rm -f sfwhm.f
+ratfor77 < mindat.r > mindat.f
+gfortran -C -O -m64  -c mindat.f
+rm -f mindat.f
+ratfor77 < restab.r > restab.f
+gfortran -C -O -m64  -c restab.f
+rm -f restab.f
+ratfor77 < replot.r > replot.f
+gfortran -C -O -m64 -c replot.f
+rm -f replot.f
+ratfor77 < rbline.r > rbline.f
+gfortran -C -O -m64 -c rbline.f
+rm -f rbline.f
+ratfor77 < dconvt.r > dconvt.f
+gfortran -C -O -m64 -c dconvt.f
+rm -f dconvt.f
+ratfor77 < gconvt.r > gconvt.f
+gfortran -C -O -m64 -c gconvt.f
+rm -f gconvt.f
+ratfor77 < bcchan.r > bcchan.f
+gfortran -C -O -m64  -c bcchan.f
+rm -f bcchan.f
+ratfor77 < opfile.r > opfile.f
+gfortran -C -O -m64 -c opfile.f
+rm -f opfile.f
+ld   -r -o /src/local/specpr/obj/interbandanl.o bdanal.o box.o quad.o findrf.o findwd.o sfwhm.o mindat.o restab.o replot.o rbline.o dconvt.o gconvt.o bcchan.o opfile.o        
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/interbandanl'
+make: [/src/local/specpr/obj/io.o] Error 127 (ignored)
+making all in io
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/io'
+ratfor77 < closnr.r > closnr.f
+gfortran -C -O -m64 -c closnr.f
+rm -f closnr.f
+ratfor77 < bytorder.r > bytorder.f
+gfortran -C -O -m64 -c bytorder.f
+rm -f bytorder.f
+ratfor77 < devlun.r > devlun.f
+gfortran -C -O -m64 -c devlun.f
+rm -f devlun.f
+ratfor77 < lundev.r > lundev.f
+gfortran -C -O -m64 -c lundev.f
+rm -f lundev.f
+ratfor77 < devok.r > devok.f
+gfortran -C -O -m64 -c devok.f
+rm -f devok.f
+ratfor77 < devol.r > devol.f
+gfortran -C -O -m64 -c devol.f
+rm -f devol.f
+ratfor77 < devsta.r > devsta.f
+gfortran -C -O -m64 -c devsta.f
+rm -f devsta.f
+ratfor77 < erored.r > erored.f
+gfortran -C -O -m64 -c erored.f
+rm -f erored.f
+ratfor77 < ertyp.r > ertyp.f
+gfortran -C -O -m64 -c ertyp.f
+rm -f ertyp.f
+ratfor77 < finfil.r > finfil.f
+gfortran -C -O -m64 -c finfil.f
+rm -f finfil.f
+ratfor77 < newsta.r > newsta.f
+gfortran -C -O -m64 -c newsta.f
+rm -f newsta.f
+ratfor77 < posfil.r > posfil.f
+gfortran -C -O -m64 -c posfil.f
+rm -f posfil.f
+ratfor77 < reastr.r > reastr.f
+gfortran -C -O -m64 -c reastr.f
+rm -f reastr.f
+ratfor77 < rederr.r > rederr.f
+gfortran -C -O -m64 -c rederr.f
+rm -f rederr.f
+sspp -r -LINUX -INTEL  -XWIN  redfil.r > redfil.x
+ratfor77 < redfil.x > redfil.f
+gfortran -C -O -m64 -c redfil.f
+ In file redfil.f:110
+
+12    iftst=4                                                           
+ 1
+ In file redfil.f:88
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file redfil.f:110
+
+12    iftst=4                                                           
+ 1
+ In file redfil.f:93
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f redfil.x redfil.f
+sspp -r -LINUX -INTEL  -XWIN  wrifil.r > wrifil.x
+ratfor77 < wrifil.x > wrifil.f
+gfortran -C -O -m64 -c wrifil.f
+rm -f wrifil.x wrifil.f
+ratfor77 < wristr.r > wristr.f
+gfortran -C -O -m64 -c wristr.f
+rm -f wristr.f
+cc -O -m64 -c fpt2v.c
+cc -O -m64 -c fpv2t.c
+ratfor77 < xfti.r > xfti.f
+gfortran -C -O -m64 -c xfti.f
+rm -f xfti.f
+ratfor77 < x2ti.r > x2ti.f
+gfortran -C -O -m64 -c x2ti.f
+rm -f x2ti.f
+ratfor77 < pad.r > pad.f
+gfortran -C -O -m64 -c pad.f
+rm -f pad.f
+cc -O -m64 -c swab4order.c
+cc  -O -m64 -c swap.c
+ld   -r -o /src/local/specpr/obj/io.o closnr.o bytorder.o devlun.o lundev.o devok.o devol.o devsta.o erored.o ertyp.o finfil.o newsta.o posfil.o reastr.o rederr.o redfil.o wrifil.o wristr.o fpt2v.o fpv2t.o xfti.o x2ti.o pad.o swab4order.o swap.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/io'
+make: [/src/local/specpr/obj/lib.o] Error 127 (ignored)
+making all in lib
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/lib'
+ratfor77 < dumpspool.r > dumpspool.f
+gfortran -C -O -m64 -c dumpspool.f
+rm -f dumpspool.f
+ratfor77 < endnam.r > endnam.f
+gfortran -C -O -m64 -c endnam.f
+rm -f endnam.f
+ratfor77 < filid.r > filid.f
+gfortran -C -O -m64 -c filid.f
+rm -f filid.f
+ratfor77 < filidw.r > filidw.f
+gfortran -C -O -m64 -c filidw.f
+rm -f filidw.f
+ratfor77 < lpcrtp.r > lpcrtp.f
+gfortran -C -O -m64 -c lpcrtp.f
+rm -f lpcrtp.f
+ratfor77 < lprpct.r > lprpct.f
+gfortran -C -O -m64 -c lprpct.f
+rm -f lprpct.f
+ratfor77 < pdata.r > pdata.f
+gfortran -C -O -m64 -c pdata.f
+rm -f pdata.f
+ratfor77 < plpage.r > plpage.f
+gfortran -C -O -m64 -c plpage.f
+rm -f plpage.f
+ratfor77 < setspool.r > setspool.f
+gfortran -C -O -m64 -c setspool.f
+rm -f setspool.f
+ratfor77 < unglic.r > unglic.f
+gfortran -C -O -m64 -c unglic.f
+rm -f unglic.f
+ratfor77 < whedr.r > whedr.f
+gfortran -C -O -m64 -c whedr.f
+rm -f whedr.f
+ratfor77 < dltpts.r > dltpts.f
+gfortran -C -O -m64 -c dltpts.f
+rm -f dltpts.f
+ratfor77 < whedr2.r > whedr2.f
+gfortran -C -O -m64 -c whedr2.f
+rm -f whedr2.f
+ratfor77 < frdms.r > frdms.f
+gfortran -C -O -m64 -c frdms.f
+rm -f frdms.f
+ratfor77 < frjuld.r > frjuld.f
+gfortran -C -O -m64 -c frjuld.f
+rm -f frjuld.f
+ratfor77 < todms.r > todms.f
+gfortran -C -O -m64 -c todms.f
+rm -f todms.f
+ratfor77 < tojuld.r > tojuld.f
+gfortran -C -O -m64 -c tojuld.f
+rm -f tojuld.f
+ratfor77 < jdatim.r > jdatim.f
+gfortran -C -O -m64 -c jdatim.f
+rm -f jdatim.f
+ratfor77 < sptime.r > sptime.f
+gfortran -C -O -m64 -c sptime.f
+rm -f sptime.f
+ratfor77 < sptimb.r > sptimb.f
+gfortran -C -O -m64 -c sptimb.f
+rm -f sptimb.f
+ratfor77 < crindex.r > crindex.f
+gfortran -C -O -m64 -c crindex.f
+rm -f crindex.f
+ld   -r -o /src/local/specpr/obj/lib.o dumpspool.o endnam.o filid.o filidw.o lpcrtp.o lprpct.o pdata.o plpage.o setspool.o unglic.o whedr.o dltpts.o whedr2.o frdms.o frjuld.o todms.o tojuld.o jdatim.o sptime.o sptimb.o crindex.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/lib'
+make: [/src/local/specpr/obj/main.o] Error 127 (ignored)
+making all in main
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/main'
+ratfor77 < closef.r > closef.f
+gfortran -C -O -m64 -c closef.f
+rm -f closef.f
+ratfor77 < callgfit.r > callgfit.f
+gfortran -C -O -m64 -c callgfit.f
+rm -f callgfit.f
+sspp -r -LINUX -INTEL  -XWIN  getcmdargs.r > getcmdargs.x
+ratfor77 < getcmdargs.x > getcmdargs.f
+gfortran -C -O -m64 -c getcmdargs.f
+rm -f getcmdargs.x getcmdargs.f
+ratfor77 < mninst.r > mninst.f
+gfortran -C -O -m64 -c mninst.f
+rm -f mninst.f
+ratfor77 < prochk.r > prochk.f
+gfortran -C -O -m64 -c prochk.f
+rm -f prochk.f
+ratfor77 < reddisv.r > reddisv.f
+gfortran -C -O -m64 -c reddisv.f
+rm -f reddisv.f
+ratfor77 < e1trap.r > e1trap.f
+gfortran -C -O -m64 -c e1trap.f
+rm -f e1trap.f
+ratfor77 < taprw.r > taprw.f
+gfortran -C -O -m64 -c taprw.f
+rm -f taprw.f
+ld   -r -o /src/local/specpr/obj/main.o  closef.o callgfit.o getcmdargs.o mninst.o prochk.o reddisv.o e1trap.o taprw.o 
+sspp -r -LINUX -INTEL  -XWIN  specpr.r > specpr.x
+ratfor77 < specpr.x > specpr.f
+gfortran -C -O -m64 -c specpr.f
+ In file specpr.f:220
+
+      data ihzx,ihxz/2hzx,2hxz/                                         
+                           1
+Warning: Extension: Hollerith constant at (1)
+ In file specpr.f:220
+
+      data ihzx,ihxz/2hzx,2hxz/                                         
+                        1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file specpr.f:220
+
+      data ihzx,ihxz/2hzx,2hxz/                                         
+                             1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+rm -f specpr.x specpr.f
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/main'
+make: [/src/local/specpr/obj/mth1.o] Error 127 (ignored)
+making all in mth1
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/mth1'
+ratfor77 < mthwrt.r > mthwrt.f
+gfortran -C -O -m64 -c mthwrt.f
+rm -f mthwrt.f
+ratfor77 < opdcod.r > opdcod.f
+gfortran -C -O -m64 -c opdcod.f
+rm -f opdcod.f
+ratfor77 < redwg2.r > redwg2.f
+gfortran -C -O -m64 -c redwg2.f
+ In file redwg2.f:132
+
+      data idm, idd, ida, ids /1h*, 1h/, 1h+, 1h-/                      
+                                               1
+Warning: Extension: Hollerith constant at (1)
+ In file redwg2.f:133
+
+      data ih /1h /                                                     
+                1
+Warning: Extension: Hollerith constant at (1)
+ In file redwg2.f:134
+
+      data ihcoln /1h: /                                                
+                    1
+Warning: Extension: Hollerith constant at (1)
+ In file redwg2.f:134
+
+      data ihcoln /1h: /                                                
+                     1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:133
+
+      data ih /1h /                                                     
+                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:132
+
+      data idm, idd, ida, ids /1h*, 1h/, 1h+, 1h-/                      
+                                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:132
+
+      data idm, idd, ida, ids /1h*, 1h/, 1h+, 1h-/                      
+                                      1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:132
+
+      data idm, idd, ida, ids /1h*, 1h/, 1h+, 1h-/                      
+                                           1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:132
+
+      data idm, idd, ida, ids /1h*, 1h/, 1h+, 1h-/                      
+                                                1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file redwg2.f:227
+
+9000  continue                                                          
+   1
+ In file redwg2.f:174
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file redwg2.f:227
+
+9000  continue                                                          
+   1
+ In file redwg2.f:178
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file redwg2.f:227
+
+9000  continue                                                          
+   1
+ In file redwg2.f:182
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file redwg2.f:226
+
+1101  inext=ihe                                                         
+   1
+ In file redwg2.f:493
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f redwg2.f
+ratfor77 < gettok.r > gettok.f
+gfortran -C -O -m64 -c gettok.f
+rm -f gettok.f
+ratfor77 < itoa.r > itoa.f
+gfortran -C -O -m64 -c itoa.f
+rm -f itoa.f
+ratfor77 < type.r > type.f
+gfortran -C -O -m64 -c type.f
+rm -f type.f
+ratfor77 < alias.r > alias.f
+gfortran -C -O -m64 -c alias.f
+rm -f alias.f
+ld   -r -o /src/local/specpr/obj/mth1.o mthwrt.o opdcod.o redwg2.o gettok.o itoa.o type.o alias.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/mth1'
+make: [/src/local/specpr/obj/mth2.o] Error 127 (ignored)
+making all in mth2
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/mth2'
+ratfor77 < ercomp.r > ercomp.f
+gfortran -C -O -m64 -c ercomp.f
+rm -f ercomp.f
+ratfor77 < mathin.r > mathin.f
+gfortran -C -O -m64 -c mathin.f
+rm -f mathin.f
+ratfor77 < namdev.r > namdev.f
+gfortran -C -O -m64 -c namdev.f
+rm -f namdev.f
+ratfor77 < nwav.r > nwav.f
+gfortran -C -O -m64 -c nwav.f
+rm -f nwav.f
+ratfor77 < titles.r > titles.f
+gfortran -C -O -m64 -c titles.f
+rm -f titles.f
+ratfor77 < whistr.r > whistr.f
+gfortran -C -O -m64 -c whistr.f
+rm -f whistr.f
+ld   -r -o /src/local/specpr/obj/mth2.o  ercomp.o mathin.o namdev.o nwav.o titles.o whistr.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/mth2'
+make: [/src/local/specpr/obj/newplot.o] Error 127 (ignored)
+making all in newplot
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/newplot'
+ratfor77 < bldplt.r > bldplt.f
+gfortran -C -O -m64 -c bldplt.f
+rm -f bldplt.f
+ratfor77 < gbldel.r > gbldel.f
+gfortran -C -O -m64 -c gbldel.f
+rm -f gbldel.f
+ratfor77 < getplt.r > getplt.f
+gfortran -C -O -m64 -c getplt.f
+rm -f getplt.f
+ratfor77 < gettxt.r > gettxt.f
+gfortran -C -O -m64 -c gettxt.f
+rm -f gettxt.f
+ratfor77 < gpplot.r > gpplot.f
+gfortran -C -O -m64 -c gpplot.f
+rm -f gpplot.f
+ratfor77 < gtrecs.r > gtrecs.f
+gfortran -C -O -m64 -c gtrecs.f
+rm -f gtrecs.f
+ratfor77 < haxis.r > haxis.f
+gfortran -C -O -m64 -c haxis.f
+rm -f haxis.f
+ratfor77 < options.r > options.f
+gfortran -C -O -m64 -c options.f
+rm -f options.f
+ratfor77 < savdta.r > savdta.f
+gfortran -C -O -m64 -c savdta.f
+rm -f savdta.f
+ratfor77 < sclfct.r > sclfct.f
+gfortran -C -O -m64 -c sclfct.f
+rm -f sclfct.f
+ratfor77 < spinit.r > spinit.f
+gfortran -C -O -m64 -c spinit.f
+rm -f spinit.f
+ratfor77 < setwav.r > setwav.f
+gfortran -C -O -m64 -c setwav.f
+rm -f setwav.f
+ratfor77 < doplot.r > doplot.f
+gfortran -C -O -m64 -c doplot.f
+rm -f doplot.f
+ratfor77 < vaxis.r > vaxis.f
+gfortran -C -O -m64 -c vaxis.f
+rm -f vaxis.f
+ld   -r -o /src/local/specpr/obj/newplot.o bldplt.o gbldel.o getplt.o gettxt.o gpplot.o gtrecs.o haxis.o options.o savdta.o sclfct.o spinit.o setwav.o doplot.o vaxis.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/newplot'
+make: [/src/local/specpr/obj/parser.o] Error 127 (ignored)
+making all in parser
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/parser'
+gfortran -C -O -m64 -c f23temp.f
+ld   -r -o /src/local/specpr/obj/parser.o f23temp.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/parser'
+make: [/src/local/specpr/obj/rst.o] Error 127 (ignored)
+making all in rst
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/rst'
+ratfor77 < rstdmp.r > rstdmp.f
+gfortran -C -O -m64 -c rstdmp.f
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                                        1
+Warning: Extension: Hollerith constant at (1)
+ In file rstdmp.f:93
+
+      data ihl,ihp,ihr/1hl,1hp,1hr/                                     
+                                1
+Warning: Extension: Hollerith constant at (1)
+ In file rstdmp.f:93
+
+      data ihl,ihp,ihr/1hl,1hp,1hr/                                     
+                         1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:93
+
+      data ihl,ihp,ihr/1hl,1hp,1hr/                                     
+                             1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:93
+
+      data ihl,ihp,ihr/1hl,1hp,1hr/                                     
+                                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                     1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                         1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                             1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                                 1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                                     1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+ In file rstdmp.f:92
+
+      data ihv,ihw,ihd,ihs,ihu,ihy/1hv,1hw,1hd,1hs,1hu,1hy/             
+                                                         1
+Warning: Extension: Conversion from HOLLERITH to INTEGER(4) at (1)
+rm -f rstdmp.f
+ratfor77 < rstart.r > rstart.f
+gfortran -C -O -m64 -c rstart.f
+rm -f rstart.f
+ratfor77 < rstart0.r > rstart0.f
+gfortran -C -O -m64 -c rstart0.f
+rm -f rstart0.f
+ld   -r -o /src/local/specpr/obj/rst.o rstdmp.o rstart.o rstart0.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/rst'
+make: [/src/local/specpr/obj/sub.o] Error 127 (ignored)
+making all in sub
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/sub'
+ratfor77 < radec.r > radec.f
+gfortran -C -O -m64 -c radec.f
+rm -f radec.f
+ratfor77 < runsb1.r > runsb1.f
+gfortran -C -O -m64 -c runsb1.f
+rm -f runsb1.f
+ratfor77 < runsub.r > runsub.f
+gfortran -C -O -m64 -c runsub.f
+ In file runsub.f:211
+
+10    xih = ih                                                          
+ 1
+ In file runsub.f:171
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file runsub.f:273
+
+20    isid = 0                                                          
+ 1
+ In file runsub.f:251
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f runsub.f
+ld   -r -o /src/local/specpr/obj/sub.o radec.o runsb1.o runsub.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/sub'
+make: [/src/local/specpr/obj/syslib.o] Error 127 (ignored)
+making all in syslib
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/syslib'
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c ilink.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c fsleep.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c time.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c iulink.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c fsize.c
+check_env SP_RFLAGS SP_FFLAGS
+Environment variable SP_RFLAGS is set to <.  OK to proceed
+Environment variable SP_FFLAGS is set to -C -O -m64.  OK to proceed
+ratfor77 < iwrite.r > iwrite.f
+gfortran -C -O -m64 -c iwrite.f
+rm -f iwrite.f
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c iread.c 
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c bkrec.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c frdrec.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c rewinf.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c wrttap.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c redtap.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c getpid.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c setbit.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c clrbit.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c chkbit.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c chkendian.c
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c fcuser.c
+fcuser.c: In function ‘fcuser’:
+fcuser.c:13: warning: assignment makes pointer from integer without a cast
+check_env SP_RFLAGS SP_FFLAGS
+Environment variable SP_RFLAGS is set to <.  OK to proceed
+Environment variable SP_FFLAGS is set to -C -O -m64.  OK to proceed
+ratfor77 < fuser.r > fuser.f
+gfortran -C -O -m64 -c fuser.f
+rm -f fuser.f
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -c ixdate.c
+ixdate.c: In function ‘ixdate’:
+ixdate.c:20: warning: incompatible implicit declaration of built-in function ‘strcpy’
+ixdate.c: In function ‘ixdate_’:
+ixdate.c:34: warning: incompatible implicit declaration of built-in function ‘strcpy’
+check_env SP_CFLAGS
+Environment variable SP_CFLAGS is set to -O -m64.  OK to proceed
+cc -O -m64 -DRANDRET=32767 -c frandom.c
+check_env SPKLUDGE SP_OBJ
+Environment variable SPKLUDGE is set to LINUX.  OK to proceed
+Environment variable SP_OBJ is set to ${SPECPR}/obj.  OK to proceed
+(cd SRC.LINUX.kludge ; ./rmo ; make) 
+++ rm ../bkrec.o ../frdrec.o ../redtap.o ../wrttap.o
+make[2]: Entering directory `/c0/src/local/specpr/src.specpr/syslib/SRC.LINUX.kludge'
+cc -g -c -o ../bkrec.o bkrec.c
+cc -g -c -o ../frdrec.o frdrec.c
+cc -g -c -o ../wrttap.o wrttap.c
+cc -g -c -o ../redtap.o redtap.c
+make[2]: Leaving directory `/c0/src/local/specpr/src.specpr/syslib/SRC.LINUX.kludge'
+ld   -r -o /src/local/specpr/obj/syslib.o ilink.o fsleep.o time.o iulink.o fsize.o iwrite.o iread.o bkrec.o frdrec.o rewinf.o wrttap.o redtap.o getpid.o setbit.o clrbit.o chkbit.o chkendian.o fcuser.o fuser.o ixdate.o frandom.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/syslib'
+make: [/src/local/specpr/obj/syslinux.o] Error 127 (ignored)
+making all in syslinux
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/syslinux'
+gfortran -C -O -m64 -c recomp.f
+cc -O -m64 -c units.c
+cc -O -m64 -c re_exec.c
+re_exec.c: In function ‘re_exec’:
+re_exec.c:9: warning: assignment makes pointer from integer without a cast
+ld   -r -o /src/local/specpr/obj/syslinux.o recomp.o units.o re_exec.o
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/syslinux'
+make: [/src/local/specpr/obj/talg.o] Error 127 (ignored)
+making all in talg
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/talg'
+ratfor77 < fnalg.r > fnalg.f
+gfortran -C -O -m64 -c fnalg.f
+rm -f fnalg.f
+ratfor77 < fnhist.r > fnhist.f
+gfortran -C -O -m64 -c fnhist.f
+rm -f fnhist.f
+ratfor77 < fnhypt.r > fnhypt.f
+gfortran -C -O -m64 -c fnhypt.f
+rm -f fnhypt.f
+ratfor77 < fnlgs.r > fnlgs.f
+gfortran -C -O -m64 -c fnlgs.f
+rm -f fnlgs.f
+ratfor77 < fnpowr.r > fnpowr.f
+gfortran -C -O -m64 -c fnpowr.f
+rm -f fnpowr.f
+ratfor77 < fntrig.r > fntrig.f
+gfortran -C -O -m64 -c fntrig.f
+rm -f fntrig.f
+ratfor77 < wfcn.r > wfcn.f
+gfortran -C -O -m64 -c wfcn.f
+rm -f wfcn.f
+ratfor77 < wfcn1.r > wfcn1.f
+gfortran -C -O -m64 -c wfcn1.f
+rm -f wfcn1.f
+ld   -r -o /src/local/specpr/obj/talg.o fnalg.o fnhist.o fnhypt.o fnlgs.o fnpowr.o fntrig.o wfcn.o wfcn1.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/talg'
+make: [/src/local/specpr/obj/wav.o] Error 127 (ignored)
+making all in wav
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/wav'
+ratfor77 < autowv.r > autowv.f
+gfortran -C -O -m64 -c autowv.f
+rm -f autowv.f
+ratfor77 < iwidok.r > iwidok.f
+gfortran -C -O -m64 -c iwidok.f
+rm -f iwidok.f
+ratfor77 < lcasew.r > lcasew.f
+gfortran -C -O -m64 -c lcasew.f
+rm -f lcasew.f
+ratfor77 < namdwv.r > namdwv.f
+gfortran -C -O -m64 -c namdwv.f
+rm -f namdwv.f
+sspp -r -LINUX -INTEL  -XWIN  redwav.r > redwav.x
+ratfor77 < redwav.x > redwav.f
+gfortran -C -O -m64 -c redwav.f
+ In file redwav.f:147
+
+12    iftst=4                                                           
+ 1
+ In file redwav.f:136
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+ In file redwav.f:147
+
+12    iftst=4                                                           
+ 1
+ In file redwav.f:141
+
+                    
+                   2
+Warning: Label at (1) is not in the same block as the GOTO statement at (2)
+rm -f redwav.x redwav.f
+ratfor77 < wavlng.r > wavlng.f
+gfortran -C -O -m64 -c wavlng.f
+rm -f wavlng.f
+ratfor77 < setwpt.r > setwpt.f
+gfortran -C -O -m64 -c setwpt.f
+rm -f setwpt.f
+ratfor77 < wriwav.r > wriwav.f
+gfortran -C -O -m64 -c wriwav.f
+rm -f wriwav.f
+ld   -r -o /src/local/specpr/obj/wav.o autowv.o iwidok.o lcasew.o namdwv.o redwav.o wavlng.o setwpt.o wriwav.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/wav'
+make: [/src/local/specpr/obj/xwindow.o] Error 127 (ignored)
+making all in xwindow
+make[1]: Entering directory `/c0/src/local/specpr/src.specpr/xwindow'
+cc -g -c xclear.c -O -m64
+cc -g -c xcrsrd.c -O -m64 
+cc -g -c  xdraw.c -O -m64
+cc -g -c xerase.c -O -m64
+cc -g -c xflush.c -O -m64
+cc -g -c xinit.c -O -m64
+xinit.c: In function ‘xinit’:
+xinit.c:126: warning: comparison between pointer and integer
+cc -g -c xread.c -O -m64
+xread.c: In function ‘xread’:
+xread.c:31: warning: passing argument 1 of ‘XLookupString’ from incompatible pointer type
+cc -g -c xtext.c -O -m64
+xtext.c: In function ‘xtext’:
+xtext.c:55: warning: assignment makes integer from pointer without a cast
+cc -g -c  xsetline.c -O -m64
+cc -g -c xwrite.c -O -m64
+ld   -r -o /src/local/specpr/obj/xwindow.o xclear.o xcrsrd.o xdraw.o xerase.o xflush.o xinit.o xread.o xtext.o xsetline.o xwrite.o 
+make[1]: Leaving directory `/c0/src/local/specpr/src.specpr/xwindow'
+check_env SP_OBJ SP_LIB AR SP_ARFLAGS RANLIB
+Environment variable SP_OBJ is set to ${SPECPR}/obj.  OK to proceed
+Environment variable SP_LIB is set to ${SPECPR}/lib.  OK to proceed
+Environment variable AR is set to ar.  OK to proceed
+Environment variable SP_ARFLAGS is set to rv.  OK to proceed
+Environment variable RANLIB is set to ranlib.  OK to proceed
+rm -f /src/local/specpr/lib/specpr.a
+ar rv /src/local/specpr/lib/specpr.a /src/local/specpr/obj/common.o /src/local/specpr/obj/3dio.o /src/local/specpr/obj/add.o /src/local/specpr/obj/band.o /src/local/specpr/obj/crtp.o /src/local/specpr/obj/dtol.o /src/local/specpr/obj/dummy.o /src/local/specpr/obj/dvml.o /src/local/specpr/obj/extn.o /src/local/specpr/obj/fass.o /src/local/specpr/obj/fcn01-08.o /src/local/specpr/obj/fcn09-11.o /src/local/specpr/obj/fcn12-13.o /src/local/specpr/obj/fcn14-16.o /src/local/specpr/obj/fcn17-19.o /src/local/specpr/obj/fcn20-25.o /src/local/specpr/obj/fcn35-39.o /src/local/specpr/obj/fcn40-42.o /src/local/specpr/obj/fcn43-47.o /src/local/specpr/obj/fcn48-51.o /src/local/specpr/obj/free.o /src/local/specpr/obj/gould.o /src/local/specpr/obj/hed.o /src/local/specpr/obj/hpgraph.o /src/local/specpr/obj/init.o /src/local/specpr/obj/interbandanl.o /src/local/specpr/obj/io.o /src/local/specpr/obj/lib.o /src/local/specpr/obj/main.o /src/local/specpr/obj/mth1.o /src/local/specpr/obj/mth2.o /src/local/specpr/obj/newplot.o /src/local/specpr/obj/parser.o /src/local/specpr/obj/rst.o /src/local/specpr/obj/sub.o /src/local/specpr/obj/syslib.o /src/local/specpr/obj/syslinux.o /src/local/specpr/obj/talg.o /src/local/specpr/obj/wav.o /src/local/specpr/obj/xwindow.o
+ar: creating /src/local/specpr/lib/specpr.a
+a - /src/local/specpr/obj/common.o
+a - /src/local/specpr/obj/3dio.o
+a - /src/local/specpr/obj/add.o
+a - /src/local/specpr/obj/band.o
+a - /src/local/specpr/obj/crtp.o
+a - /src/local/specpr/obj/dtol.o
+a - /src/local/specpr/obj/dummy.o
+a - /src/local/specpr/obj/dvml.o
+a - /src/local/specpr/obj/extn.o
+a - /src/local/specpr/obj/fass.o
+a - /src/local/specpr/obj/fcn01-08.o
+a - /src/local/specpr/obj/fcn09-11.o
+a - /src/local/specpr/obj/fcn12-13.o
+a - /src/local/specpr/obj/fcn14-16.o
+a - /src/local/specpr/obj/fcn17-19.o
+a - /src/local/specpr/obj/fcn20-25.o
+a - /src/local/specpr/obj/fcn35-39.o
+a - /src/local/specpr/obj/fcn40-42.o
+a - /src/local/specpr/obj/fcn43-47.o
+a - /src/local/specpr/obj/fcn48-51.o
+a - /src/local/specpr/obj/free.o
+a - /src/local/specpr/obj/gould.o
+a - /src/local/specpr/obj/hed.o
+a - /src/local/specpr/obj/hpgraph.o
+a - /src/local/specpr/obj/init.o
+a - /src/local/specpr/obj/interbandanl.o
+a - /src/local/specpr/obj/io.o
+a - /src/local/specpr/obj/lib.o
+a - /src/local/specpr/obj/main.o
+a - /src/local/specpr/obj/mth1.o
+a - /src/local/specpr/obj/mth2.o
+a - /src/local/specpr/obj/newplot.o
+a - /src/local/specpr/obj/parser.o
+a - /src/local/specpr/obj/rst.o
+a - /src/local/specpr/obj/sub.o
+a - /src/local/specpr/obj/syslib.o
+a - /src/local/specpr/obj/syslinux.o
+a - /src/local/specpr/obj/talg.o
+a - /src/local/specpr/obj/wav.o
+a - /src/local/specpr/obj/xwindow.o
+ranlib /src/local/specpr/lib/specpr.a
+check_env SP_OBJ SP_LIB F77 SP_FFLAGS SP_LDFLAGS SP_LIB SP_LDLIBS
+Environment variable SP_OBJ is set to ${SPECPR}/obj.  OK to proceed
+Environment variable SP_LIB is set to ${SPECPR}/lib.  OK to proceed
+Environment variable F77 is set to gfortran.  OK to proceed
+Environment variable SP_FFLAGS is set to -C -O -m64.  OK to proceed
+Environment variable SP_LDFLAGS is set to -L/usr/lib64.  OK to proceed
+Environment variable SP_LIB is set to ${SPECPR}/lib.  OK to proceed
+Environment variable SP_LDLIBS is set to -L/usr/X11R6/lib -lX11.  OK to proceed
+gfortran -C -O -m64 -v -O -L/usr/lib64 -o xdspecpr main/specpr.o \
+		/src/local/specpr/obj/common.o \
+		/src/local/specpr/lib/specpr.a -L/usr/X11R6/lib -lX11
+Driving: gfortran -C -O -m64 -v -O -L/usr/lib64 -o xdspecpr main/specpr.o /src/local/specpr/obj/common.o /src/local/specpr/lib/specpr.a -L/usr/X11R6/lib -lX11 -lgfortranbegin -lgfortran -lm -shared-libgcc
+Using built-in specs.
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-libgcj-multifile --enable-languages=c,c++,objc,obj-c++,java,fortran,ada --enable-java-awt=gtk --disable-dssi --enable-plugin --with-java-home=/usr/lib/jvm/java-1.4.2-gcj-1.4.2.0/jre --with-cpu=generic --host=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.1.2 20080704 (Red Hat 4.1.2-46)
+ /usr/libexec/gcc/x86_64-redhat-linux/4.1.2/collect2 --eh-frame-hdr -m elf_x86_64 --hash-style=gnu -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o xdspecpr /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/4.1.2/crtbegin.o -L/usr/lib64 -L/usr/X11R6/lib -L/usr/lib/gcc/x86_64-redhat-linux/4.1.2 -L/usr/lib/gcc/x86_64-redhat-linux/4.1.2 -L/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 main/specpr.o /src/local/specpr/obj/common.o /src/local/specpr/lib/specpr.a -lX11 -lgfortranbegin -lgfortran -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/4.1.2/crtend.o /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../lib64/crtn.o
+mv dspecpr dspecpr.old1
+mv xdspecpr dspecpr

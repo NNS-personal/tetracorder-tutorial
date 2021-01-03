@@ -1,0 +1,22 @@
+#
+#
+# parameter (NBND = 3)       # in defs.h
+# parameter (NMINL = 9)      # in defs.h
+# parameter (MAXCHNS = 4852) # in defs.h
+# parameter (MAXTEXT = 19408)# in defs.h
+# parameter (NAREF = 2)      # in defs.h
+# parameter (NMMIX = 2)      # in defs.h
+
+#  xindex   =  index of refraction for each mineral
+#  xabscoef =  absorption coefficient for each mineral
+#  xaref    =  areal fraction
+#  xmindx   =  index of refraction working array for molecular mix
+#  xmabsc   =  absorption coefficient working array for molecular mix
+#  
+
+       real*4 xindex, xabscoef, xaref
+
+       common /lblref/ xindex(MAXCHNS,NMINL), xabscoef(MAXCHNS,NMINL)
+       common /lblref/ xaref(MAXCHNS,NAREF)
+       common /lblref/ xmindx(MAXCHNS,NWMIX), xmabsc(MAXCHNS,NWMIX)
+       common /lblref/ xahist(MAXTEXT)

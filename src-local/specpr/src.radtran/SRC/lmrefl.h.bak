@@ -1,0 +1,50 @@
+# Whenever this header file is used, source should also include defs.h
+
+#
+#
+# parameter (NBND = 3)        # in defs.h
+# parameter (NMINL = 9)       # in defs.h
+# parameter (MAXCHNS = 4852)  # in defs.h
+# parameter (maxtext = 19408) # in defs.h
+# parameter (NAREF = 2)       # in defs.h
+# parameter (NMMIX = 2)       # in defs.h
+
+
+	common /lmrefl/ wav(MAXCHNS), d(NMINL)
+	common /lmrefl/ ddflt(NMINL), weight(NMINL)
+	common /lmrefl/ dens(NMINL), scoef(NMINL)
+	common /lmrefl/ xn(NMINL,MAXCHNS), xk(NMINL,MAXCHNS), xi(MAXCHNS)
+	common /lmrefl/ r(MAXCHNS)
+	common /lmrefl/ irecxn(NMINL), irecxk(NMINL), irecxi
+	common /lmrefl/ xiangl,xeangl, wsmean(MAXCHNS), g
+	common /lmrefl/ idxn(NMINL),idxk(NMINL),idxi
+	common /lmrefl/ mu, mu0,nminer,imask(MAXCHNS)
+	common /lmrefl/ npeaka(NMINL),ipeaka(NMINL,10) # absorption coeff peaks
+	common /lmrefl/ dlowlm(NMINL),duplm(NMINL),wlowlm(NMINL)
+	common /lmrefl/ wuplm(NMINL),wpf(NMINL),dpf(NMINL),df,w0,inrmlc
+
+	real*4 weight, d, ddflt, df, w0
+	integer*4 nminer,imask
+	real*4 mu0, mu, g, r, xi, dlowlm, duplm, wlowlm, wuplm
+	real*4 xn, xk, dens, wsmean, wpf, dpf
+ 	integer*4 idxn,idxk,idxi,irecxn,irecxk,irecxi,inrmlc
+
+
+#  xaref    =  areal fraction
+
+        common /lblref/ xaref(NAREF,MAXCHNS), xafrac(NAREF),  numaref
+        common /lblref/ xatspec(MAXCHNS)
+
+        real*4    xaref         # areal mix spectra
+	real*4    xafrac        # areal fractions to each areal mix spectrum
+	integer*4 numaref       # number of areal mix spectra in use
+	real*4    xatspec       # total of areal mix spectra, areal mix fractions only
+
+####### these are currenly not used, but should be in the future 11/2010:
+
+#  xmindx   =  index of refraction working array for molecular mix
+#  xmabsc   =  absorption coefficient working array for molecular mix
+#
+        common /lblref/ xmindx(NWMIX,MAXCHNS), xmabsc(NWMIX,MAXCHNS)
+
+	real*4 xmindx, xmabsc

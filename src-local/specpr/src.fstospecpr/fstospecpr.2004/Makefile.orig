@@ -1,0 +1,9 @@
+CFLAGS=-g -Aa -D_HPUX_SOURCE
+OBJ=specio.o io_specpr.o
+PROG=fstospecpr
+
+${PROG}:	${OBJ}
+	${CC} ${CFLAGS} ${OBJ} -o $@ -lm
+
+clean:
+	-rm -f ${OBJ} ${PROG}

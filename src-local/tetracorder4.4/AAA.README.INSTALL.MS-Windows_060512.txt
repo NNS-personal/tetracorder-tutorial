@@ -1,0 +1,88 @@
+Cygwin 1.7.9-1
+GNU gfortran 4.5.3
+GNU gcc 4.5.3
+Ratfor77	(source-code included within the SpecPR sources)
+sspp		(source-code included within the SpecPR sources)
+check_env	(source-code included within the SpecPR sources)
+
+using Cygwin  (under c:\cygwin):
+/usr/local/bin
+/src/local
+
+install cygwin as root
+create /usr/local/bin (in cygwin file tree)
+need to set path to /usr/local/bin/ ?
+	set permissions to Users ?
+logout user-pr
+
+if needed, make /src/local/
+copy specpr and tetracorder4.4 to /src/local from distrib-all-05.2012
+
+cd /src/local/specpr/config
+
+have in config:
+shenv.cygwin
+shenv.cygwin_fflags-org
+shenv.cygwin_i686-w64-mingw32
+pc.bat
+pcx.bat
+MinGW64.bat
+
+./source shenv.cygwin
+(type 'env' to check settings)
+
+need in /usr/local/bin/:
+check_env
+sspp.exe
+ratfor.exe
+ratfor77.exe
+
+install check_env:
+(in /src/local/specpr/src.specpr/)
+cp check_env /usr/local/bin
+
+make and install ratfor:
+cd /src/local/specpr/ratfor77
+make
+cp ratfor77.exe /usr/local/bin
+cp ratfor77.exe /usr/local/bin/ratfor.exe
+
+make and install sspp:
+cd /src/local/specpr/src.sspp
+make
+cp sspp.exe /usr/local/bin
+
+make specpr:
+cd /src/local/specpr/lib
+rm libspecpr.a
+rm specpr.a
+rm sputil.a
+
+cd /src/local/specpr/src.specpr
+(create file 'dspecpr' so that make file completes properly)
+touch dspecpr
+touch xspecpr
+make
+cp xdspecpr.exe /usr/local/bin/dspecpr.exe
+
+
+
+Make tetracorder 4.4
+compile SpecPR as above
+
+cd /src/local/specpr/config
+
+(if new compile session:)
+./source shenv.cygwin
+(type 'env' to check settings)
+
+cd /src/local/tetracorder4.4
+
+replace the large data array size used by the standard size for Cygwin ver. 1.7.9
+	(files multimap.h, read2sheet.r, and tricube.h)
+
+copy multimap.h-081110-cygwin179	multimap.h
+copy read2sheet.r-081110-cygwin179	read2sheet.r
+copy tricube.h-081110-cygwin179	tricube.h
+
+make

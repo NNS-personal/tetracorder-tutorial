@@ -1,0 +1,98 @@
+	subroutine readi2sheet(qlun,reclen,nrecshdr,
+				dx,dy,dz,idnoff,scale,iptdrop,
+				chfirst,chlast,iline,specdat,ioerr)
+	implicit integer*4 (i-n)
+
+#ccc  name: readi2sheet
+#ccc  version date: 1/3/91
+#ccc  author(s):  Roger N. Clark
+#ccc  language:  Ratfor
+#ccc
+#ccc  short description: read one cross track line of I*2 BIL format
+#ccc                     imaging spectrometer data set
+#ccc
+#ccc  algorithm description:
+#ccc  system requirements:
+#ccc  subroutines called:
+#ccc  argument list description:
+#ccc  parameter description:
+#ccc  common description:
+#ccc  message files referenced:
+#ccc  internal variables:
+#ccc  file description:
+#ccc  user command lines:
+#ccc  update information:
+#ccc  NOTES:
+#ccc
+
+	include 	../specpr/src.specpr/common/lundefs
+
+	integer*4 qlun		# logical unit
+	integer*4 reclen	# record length in bytes
+	integer*4 nrecshdr	# number of header records
+	integer*4 dx		# number samples (cross track)
+	integer*4 dy		# number of lines (down track)
+	integer*4 dz		# number of spectral bands
+	integer*4 idnoff	# dn offset
+	real*4    scale         # dn scale
+	integer*4 iptdrop       # deleted point value in dn
+
+	integer*4 chfirst	# first dz channel needed
+	integer*4 chlast	# last dz channel needed
+	integer*4 iline         # line number to read in file
+	integer*4 ioerr		# I/O error flag (=0 no errors)
+
+	integer*2 i2sht(1000,410)   # buffer to hold I*2 data
+	character*2000 chibuff(410) # buffer to read data
+        equivalence     (i2sht,chibuff)
+
+	real*4	specdat(410,1000)   # extracted spectra in BIP format
+
+	integer*4 zel
+
+	itmp = dz*(iline-1) + nrecshdr
+
+	if (chfirst < 0 || chlast > dz || chfirst > chlast) {
+		write (ttyout,200) chfirst, chlast, dz
+200		format (/,' ERROR in readi2sheet: channel range:',
+			i6,i6,'  is not',/,
+			'       in the range 1 to',i6,' or',
+			' first channel > second')
+		ioerr = 1
+		return
+	}
+
+	do zel = chfirst,chlast {    # Read band into large 2d array
+
+		# Increment through records in 3d input file
+		key = itmp + zel
+
+		# Read 3d input file record
+
+		#write(ttyout,*)'DEBUG: readi2sheet: key=',key,':'
+		#write(ttyout,*)'DEBUG: readi2sheet: zel=',zel,' reclen=',reclen
+		read (qlun,rec=key,iostat=ioerr) chibuff(zel)(1:reclen)
+			# (NOTE: chibuff is equivalenced to i2sht)
+
+		if (ioerr != 0) {
+			write (ttyout,*)'ERROR on read in readi2sheet: ',ioerr
+			write (ttyout,*)'Input image, rec = ',key
+			write (ttyout,*)'Input image, line= ',iline
+		}
+	}
+
+	do j = 1,dx {     # Process each spectrum in sheet
+
+		do i = chfirst,chlast {
+               		# Scale and offset values within band of interest
+			itmp2 = i2sht(j,i)
+			if (itmp2 == iptdrop) {
+				specdat(i,j) = -1.23e34
+			}
+			else {
+				specdat(i,j) = float(itmp2+idnoff)*scale
+			}
+		}
+	}
+	return
+	end

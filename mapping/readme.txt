@@ -1,0 +1,1 @@
+This mapping directory is the place used for Tetracorder processing of imaging spectrometer data and the location of the output material maps.

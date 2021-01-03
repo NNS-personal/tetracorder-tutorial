@@ -1,0 +1,22 @@
+#!/usr/local/bin/davinci -f
+
+# image ratio
+
+fout="group.1um/genericFe2+.all.fd"
+
+#############################################################
+
+a=    load(filename="group.1um/generic.Fe2+nrw.cummingtonite.fd.gz")
+b=    load(filename="group.1um/generic.Fe2+nrw.actinolite.fd.gz")
+c=    load(filename="group.1um/generic.Fe2+nrw.hs-actinolite.fd.gz")
+d=    load(filename="group.1um/generic.Fe2+med.jadeite.fd.gz")
+e=    load(filename="group.1um/generic.Fe2+brd.br5a_actinolite.fd.gz")
+f=    load(filename="group.1um/generic.Fe2+brd.br22c_actinolite.fd.gz")
+g=    load(filename="group.1um/generic.Fe2+brd.br36a_chlorite.fd.gz")
+h=    load(filename="group.1um/generic.Fe2+basalt_br46b.fd.gz")
+i=    load(filename="group.1um/generic.Fe2+.broad_br60b.fd.gz")
+j=    load(filename="group.1um/generic.Fe2+.vbroad_br20.fd.gz")
+
+x = byte (a + b + c + d + e + f + g + h + i + j)
+
+write(x,filename=fout,type=vicar)
